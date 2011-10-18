@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>IndexedDB Wrapper</title>
+	</head>
+	<body onload="onload();">
+		<p>Open the console and click 'Open DB'. You will then see a bunch of buttons that allow data manipulation. Click them, and check the console for results.</p>
+		<p id="openWrapper" style="display: none;">
+			<button onclick="createStore_1_1()">Open DB</button>
+		</p>
+		<p id="dataWrapper" style="display: none;">
+			<button onclick="testWrite()">put</button>
+			<br />
+			<button onclick="testRead()">get</button>
+			<br />
+			<button onclick="testGetAll()">getAll</button>
+			<br />
+			<button onclick="testRemove()">remove</button>
+			<br />
+			<button onclick="testClear()">clear</button>
+		</p>
+		
+		<script type="text/javascript" src="IDBStore.js"></script>
+		<script type="text/javascript">
+
+			function onload(){
+				document.getElementById('openWrapper').style.display='';
+			}
+
+			/* methods for walking thorugh the data ops: */
+			
+			function testWrite(store){
+				store = store || store_1_1;
+				store.put({
+						id: 2,
+						name: 'Doe',
+						age: 52
+					},
+					function(result){ 
+						console.log('put() call success. Result:', result);
+					}
+				);
+			}
+
+			function testRead(store){
+				store = store || store_1_1;
+				store.get(2, function(result){
+					console.log('get() call success. Result:', result);
+				});
+			}
+
+			function testGetAll(store){
+				store = store || store_1_1;
+				store.getAll(function(result){
+					console.log('getAll() call success. Result:', result);
+				});
+			}
+
+			function testRemove(store){
+				store = store || store_1_1;
+				store.remove(2, function(result){
+					console.log('remove() call success. Result:', result);
+				});
+			}
+
+			function testClear(store){
+				store = store || store_1_1;
+				store.clear(function(result){
+					console.log('clear() call success. Result:', result);
+				});
+			}
+
+			function testDeleteStore(store){
+				store = store || store_1_1;
+				store.deleteObjectStore();
+			}
+
+			/* create a store using the wrapper and kick off: */
+			
+			function createStore_1_1(){
+				window['store_1_1'] = new IDBStore({
+					dbName: 'idbTestDb',
+					dbDescription: 'test db 1',
+					dbVersion: '1',
+					storeName: 'testStore_1_1',
+					keyPath: 'id',
+					autoIncrement: true,
+					onStoreReady: function(){
+						console.log('Store ready, go ahead!');
+
+						document.getElementById('openWrapper').style.display='none';
+						document.getElementById('dataWrapper').style.display='';
+					}
+				});
+			}
+			
+			/*
+			var store_1_2 = new idbObjectStoreFF({
+				dbName: 'idbTestDb',
+				dbDescription: 'test db 1',
+				dbVersion: '1',
+				storeName: 'testStore_1_2',
+				keyPath: 'id',
+				autoIncrement: true,
+				onStoreReady: function(){
+					console.log('store 1-2 is ready');
+				}
+			});
+			var store_2_1 = new idbObjectStoreFF({
+				dbName: 'idbTestDb_2',
+				dbDescription: 'test db 2',
+				dbVersion: '1',
+				storeName: 'testStore_2_1',
+				keyPath: 'id',
+				autoIncrement: true,
+				onStoreReady: function(){
+					console.log('store 2-1 is ready');
+				}
+			});
+			var store_2_2 = new idbObjectStoreFF({
+				dbName: 'idbTestDb_2',
+				dbDescription: 'test db 2',
+				dbVersion: '1',
+				storeName: 'testStore_2_2',
+				keyPath: 'id',
+				autoIncrement: true,
+				onStoreReady: function(){
+					console.log('store 2-2 is ready');
+				}
+			});
+			*/
+			
+		</script>
+	</body>
+</html>
