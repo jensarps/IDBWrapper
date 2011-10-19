@@ -37,4 +37,39 @@ The options object may contain the following properties (default values are show
 
 'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true, 
 the database will automatically add a unique key to the keyPath index when storing objects missing 
-that property. 
+that property.
+
+You can also pass a callback function to the options object. If a callback is provided both as second 
+parameter and inside of the options object, the function passed as second parameter will be used.
+
+Methods
+=======
+
+Here's an overview of available methods in IDBStore:
+
+Data Manipulation
+-----------------
+
+Use the following methods to read and write data:
+
+___
+
+1) The put method.
+
+
+```javascript
+put(/*Object*/ dataObj, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+'dataObj' is the Object to store. 'onSuccess' will be called when the insertion/update was successful, 
+and it will recieve the keyPath value (the id, so to say) of the inserted object as first and only 
+parameter. 'onError' will be called if the insertion/update failed and it will recieve the error event 
+object as first and only parameter.
+
+___
+
+2) The get method.
+
+```javascript
+get(/*keyPath value*/ key, /*Function?*/onSuccess, /*Function?*/onError)
+```
