@@ -28,10 +28,10 @@ The options object may contain the following properties (default values are show
 {
   dbName: 'IDB',
   storeName: 'Store',
-	dbVersion: '1.0',
-	keyPath: 'id',
-	autoIncrement: true,
-	onStoreReady: function(){}
+  dbVersion: '1.0',
+  keyPath: 'id',
+  autoIncrement: true,
+  onStoreReady: function(){}
 }
 ```
 
