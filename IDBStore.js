@@ -65,6 +65,8 @@ IDBStore.prototype = {
 		// We won't test for that, as testing
 		// sometimes fails in Chrome (it's a long
 		// story).
+		
+		callback && callback();
 	},
 	
 	/* version */
@@ -119,7 +121,6 @@ IDBStore.prototype = {
 		var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY, 0);
 		this.store = emptyTransaction.objectStore(this.storeName);
 		console.log('Store ready:', this.store);
-		emptyTransaction.abort();
 		onSuccess && onSuccess(this.store);
 	},
 	
@@ -165,13 +166,34 @@ IDBStore.prototype = {
 	},
 	
 	getAll: function(onSuccess, onError){
-		// TODO: Implement cursor using variant for chrome.
 		onError || (onError = function(error) { console.error('Could not read data.', error); });
 		onSuccess || (onSuccess = noop);
 		var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-		var getAllRequest = getAllTransaction.objectStore(this.storeName).getAll();
-		getAllRequest.onsuccess = function(event){ onSuccess(event.target.result); };
-		getAllRequest.onerror = onError;
+		if(this.features.hasGetAll){
+			var getAllRequest = getAllTransaction.objectStore(this.storeName).getAll();
+			getAllRequest.onsuccess = function(event){ onSuccess(event.target.result); };
+			getAllRequest.onerror = onError;
+		}else{
+			this._getAllCursor(getAllTransaction, onSuccess, onError);
+		}
+	},
+	
+	_getAllCursor: function(tr, onSuccess, onError){
+		var all = [];
+		var store = tr.objectStore(this.storeName);
+		var cursorRequest = store.openCursor();
+		
+		cursorRequest.onsuccess = function(event) {
+          var cursor = event.target.result;
+          if (cursor) {
+               all.push(cursor.value);
+               cursor.continue();
+          }
+          else {
+              onSuccess(all);
+          }
+        };
+        cursorRequest.onError = onError;
 	},
 	
 	clear: function(onSuccess, onError){
@@ -188,6 +210,7 @@ IDBStore.prototype = {
 	
 	/* key ranges / cursors */
 	// TODO: implement
+	
 };
 
 /** helpers **/
