@@ -38,6 +38,8 @@ IDBStore.prototype = {
 	
 	autoIncrement: null,
 	
+	features: null,
+	
 	onStoreReady: null,
 	
 	openDB: function(){
@@ -65,6 +67,7 @@ IDBStore.prototype = {
 		// We won't test for that, as testing
 		// sometimes fails in Chrome (it's a long
 		// story).
+		features.hasAutoIncrement = !window.mozIndexedDB;
 		
 		callback && callback();
 	},
