@@ -187,16 +187,16 @@ IDBStore.prototype = {
 		var cursorRequest = store.openCursor();
 		
 		cursorRequest.onsuccess = function(event) {
-          var cursor = event.target.result;
-          if (cursor) {
-               all.push(cursor.value);
-               cursor.continue();
-          }
-          else {
-              onSuccess(all);
-          }
-        };
-        cursorRequest.onError = onError;
+			var cursor = event.target.result;
+			if (cursor) {
+				all.push(cursor.value);
+				cursor.continue();
+			}
+			else {
+				onSuccess(all);
+			}
+		};
+		cursorRequest.onError = onError;
 	},
 	
 	clear: function(onSuccess, onError){
