@@ -4,10 +4,21 @@ About
 This is a wrapper for indexedDB. It is meant to
 
 a) ease the use of indexedDB and abstract away the differences between the 
-existing impls in Chrome and Firefox, and
+existing impls in Chrome and Firefox (yes, it works in both), and
 
 b) show how IDB works. The code is split up into short methods, so that it's
 easy to see what happens in what method.
+
+"Showing how it works" is the main intention of this project. IndexedDB is 
+all the buzz, but only a few people actually know how to use it. 
+
+The code in IDBWrapper.js is not optimized for anything, nor minified or anything. 
+It is meant to be read and easy to understand. So, please, go ahead and check out
+the source!
+
+NOTE: This is a work in progress. IDBWrapper still misses index and keyRange operations,
+and this Readme only covers basic CRUD operations. I will add more content to both before
+too long.
 
 Usage
 =====
