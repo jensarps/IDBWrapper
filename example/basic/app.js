@@ -29,6 +29,10 @@ require(['../../IDBStore.js'], function(IDBStore){
 		nodeCache.submit.addEventListener('click', enterData);
 	}
 	
+	function refreshTable(){
+		customers.getAll(listItems);
+	}
+	
 	function listItems(data){
 		var content = '';
 		data.forEach(function(item){
@@ -40,10 +44,28 @@ require(['../../IDBStore.js'], function(IDBStore){
 	}
 	
 	function enterData(){
-		var data = readForm();
+		// read data from inputs…
+		var data = {};
+		['customerid','firstname','lastname'].forEach(function(key){
+			var value = nodeCache[key].value.trim();
+			if(value.length){
+				if(key == 'customerid'){ // We want the id to be numeric:
+					value = parseInt(value, 10);
+				}
+				data[key] = value;
+			}
+		});
+		
+		// …and store them away.
 		customers.put(data, function(){
 			clearForm();
 			refreshTable();
+		});
+	}
+	
+	function clearForm(){
+		['customerid','firstname','lastname'].forEach(function(id){
+			nodeCache[id].value = '';
 		});
 	}
 	
@@ -60,35 +82,14 @@ require(['../../IDBStore.js'], function(IDBStore){
 		customers.put(data, refreshTable);
 	}
 	
-	function readForm(){
-		var data = {};
-		['customerid','firstname','lastname'].forEach(function(key){
-			var value = nodeCache[key].value.trim();
-			if(value.length){
-				if(key == 'customerid'){ // We want the id to be numeric:
-					value = ~~value;
-				}
-				data[key] = value;
-			}
-		});
-		return data;
-	}
-	
-	function clearForm(){
-		['customerid','firstname','lastname'].forEach(function(id){
-			nodeCache[id].value = '';
-		});
-	}
-	
-	function refreshTable(){
-		customers.getAll(listItems);
-	}
-	
+	// export some functions to the outside to
+	// make the onclick="" attributes work.
 	window.app = {
 		deleteItem: deleteItem,
 		updateItem: updateItem
 	};
 	
+	// go!
 	init();
 	
 });
