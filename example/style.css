@@ -6,6 +6,7 @@ body {
 	width: 100%;
 	height: 100%;
 	margin: 0;
+	font-family: sans-serif;
 }
 a {
 	color: black;
@@ -15,16 +16,46 @@ a {
 /* box setup */
 .vbox {
 	display: -webkit-box;
+	display: -moz-box;
 	-webkit-box-orient: vertical;
+	-moz-box-orient: vertical;
 }
 .hbox {
 	display: -webkit-box;
+	display: -moz-box;
 	-webkit-box-orient: horizontal;
+	-moz-box-orient: horizontal;
 }
 .flex {
 	-webkit-box-flex: 1;
+	-moz-box-flex: 1;
 }
 
+/* table */
 #results-container {
-	width: 50%;
+	border-right: solid 1px black;
+	padding: 10px;
+	width: 500px;
+}
+#results-container table {
+	border-collapse: collapse;
+}
+#results-container th {
+	border-bottom: solid 1px #808080;
+}
+#results-container th,
+#results-container td {
+	padding: 2px 5px;
+}
+
+/* input */
+#input {
+	padding: 10px;
+}
+#input div {
+	padding: 5px;
+}
+#input label {
+	display: inline-block;
+	width: 100px;
 }
