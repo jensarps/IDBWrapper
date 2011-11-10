@@ -218,17 +218,9 @@
 		},
 		
 		_getUID: function(){
-			// NOTE: What we *should* do here to mimic Chrome's is to do a getAll 
-			// call and iterate over the existing keys and find the key that is
-			// numeric and of the highest value, and return key + 1. But, as
-			// can see, this might be a pretty load intensive operation.
-			// The code below is commonly used to generate unique IDs; keep in mind
-			// though, that it's result will just be a random number, not a 
-			// reliably unique one.
-	        var S4 = function () {
-	            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-	        }
-	        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+			// FF bails at times on non-numeric ids. So we take an even
+			// worse approach now, using current time as id. Sigh.
+			return +new Date();
 		}
 		
 		/* indexing */
