@@ -1,7 +1,7 @@
 require(['../IDBStore.js'], function(IDBStore){
 	
 	var tpls = {
-		row: '<tr><td>{customerid}</td><td>{lastname}</td><td>{firstname}</td><td><button onclick="app.deleteItem({customerid});">delete</button></td></tr>',
+		row: '<tr><td>{customerid}</td><td><input id="lastname_{customerid}" value="{lastname}"></td><td><input id="firstname_{customerid}" value="{firstname}"></td><td><button onclick="app.deleteItem({customerid});">delete</button><button onclick="app.updateItem({customerid});">update</button></td></tr>',
 		table: '<table><tr><th>ID</th><th>Last Name</th><th>First Name</th><th></th></tr>{content}</table>'
 	};
 	
@@ -17,7 +17,7 @@ require(['../IDBStore.js'], function(IDBStore){
 			storeName: 'customer',
 			keyPath: 'customerid',
 			autoIncrement: true,
-			onStoreReady: updateTable
+			onStoreReady: refreshTable
 		});
 		
 		// create references for some nodes we have to work with
@@ -43,12 +43,21 @@ require(['../IDBStore.js'], function(IDBStore){
 		var data = readForm();
 		customers.put(data, function(){
 			clearForm();
-			updateTable();
+			refreshTable();
 		});
 	}
 	
 	function deleteItem(id){
-		customers.remove(id, updateTable);
+		customers.remove(id, refreshTable);
+	}
+	
+	function updateItem(id){
+		var data = {
+			customerid: id,
+			firstname: document.getElementById('firstname_' + id).value.trim(),
+			lastname: document.getElementById('lastname_' + id).value.trim()
+		};
+		customers.put(data, refreshTable);
 	}
 	
 	function readForm(){
@@ -71,12 +80,13 @@ require(['../IDBStore.js'], function(IDBStore){
 		});
 	}
 	
-	function updateTable(){
+	function refreshTable(){
 		customers.getAll(listItems);
 	}
 	
 	window.app = {
-		deleteItem: deleteItem
+		deleteItem: deleteItem,
+		updateItem: updateItem
 	};
 	
 	init();
