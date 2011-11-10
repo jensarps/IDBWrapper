@@ -226,7 +226,11 @@ IDBStore.prototype = {
 	}
 	
 	/* indexing */
-	// TODO: implement
+	
+	createIndex: function(column, indexName, isUnique){
+		var res = this.store.createIndex(column, indexName, { unique: !!isUnique });
+		console.log('index res:', res);
+	},
 	
 	/* key ranges / cursors */
 	// TODO: implement
