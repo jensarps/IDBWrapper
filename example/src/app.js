@@ -11,6 +11,7 @@ require(['../IDBStore.js'], function(IDBStore){
 	
 	function init(){
 		
+		// create a store ("table") for the customers
 		customers = new IDBStore({
 			dbName: this.dbName,
 			storeName: 'customer',
@@ -19,15 +20,21 @@ require(['../IDBStore.js'], function(IDBStore){
 			onStoreReady: updateTable
 		});
 		
+		// create references for some nodes we have to work with
 		['submit', 'customerid', 'firstname', 'lastname', 'results-container'].forEach(function(id){
 			nodeCache[id] = document.getElementById(id);
 		});
+		
+		// and listen to the form's submit button.
 		nodeCache.submit.addEventListener('click', enterData);
 	}
 	
 	function listItems(data){
 		var content = '';
 		data.forEach(function(item){
+			// Chrome auto-increment ids are Numbers, ids from input and FF 
+			// auto-increment ids are Stings. We need to make sure to pass
+			// the right thing to the delete function.
 			item.typedcustomerid = typeof item.customerid == 'string' ? "'" + item.customerid.trim() + "'" : item.customerid;
 			content += tpls.row.replace(/\{([^\}]+)\}/g, function(_, key){
 				return item[key];
