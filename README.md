@@ -12,7 +12,12 @@ easy to see what happens in what method.
 Usage
 =====
 
-Including the IDBStore.js file will add an IDBStore contructor to the global scope. 
+Including the IDBStore.js file will add an IDBStore contructor to the global scope.
+
+Alternatively, you can use an AMD loader such as RequireJS to load the file, 
+and you will recieve the constructor in your load callback (the constructor 
+will then, of course, have whatever name you call it).
+
 You can then create an IDB store:
 
 ```javascript
