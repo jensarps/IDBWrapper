@@ -6,8 +6,18 @@
 		<script type="text/javascript" src="lib/requirejs/require.js"></script>
 	</head>
 	<body class="hbox">
-		<div class="vbox"></div>
-		<div class="vbox"></div>
+		<div class="vbox" id="results-container">
+			QueryResults
+		</div>
+		<div class="vbox flex">
+			<div id="query"></div>
+			<div id="input">
+				<label>Customer ID</label><input id="customerid">
+				<label>First Name</label><input id="firstname">
+				<label>Last Name</label><input id="lastname">
+				<button id="submit">Enter data</button>
+			</div>
+		</div>
 		<script type="text/javascript" src="src/app.js"></script>
 	</body>
 </html>
