@@ -77,8 +77,11 @@
 			
 			callback && callback();
 		},
-		
-		/* version */
+
+
+		/**************
+		 * versioning *
+		 **************/
 		
 		checkVersion: function(onSuccess, onError){
 			if(this.getVersion() != this.dbVersion){
@@ -99,9 +102,13 @@
 			versionRequest.onblocked = onError;
 			versionRequest.onsuccess = onSuccess;
 		},
-		
-		/* object store handling */
-		
+
+
+		/*************************
+		 * object store handling *
+		 *************************/ 
+
+
 		getObjectStore: function(onSuccess, onError){
 			if(this.hasObjectStore()){
 				this.openExistingObjectStore(onSuccess, onError);
@@ -124,8 +131,6 @@
 		},
 		
 		openExistingObjectStore: function(onSuccess, onError){
-			// Having a ref to the store in some transaction state
-			// is not useful; do we really want to offer this method?
 			console.log('Opening existing objectStore:', this.storeName);
 			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY, 0);
 			this.store = emptyTransaction.objectStore(this.storeName);
@@ -143,9 +148,13 @@
 				onError && !success && onError();
 			}), onError);
 		},
-		
-		/* data manipulation */
-		
+
+
+		/*********************
+		 * data manipulation *
+		 *********************/
+
+
 		put: function(dataObj, onSuccess, onError){
 			// TODO: Check for missing keyPath property.
 			onError || (onError = function(error) { console.error('Could not write data.', error); });
@@ -221,10 +230,43 @@
 			// FF bails at times on non-numeric ids. So we take an even
 			// worse approach now, using current time as id. Sigh.
 			return +new Date();
-		}
+		},
 		
-		/* indexing */
-		// TODO: implement
+		
+		/************
+		 * indexing *
+		 ************/
+		
+		createIndex: function(indexName, propertyName, isUnique, onSuccess, onError){
+			onError || (onError = function(error) { console.error('Could not create index.', error); });
+			onSuccess || (onSuccess = noop);
+			propertyName || (propertyName = indexName);
+			this.setVersion(hitch(this, function(evt){
+				var index = evt.target.result.objectStore(this.storeName).createIndex(indexName, propertyName, { unique: !!isUnique });
+				onSuccess(index);
+			}), onError);
+		},
+		
+		getIndex: function(indexName){
+			return this.store.index(indexName);  
+		},
+		
+		getIndexList: function(){
+			return this.store.indexNames;
+		},
+		
+		hasIndex: function(indexName){
+			return this.store.indexNames.contains(indexName);
+		},
+		
+		removeIndex: function(indexName, onSuccess, onError){
+			onError || (onError = function(error) { console.error('Could not remove index.', error); });
+			onSuccess || (onSuccess = noop);
+			this.setVersion(hitch(this, function(evt){
+				evt.target.result.objectStore(this.storeName).deleteIndex(indexName);
+				onSuccess();
+			}), onError);
+		},
 		
 		/* key ranges / cursors */
 		// TODO: implement
