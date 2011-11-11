@@ -157,7 +157,38 @@ hasIndex: function(/*String*/ indexName)
 
 Return true if an index with the given name exists in the store, false if not.
 
+___
+
+
+3) The removeIndex method.
+
+```javascript
+removeIndex: function(/*String*/indexName, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`onSuccess` will be called without arguments if the remove operation was successful. `onError` will be 
+called if the remove operation failed and it will recieve the error event object as first and only argument.
 
 ___
+
+4) The getIndex method.
+
+```javascript
+getIndex: function(/*String*/indexName)
+```
+
+Will return the index with the given name. You can then open open cursors on the index or call the index' get
+method. Kepp in mind though, that IDB will throww if there is no index with the given name, so make sure to
+check if it exists if you are not sure.
+
+___
+
+5) The getIndexList method.
+
+```javascript
+getIndexList: function()
+```
+
+Returns a `DOMStringList` with all existing indices.
 
 
