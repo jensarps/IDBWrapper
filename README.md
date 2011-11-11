@@ -66,11 +66,11 @@ ___
 put(/*Object*/ dataObj, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-'dataObj' is the Object to store. 'onSuccess' will be called when the insertion/update was successful, 
+`dataObj` is the Object to store. `onSuccess` will be called when the insertion/update was successful, 
 and it will recieve the keyPath value (the id, so to say) of the inserted object as first and only 
-argument. 'onError' will be called if the insertion/update failed and it will recieve the error event 
+argument. `onError` will be called if the insertion/update failed and it will recieve the error event 
 object as first and only argument. If the store already contains an object with the given keyPath id,
-it will be overwritten by 'dataObj'.
+it will be overwritten by `dataObj`.
 
 ___
 
@@ -80,9 +80,9 @@ ___
 get(/*keyPath value*/ key, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-'key' is the keyPath property value (the id) of the object to retrieve. 'onSuccess' will be called if
+`key` is the keyPath property value (the id) of the object to retrieve. `onSuccess` will be called if
 the get operation was successful, and it will receive the stored object as first and only argument. If
-no object was found with the given keyPath value, this argument will be null. 'onError' will be called
+no object was found with the given keyPath value, this argument will be null. `onError` will be called
 if the get operation failed and it will recieve the error event object as first and only argument.
 
 ___
@@ -93,8 +93,8 @@ ___
 getAll: function(/*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-'onSuccess' will be called if the getAll operation was successful, and it will receive an Array of
-all objects currently stored in the store as first and only argument. 'onError' will be called if 
+`onSuccess` will be called if the getAll operation was successful, and it will receive an Array of
+all objects currently stored in the store as first and only argument. `onError` will be called if 
 the getAll operation failed and it will recieve the error event object as first and only argument.
 
 ___
@@ -105,9 +105,9 @@ ___
 remove: function(/*keyPath value*/ key, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-'key' is the keyPath property value (the id) of the object to remove. 'onSuccess' will be called if
+`key` is the keyPath property value (the id) of the object to remove. `onSuccess` will be called if
 the remove operation was successful, and it will receive the removed object as first and only argument.
-'onError' will be called if the remove operation failed and it will recieve the error event object as first 
+`onError` will be called if the remove operation failed and it will recieve the error event object as first 
 and only argument.
 
 ___
@@ -118,7 +118,7 @@ ___
 clear: function(/*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-'onSuccess' will be called if the clear operation was successful. 'onError' will be called if the clear 
+`onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear 
 operation failed and it will recieve the error event object as first and only argument.
 
 
