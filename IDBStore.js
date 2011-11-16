@@ -122,25 +122,20 @@
 		},
 		
 		createNewObjectStore: function(onSuccess, onError){
-			console.log('Creating new objectStore:', this.storeName);
 			this.setVersion(hitch(this, function(){
 				this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
-				console.log('Store ready:', this.store);
 				onSuccess && onSuccess(this.store);
 			}), onError);
 		},
 		
 		openExistingObjectStore: function(onSuccess, onError){
-			console.log('Opening existing objectStore:', this.storeName);
 			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY, 0);
 			this.store = emptyTransaction.objectStore(this.storeName);
-			console.log('Store ready:', this.store);
 			onSuccess && onSuccess(this.store);
 		},
 		
 		deleteObjectStore: function(onSuccess, onError){
 			onError || (onError = function(error){ console.error('Failed to delete objectStore.', error); });
-			console.log('Deleting objectStore:', this.storeName);
 			this.setVersion(hitch(this, function(){
 				this.db.deleteObjectStore(this.storeName);
 				var success = !this.hasObjectStore();
@@ -156,7 +151,6 @@
 
 
 		put: function(dataObj, onSuccess, onError){
-			// TODO: Check for missing keyPath property.
 			onError || (onError = function(error) { console.error('Could not write data.', error); });
 			onSuccess || (onSuccess = noop);
 			if(typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement){
