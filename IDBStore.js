@@ -1,3 +1,11 @@
+/*
+ * IDBWrapper - A cross-browser wrapper for IndexedDB
+ * Copyright (c) 2011 Jens Arps
+ * http://jensarps.de/
+ *
+ * Licensed under the MIT (X11) license
+ */
+
 (function(name, definition, global){
 	if (typeof define === 'function'){
 		define(definition);
