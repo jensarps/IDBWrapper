@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>IndexedDB Wrapper</title>
+		<title>IndexedDB Wrapper Quick Test</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
-	<body onload="onload();">
-		<p>Open the console and click 'Open DB'. You will then see a bunch of buttons that allow data manipulation. Click them, and check the console for results.</p>
-		<p id="openWrapper" style="display: none;">
-			<button onclick="createStore_1_1()">Open DB</button>
-		</p>
-		<p id="dataWrapper" style="display: none;">
-			<button onclick="testWrite()">put</button>
-			<br />
-			<button onclick="testRead()">get</button>
-			<br />
-			<button onclick="testGetAll()">getAll</button>
-			<br />
-			<button onclick="testRemove()">remove</button>
-			<br />
-			<button onclick="testClear()">clear</button>
-		</p>
+	<body class="vbox" onload="onload();">
+		<div id="head">IDBWrapper Quick Test</div>
+		<div class="container">
+			<p>Open the console and click 'Open DB'. You will then see a bunch of buttons that allow data manipulation. Click them, and check the console for results.</p>
+			<p id="openWrapper" style="display: none;">
+				<button onclick="createStore_1_1()">Open DB</button>
+			</p>
+			<p id="dataWrapper" style="display: none;">
+				<button onclick="testWrite()">put</button>
+				<br />
+				<button onclick="testRead()">get</button>
+				<br />
+				<button onclick="testGetAll()">getAll</button>
+				<br />
+				<button onclick="testRemove()">remove</button>
+				<br />
+				<button onclick="testClear()">clear</button>
+			</p>
+		</div>
 		
 		<script type="text/javascript" src="../../IDBStore.js"></script>
 		<script type="text/javascript">
