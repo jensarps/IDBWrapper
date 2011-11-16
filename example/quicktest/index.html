@@ -20,7 +20,7 @@
 			<button onclick="testClear()">clear</button>
 		</p>
 		
-		<script type="text/javascript" src="IDBStore.js"></script>
+		<script type="text/javascript" src="../../IDBStore.js"></script>
 		<script type="text/javascript">
 
 			function onload(){
@@ -87,6 +87,7 @@
 					autoIncrement: true,
 					onStoreReady: function(){
 						console.log('Store ready, go ahead!');
+						console.log('The store is accessible at window.store_1_1');
 
 						document.getElementById('openWrapper').style.display='none';
 						document.getElementById('dataWrapper').style.display='';
