@@ -1,3 +1,11 @@
+/*
+ * IDBWrapper - A cross-browser wrapper for IndexedDB
+ * Copyright (c) 2011 Jens Arps
+ * http://jensarps.de/
+ *
+ * Licensed under the MIT (X11) license
+ */
+
 (function(name, definition, global){
 	if (typeof define === 'function'){
 		define(definition);
@@ -77,8 +85,11 @@
 			
 			callback && callback();
 		},
-		
-		/* version */
+
+
+		/**************
+		 * versioning *
+		 **************/
 		
 		checkVersion: function(onSuccess, onError){
 			if(this.getVersion() != this.dbVersion){
@@ -99,9 +110,13 @@
 			versionRequest.onblocked = onError;
 			versionRequest.onsuccess = onSuccess;
 		},
-		
-		/* object store handling */
-		
+
+
+		/*************************
+		 * object store handling *
+		 *************************/ 
+
+
 		getObjectStore: function(onSuccess, onError){
 			if(this.hasObjectStore()){
 				this.openExistingObjectStore(onSuccess, onError);
@@ -136,9 +151,13 @@
 				onError && !success && onError();
 			}), onError);
 		},
-		
-		/* data manipulation */
-		
+
+
+		/*********************
+		 * data manipulation *
+		 *********************/
+
+
 		put: function(dataObj, onSuccess, onError){
 			onError || (onError = function(error) { console.error('Could not write data.', error); });
 			onSuccess || (onSuccess = noop);
@@ -213,10 +232,43 @@
 			// FF bails at times on non-numeric ids. So we take an even
 			// worse approach now, using current time as id. Sigh.
 			return +new Date();
-		}
+		},
 		
-		/* indexing */
-		// TODO: implement
+		
+		/************
+		 * indexing *
+		 ************/
+		
+		createIndex: function(indexName, propertyName, isUnique, onSuccess, onError){
+			onError || (onError = function(error) { console.error('Could not create index.', error); });
+			onSuccess || (onSuccess = noop);
+			propertyName || (propertyName = indexName);
+			this.setVersion(hitch(this, function(evt){
+				var index = evt.target.result.objectStore(this.storeName).createIndex(indexName, propertyName, { unique: !!isUnique });
+				onSuccess(index);
+			}), onError);
+		},
+		
+		getIndex: function(indexName){
+			return this.store.index(indexName);  
+		},
+		
+		getIndexList: function(){
+			return this.store.indexNames;
+		},
+		
+		hasIndex: function(indexName){
+			return this.store.indexNames.contains(indexName);
+		},
+		
+		removeIndex: function(indexName, onSuccess, onError){
+			onError || (onError = function(error) { console.error('Could not remove index.', error); });
+			onSuccess || (onSuccess = noop);
+			this.setVersion(hitch(this, function(evt){
+				evt.target.result.objectStore(this.storeName).deleteIndex(indexName);
+				onSuccess();
+			}), onError);
+		},
 		
 		/* key ranges / cursors */
 		// TODO: implement
