@@ -20,6 +20,13 @@ NOTE: This is a work in progress. IDBWrapper still misses index and keyRange ope
 and this Readme only covers basic CRUD operations. I will add more content to both before
 too long.
 
+Examples
+========
+
+There are some examples to run right in your browser over here: http://jensarps.github.com/IDBWrapper/example/
+
+The source for these examples are in the `example` folder of this repository.
+
 Usage
 =====
 
