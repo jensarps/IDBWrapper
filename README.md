@@ -124,7 +124,13 @@ remove: function(/*keyPath value*/ key, /*Function?*/onSuccess, /*Function?*/onE
 ```
 
 `key` is the keyPath property value (the id) of the object to remove. `onSuccess` will be called if
-the remove operation was successful, and it will receive the removed object as first and only argument.
+the remove operation was successful, and it _should_ receive `false` as first and only argument if the
+object to remove was not found, and `true` if it was found and removed.
+
+NOTE: FF 8 will pass the key to the onSuccess handler, no matter if there is an corresponding object
+or not. Chrome 15 will pass `null` if removal wass successful, and call the error handler if the object
+wasn't found. Chrome 17 will behave as described above.
+
 `onError` will be called if the remove operation failed and it will recieve the error event object as first 
 and only argument.
 
