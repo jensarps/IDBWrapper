@@ -137,7 +137,7 @@
 		},
 		
 		openExistingObjectStore: function(onSuccess, onError){
-			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY, 0);
+			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY);
 			this.store = emptyTransaction.objectStore(this.storeName);
 			onSuccess && onSuccess(this.store);
 		},
@@ -164,7 +164,7 @@
 			if(typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement){
 				dataObj[this.keyPath] = this._getUID();
 			}
-			var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE, 1000);
+			var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
 			var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
 			putRequest.onsuccess = function(event){ onSuccess(event.target.result); };
 			putRequest.onerror = onError;
@@ -173,7 +173,7 @@
 		get: function(key, onSuccess, onError){
 			onError || (onError = function(error) { console.error('Could not read data.', error); });
 			onSuccess || (onSuccess = noop);
-			var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY, 1000);
+			var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
 			var getRequest = getTransaction.objectStore(this.storeName).get(key);
 			getRequest.onsuccess = function(event){ onSuccess(event.target.result); };
 			getRequest.onerror = onError;
