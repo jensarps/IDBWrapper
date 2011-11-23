@@ -29,8 +29,9 @@
 		mixin(this, defaults);
 		mixin(this, kwArgs);
 		onStoreReady && (this.onStoreReady = onStoreReady);
-		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-		this.consts = window.IDBTransaction || window.webkitIDBTransaction || window.msIndexedDB;
+		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+		this.consts = window.IDBTransaction || window.webkitIDBTransaction;
+		this.cursor = window.IDBCursor || window.webkitIDBCursor;
 		this.openDB();
 	};
 	
@@ -137,7 +138,7 @@
 		},
 		
 		openExistingObjectStore: function(onSuccess, onError){
-			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY);
+			var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
 			this.store = emptyTransaction.objectStore(this.storeName);
 			onSuccess && onSuccess(this.store);
 		},
@@ -272,6 +273,35 @@
 		
 		/* key ranges / cursors */
 		// TODO: implement
+		
+		iterate: function(callback, options){
+			options || (options = {});
+			mixin(options, {
+				direction: 'ASC',
+				skipDuplicates: false,
+				keyRange: null,
+				onEnd: noop,
+				onError: function(error) { console.error('Could not open cursor.', error); }
+			});
+			console.log('options:', options);
+			var directionType = options.direction.toLowerCase() == 'desc' ? 'NEXT' : 'PREV';
+			if(options.skipDuplicates){
+				directionType += '_NO_DUPLICATE';
+			}
+			
+
+			var cursorRequest = this.store.openCursor(options.keyRange, this.cursor[directionType]);
+			cursorTransaction.onError = onError;
+			cursorTransaction.onSuccess = function(event){
+				var cursor = event.target.result;
+				if(cursor){
+					callback(cursor.value);
+					cursor.continue();
+				}else{
+					options.onEnd();
+				}
+			};
+		}
 		
 	};
 	
