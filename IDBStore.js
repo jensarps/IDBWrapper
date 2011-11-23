@@ -137,7 +137,7 @@
 		},
 		
 		openExistingObjectStore: function(onSuccess, onError){
-			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY);
+			var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
 			this.store = emptyTransaction.objectStore(this.storeName);
 			onSuccess && onSuccess(this.store);
 		},
