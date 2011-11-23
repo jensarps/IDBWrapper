@@ -277,23 +277,29 @@
 		iterate: function(callback, options){
 			options || (options = {});
 			mixin(options, {
-				direction: 'ASC',
+				order: 'ASC',
 				skipDuplicates: false,
 				keyRange: null,
 				onEnd: noop,
 				onError: function(error) { console.error('Could not open cursor.', error); }
 			});
 			console.log('options:', options);
-			var directionType = options.direction.toLowerCase() == 'desc' ? 'NEXT' : 'PREV';
+			var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
 			if(options.skipDuplicates){
 				directionType += '_NO_DUPLICATE';
 			}
+			console.log('direction:', directionType, this.cursor[directionType]);
 			
-
-			var cursorRequest = this.store.openCursor(options.keyRange, this.cursor[directionType]);
-			cursorTransaction.onError = onError;
-			cursorTransaction.onSuccess = function(event){
+			var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+			console.log('starting transaction:', cursorTransaction);
+			var cursorRequest = cursorTransaction.objectStore(this.storeName).openCursor(options.keyRange, this.cursor[directionType]);
+			console.log('cursor request:', cursorRequest);
+			
+			cursorRequest.onerror = options.onError;
+			cursorRequest.onsuccess = function(event){
+				console.log('got cursor event:', event);
 				var cursor = event.target.result;
+				console.log('got cursor:', cursor);
 				if(cursor){
 					callback(cursor.value);
 					cursor.continue();
