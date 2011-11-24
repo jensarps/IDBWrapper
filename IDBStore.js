@@ -271,8 +271,9 @@
 			}), onError);
 		},
 		
-		/* key ranges / cursors */
-		// TODO: implement
+		/**********
+		 * cursor *
+		 **********/
 		
 		iterate: function(callback, options){
 			options || (options = {});
@@ -284,32 +285,22 @@
 				onEnd: null,
 				onError: function(error) { console.error('Could not open cursor.', error); }
 			}, options);
-			console.log('options:', options);
+
 			var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
 			if(options.filterDuplicates){
 				directionType += '_NO_DUPLICATE';
 			}
-			console.log('direction:', directionType, this.cursor[directionType]);
-			
-			
+
 			var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-			console.log('starting transaction:', cursorTransaction);
-			var cursorTarget = cursorTransaction.objectStore(this.storeName);
-			
+			var cursorTarget = cursorTransaction.objectStore(this.storeName);			
 			if(options.index){
 				cursorTarget = cursorTarget.index(options.index);
-				console.log('getting index:', options.index);
 			}
 
 			var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
-			console.log('cursor request:', cursorRequest);
-
-			
 			cursorRequest.onerror = options.onError;
 			cursorRequest.onsuccess = function(event){
-				console.log('got cursor event:', event);
 				var cursor = event.target.result;
-				console.log('got cursor:', cursor);
 				if(cursor){
 					callback(cursor.value, cursor, cursorTransaction);
 					cursor.continue();
@@ -318,7 +309,10 @@
 				}
 			};
 		}
-		
+
+		/* key ranges */
+		// TODO: implement
+
 	};
 	
 	/** helpers **/
