@@ -276,22 +276,22 @@
 		 **********/
 		
 		iterate: function(callback, options){
-			options || (options = {});
 			options = mixin({
 				index: null,
 				order: 'ASC',
 				filterDuplicates: false,
 				keyRange: null,
+				writeAccess: false,
 				onEnd: null,
 				onError: function(error) { console.error('Could not open cursor.', error); }
-			}, options);
+			}, options || {});
 
 			var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
 			if(options.filterDuplicates){
 				directionType += '_NO_DUPLICATE';
 			}
 
-			var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+			var cursorTransaction = this.db.transaction([this.storeName], this.consts[options.writeAccess ? 'READ_WRITE' : 'READ_ONLY']);
 			var cursorTarget = cursorTransaction.objectStore(this.storeName);			
 			if(options.index){
 				cursorTarget = cursorTarget.index(options.index);
