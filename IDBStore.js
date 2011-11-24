@@ -279,14 +279,14 @@
 			options = mixin({
 				index: null,
 				order: 'ASC',
-				skipDuplicates: false,
+				filterDuplicates: false,
 				keyRange: null,
 				onEnd: noop,
 				onError: function(error) { console.error('Could not open cursor.', error); }
 			}, options);
 			console.log('options:', options);
 			var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
-			if(options.skipDuplicates){
+			if(options.filterDuplicates){
 				directionType += '_NO_DUPLICATE';
 			}
 			console.log('direction:', directionType, this.cursor[directionType]);
