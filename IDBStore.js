@@ -281,7 +281,7 @@
 				order: 'ASC',
 				filterDuplicates: false,
 				keyRange: null,
-				onEnd: noop,
+				onEnd: null,
 				onError: function(error) { console.error('Could not open cursor.', error); }
 			}, options);
 			console.log('options:', options);
@@ -311,10 +311,10 @@
 				var cursor = event.target.result;
 				console.log('got cursor:', cursor);
 				if(cursor){
-					callback(cursor.value);
+					callback(cursor.value, cursor, cursorTransaction);
 					cursor.continue();
 				}else{
-					options.onEnd();
+					options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
 				}
 			};
 		}
