@@ -29,8 +29,9 @@
 		mixin(this, defaults);
 		mixin(this, kwArgs);
 		onStoreReady && (this.onStoreReady = onStoreReady);
-		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-		this.consts = window.IDBTransaction || window.webkitIDBTransaction || window.msIndexedDB;
+		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+		this.consts = window.IDBTransaction || window.webkitIDBTransaction;
+		this.cursor = window.IDBCursor || window.webkitIDBCursor;
 		this.openDB();
 	};
 	
@@ -270,9 +271,48 @@
 			}), onError);
 		},
 		
-		/* key ranges / cursors */
-		// TODO: implement
+		/**********
+		 * cursor *
+		 **********/
 		
+		iterate: function(callback, options){
+			options = mixin({
+				index: null,
+				order: 'ASC',
+				filterDuplicates: false,
+				keyRange: null,
+				writeAccess: false,
+				onEnd: null,
+				onError: function(error) { console.error('Could not open cursor.', error); }
+			}, options || {});
+
+			var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
+			if(options.filterDuplicates){
+				directionType += '_NO_DUPLICATE';
+			}
+
+			var cursorTransaction = this.db.transaction([this.storeName], this.consts[options.writeAccess ? 'READ_WRITE' : 'READ_ONLY']);
+			var cursorTarget = cursorTransaction.objectStore(this.storeName);			
+			if(options.index){
+				cursorTarget = cursorTarget.index(options.index);
+			}
+
+			var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+			cursorRequest.onerror = options.onError;
+			cursorRequest.onsuccess = function(event){
+				var cursor = event.target.result;
+				if(cursor){
+					callback(cursor.value, cursor, cursorTransaction);
+					cursor.continue();
+				}else{
+					options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
+				}
+			};
+		}
+
+		/* key ranges */
+		// TODO: implement
+
 	};
 	
 	/** helpers **/

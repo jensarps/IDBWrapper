@@ -33,17 +33,19 @@
 
 			/* methods for walking thorugh the data ops: */
 			
+			var lastnames = ['Smith','Miller','Doe','Frankenstein','Furter'],
+    			firstnames = ['Peter','John','Frank', 'James'];
+			
 			function testWrite(store){
 				store = store || store_1_1;
-				store.put({
-						id: 2,
-						name: 'Doe',
-						age: 52
-					},
-					function(result){ 
-						console.log('put() call success. Result:', result);
-					}
-				);
+				var dataObj = {
+					lastname: lastnames[Math.floor(Math.random()*5)],
+					firstname: firstnames[Math.floor(Math.random()*4)],
+					age: Math.floor(Math.random() * (100 - 20)) + 20
+				};
+				store.put(dataObj, function(result){ 
+					console.log('put() call success. Result:', result);
+				});
 			}
 
 			function testRead(store){
