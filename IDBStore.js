@@ -57,7 +57,7 @@
 		onStoreReady: null,
 		
 		openDB: function(){
-			var openRequest = this.idb.open(this.dbName, this.dbDescription);
+			var openRequest = this.idb.open(this.dbName, this.dbVersion); // changed the second parameter for firefox 10
 			openRequest.onerror = function(error){ console.error('Could not open database.', error); };
 			openRequest.onsuccess = hitch(this, function(event){
 				this.db = event.target.result;
@@ -66,6 +66,10 @@
 						this.testFeatures(this.onStoreReady)
 					}));
 				}));
+			});
+			openRequest.onupgradeneeded = hitch(this, function(event){ // added version changed event for firefox 10
+				this.db = event.target.result;
+				this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
 			});
 		},
 		
@@ -105,6 +109,7 @@
 		
 		setVersion: function(onSuccess, onError){
 			onError || (onError = function(error){ console.error('Failed to set version.', error); });
+			if (!this.db.setVersion) { return; } // this.db doesn't have this method in firefox 10
 			var versionRequest = this.db.setVersion(this.dbVersion);
 			versionRequest.onerror = onError;
 			versionRequest.onblocked = onError;
@@ -161,6 +166,7 @@
 		put: function(dataObj, onSuccess, onError){
 			onError || (onError = function(error) { console.error('Could not write data.', error); });
 			onSuccess || (onSuccess = noop);
+			dataObj = JSON.parse(JSON.stringify(dataObj)); // to fix firefox 10 exception: "the object couldn't be cloned..."
 			if(typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement){
 				dataObj[this.keyPath] = this._getUID();
 			}
