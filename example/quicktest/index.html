@@ -34,14 +34,16 @@
 			/* methods for walking thorugh the data ops: */
 			
 			var lastnames = ['Smith','Miller','Doe','Frankenstein','Furter'],
-    			firstnames = ['Peter','John','Frank', 'James'];
+    			firstnames = ['Peter','John','Frank', 'James'],
+                id = 1;
 			
 			function testWrite(store){
 				store = store || store_1_1;
 				var dataObj = {
 					lastname: lastnames[Math.floor(Math.random()*5)],
 					firstname: firstnames[Math.floor(Math.random()*4)],
-					age: Math.floor(Math.random() * (100 - 20)) + 20
+					age: Math.floor(Math.random() * (100 - 20)) + 20,
+                    id: id++
 				};
 				store.put(dataObj, function(result){ 
 					console.log('put() call success. Result:', result);
@@ -50,7 +52,7 @@
 
 			function testRead(store){
 				store = store || store_1_1;
-				store.get(2, function(result){
+				store.get(1, function(result){
 					console.log('get() call success. Result:', result);
 				});
 			}
@@ -64,7 +66,7 @@
 
 			function testRemove(store){
 				store = store || store_1_1;
-				store.remove(2, function(result){
+				store.remove(1, function(result){
 					console.log('remove() call success. Result:', result);
 				});
 			}
