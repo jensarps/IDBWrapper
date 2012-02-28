@@ -16,9 +16,13 @@ The code in IDBWrapper.js is not optimized for anything, nor minified or anythin
 It is meant to be read and easy to understand. So, please, go ahead and check out
 the source!
 
-NOTE: This is a work in progress. IDBWrapper still misses index and keyRange operations,
+_NOTE_: This is a work in progress. IDBWrapper still misses index and keyRange operations,
 and this Readme only covers basic CRUD operations. I will add more content to both before
 too long.
+
+_NOTE II_: A tutorial with some more details can be found here: http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
+
+_NOTE III_: A new specification draft has been released, leaving me with very mixed feelings, which is already implemented in Firefox 10. IDBWrapper is working there, but it's currently not possible to add new indices. Also, IDBWrapper will bump version numbers as neccessary on it's own. This is ugly, but the only way to make it work for now. To check the current version of your database, check the `dbVersion` property in your IDBStore instance.
 
 Examples
 ========
