@@ -241,7 +241,7 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					all.push(cursor.value);
-					cursor.continue();
+          cursor['continue']();
 				}
 				else {
 					onSuccess(all);
@@ -344,7 +344,7 @@
 				var cursor = event.target.result;
 				if(cursor){
 					callback(cursor.value, cursor, cursorTransaction);
-					cursor.continue();
+					cursor['continue']();
 				}else{
 					options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
 				}
