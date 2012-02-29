@@ -19,7 +19,7 @@
 	var defaults = {
 		dbName: 'IDB',
 		storeName: 'Store',
-		dbVersion: '1.0',
+		dbVersion: 1,
 		keyPath: 'id',
 		autoIncrement: true,
 		onStoreReady: function(){}
@@ -29,8 +29,9 @@
 		mixin(this, defaults);
 		mixin(this, kwArgs);
 		onStoreReady && (this.onStoreReady = onStoreReady);
-		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-		this.consts = window.IDBTransaction || window.webkitIDBTransaction || window.msIndexedDB;
+		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+		this.consts = window.IDBTransaction || window.webkitIDBTransaction;
+		this.cursor = window.IDBCursor || window.webkitIDBCursor;
 		this.openDB();
 	};
 	
@@ -57,34 +58,62 @@
 		onStoreReady: null,
 		
 		openDB: function(){
-			var openRequest = this.idb.open(this.dbName, this.dbDescription);
-			openRequest.onerror = function(error){ console.error('Could not open database.', error); };
+      // need to check for FF10, which implements the new setVersion API
+      this.newVersionAPI = !!(window.IDBFactory && IDBFactory.prototype.deleteDatabase);
+
+      var features = this.features = {};
+      features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
+
+      var openRequest;
+      if (this.newVersionAPI) {
+        this.dbVersion = parseInt(this.dbVersion, 10);
+        openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
+      } else {
+        openRequest = this.idb.open(this.dbName, this.dbDescription);
+      }
+
+			openRequest.onerror = hitch(this, function(error){
+        if(error.target.errorCode == 12){ // TODO: Use const
+          this.dbVersion++;
+          setTimeout(hitch(this, 'openDB'));
+        }else{
+          console.error('Could not open database, error', error);
+        }
+      });
+
 			openRequest.onsuccess = hitch(this, function(event){
 				this.db = event.target.result;
-				this.checkVersion(hitch(this, function(){
-					this.getObjectStore(hitch(this, function(){
-						this.testFeatures(this.onStoreReady)
-					}));
-				}));
+
+        this.db.onversionchange = function(event){
+          event.target.close();
+        };
+
+        if(this.newVersionAPI){
+          this.getObjectStore(hitch(this, function(){
+            setTimeout(this.onStoreReady);
+          }));
+        }else{
+          this.checkVersion(hitch(this, function(){
+            this.getObjectStore(hitch(this, function(){
+              setTimeout(this.onStoreReady);
+            }));
+          }));
+        }
 			});
 		},
-		
-		testFeatures: function(callback){
-			var features = this.features = {};
-			
-			// In Chrome, there's no getAll method (getAll is not part of the spec, but handy)
-			var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-			features.hasGetAll = !!getAllTransaction.objectStore(this.storeName).getAll;
-			getAllTransaction.abort();
-			
-			// In FF, autoIncrement doesn't work.
-			// We won't test for that, as testing
-			// sometimes fails in Chrome (it's a long
-			// story).
-			features.hasAutoIncrement = !window.mozIndexedDB;
-			
-			callback && callback();
-		},
+
+    enterMutationState: function(onSuccess, onError){
+      if(this.newVersionAPI){
+        this.dbVersion++;
+        var openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
+        openRequest.onupgradeneeded = onSuccess;
+        openRequest.onsuccess = onError;
+        openRequest.onerror = onError;
+        openRequest.onblocked = onError;
+      }else{
+        this.setVersion(onSuccess, onError);
+      }
+    },
 
 
 		/**************
@@ -111,7 +140,6 @@
 			versionRequest.onsuccess = onSuccess;
 		},
 
-
 		/*************************
 		 * object store handling *
 		 *************************/ 
@@ -130,22 +158,24 @@
 		},
 		
 		createNewObjectStore: function(onSuccess, onError){
-			this.setVersion(hitch(this, function(){
+			this.enterMutationState(hitch(this, function(){
 				this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
 				onSuccess && onSuccess(this.store);
 			}), onError);
 		},
 		
 		openExistingObjectStore: function(onSuccess, onError){
-			var emptyTransaction = this.db.transaction([], this.consts.READ_ONLY);
+			var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
 			this.store = emptyTransaction.objectStore(this.storeName);
+      emptyTransaction.abort();
 			onSuccess && onSuccess(this.store);
 		},
 		
 		deleteObjectStore: function(onSuccess, onError){
 			onError || (onError = function(error){ console.error('Failed to delete objectStore.', error); });
-			this.setVersion(hitch(this, function(){
-				this.db.deleteObjectStore(this.storeName);
+			this.enterMutationState(hitch(this, function(evt){
+        var db = evt.target.result;
+				db.deleteObjectStore(this.storeName);
 				var success = !this.hasObjectStore();
 				onSuccess && success && onSuccess();
 				onError && !success && onError();
@@ -192,8 +222,9 @@
 			onError || (onError = function(error) { console.error('Could not read data.', error); });
 			onSuccess || (onSuccess = noop);
 			var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-			if(this.features.hasGetAll){
-				var getAllRequest = getAllTransaction.objectStore(this.storeName).getAll();
+      var store = getAllTransaction.objectStore(this.storeName);
+			if(store.getAll){
+				var getAllRequest = store.getAll();
 				getAllRequest.onsuccess = function(event){ onSuccess(event.target.result); };
 				getAllRequest.onerror = onError;
 			}else{
@@ -210,7 +241,7 @@
 				var cursor = event.target.result;
 				if (cursor) {
 					all.push(cursor.value);
-					cursor.continue();
+          cursor['continue']();
 				}
 				else {
 					onSuccess(all);
@@ -243,8 +274,19 @@
 			onError || (onError = function(error) { console.error('Could not create index.', error); });
 			onSuccess || (onSuccess = noop);
 			propertyName || (propertyName = indexName);
-			this.setVersion(hitch(this, function(evt){
-				var index = evt.target.result.objectStore(this.storeName).createIndex(indexName, propertyName, { unique: !!isUnique });
+
+      var that = this;
+
+			this.enterMutationState(hitch(this, function(evt){
+        var result = evt.target.result;
+        var index;
+        if(result.objectStore){ // transaction
+          index = db.objectStore(this.storeName).createIndex(indexName, propertyName, { unique: !!isUnique });
+        } else { // db
+          var putTransaction = result.transaction([that.storeName] /* , this.consts.READ_WRITE */ );
+          var store = putTransaction.objectStore(that.storeName);
+       		index = store.createIndex(indexName, propertyName, { unique: !!isUnique });
+        }
 				onSuccess(index);
 			}), onError);
 		},
@@ -264,15 +306,54 @@
 		removeIndex: function(indexName, onSuccess, onError){
 			onError || (onError = function(error) { console.error('Could not remove index.', error); });
 			onSuccess || (onSuccess = noop);
-			this.setVersion(hitch(this, function(evt){
+			this.enterMutationState(hitch(this, function(evt){
 				evt.target.result.objectStore(this.storeName).deleteIndex(indexName);
 				onSuccess();
 			}), onError);
 		},
 		
-		/* key ranges / cursors */
-		// TODO: implement
+		/**********
+		 * cursor *
+		 **********/
 		
+		iterate: function(callback, options){
+			options = mixin({
+				index: null,
+				order: 'ASC',
+				filterDuplicates: false,
+				keyRange: null,
+				writeAccess: false,
+				onEnd: null,
+				onError: function(error) { console.error('Could not open cursor.', error); }
+			}, options || {});
+
+			var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
+			if(options.filterDuplicates){
+				directionType += '_NO_DUPLICATE';
+			}
+
+			var cursorTransaction = this.db.transaction([this.storeName], this.consts[options.writeAccess ? 'READ_WRITE' : 'READ_ONLY']);
+			var cursorTarget = cursorTransaction.objectStore(this.storeName);			
+			if(options.index){
+				cursorTarget = cursorTarget.index(options.index);
+			}
+
+			var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+			cursorRequest.onerror = options.onError;
+			cursorRequest.onsuccess = function(event){
+				var cursor = event.target.result;
+				if(cursor){
+					callback(cursor.value, cursor, cursorTransaction);
+					cursor['continue']();
+				}else{
+					options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
+				}
+			};
+		}
+
+		/* key ranges */
+		// TODO: implement
+
 	};
 	
 	/** helpers **/
