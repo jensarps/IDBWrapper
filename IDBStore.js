@@ -26,12 +26,26 @@
 	};
 	
 	IDBStore = function(kwArgs, onStoreReady){
+		function fixupConstants(object, constants) {
+			for (var prop in constants) {
+				if (!(prop in object))
+					object[prop] = constants[prop];
+                        }
+		}
+          
 		mixin(this, defaults);
 		mixin(this, kwArgs);
 		onStoreReady && (this.onStoreReady = onStoreReady);
 		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
 		this.consts = window.IDBTransaction || window.webkitIDBTransaction;
+		fixupConstants(this.consts, {'READ_ONLY': 'readonly',
+						'READ_WRITE': 'readwrite',
+						'VERSION_CHANGE': 'versionchange'});
 		this.cursor = window.IDBCursor || window.webkitIDBCursor;
+		fixupConstants(this.cursor, {'NEXT': 'next',
+						'NEXT_NO_DUPLICATE': 'nextunique',
+						'PREV': 'prev',
+						'PREV_NO_DUPLICATE': 'prevunique'});
 		this.openDB();
 	};
 	
