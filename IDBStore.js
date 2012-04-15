@@ -87,7 +87,13 @@
       }
 
 			openRequest.onerror = hitch(this, function(error){
-        if(error.target.errorCode == 12){ // TODO: Use const
+        var gotVersionErr = false;
+        if('error' in error.target) {
+          gotVersionErr = error.target.error.name == "VersionError";
+        } else if('errorCode' in error.target) {
+          gotVersionErr = error.target.errorCode == 12; // TODO: Use const
+        }
+        if(gotVersionErr){ 
           this.dbVersion++;
           setTimeout(hitch(this, 'openDB'));
         }else{
