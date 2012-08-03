@@ -113,11 +113,18 @@
             setTimeout(this.onStoreReady);
           }));
         }else{
+          // getObjectStore will either call
+          //   a) openExistingObjectStore, which will create a new transaction
+          //   b) createNewObjectStore, which will try to enter mutation state,
+          //      which can only be done via a versionchange transaction
+          // Since Chrome 21, both actions require to not be inside of a
+          // versionchange transaction, which will be the case if the database
+          // is new.
           this.checkVersion(hitch(this, function(){
             this.getObjectStore(hitch(this, function(){
               setTimeout(this.onStoreReady);
             }));
-          }));
+          }), null, { waitForTransactionEnd: true });
         }
 			});
 		},
@@ -146,9 +153,10 @@
 		 * versioning *
 		 **************/
 		
-		checkVersion: function(onSuccess, onError){
+		checkVersion: function(onSuccess, onError, options){
+      options || (options = {});
 			if(this.getVersion() != this.dbVersion){
-				this.setVersion(onSuccess, onError);
+				this.setVersion(onSuccess, onError, options);
 			}else{
 				onSuccess && onSuccess();
 			}
@@ -158,12 +166,21 @@
 			return this.db.version;
 		},
 		
-		setVersion: function(onSuccess, onError){
+		setVersion: function(onSuccess, onError, options){
+      options || (options = {});
 			onError || (onError = function(error){ console.error('Failed to set version.', error); });
 			var versionRequest = this.db.setVersion(this.dbVersion);
 			versionRequest.onerror = onError;
 			versionRequest.onblocked = onError;
-			versionRequest.onsuccess = onSuccess;
+
+			versionRequest.onsuccess = function(evt){
+        if(options.waitForTransactionEnd){
+          var transaction = evt.target.result;
+          transaction.oncomplete = onSuccess;
+        } else {
+          onSuccess();
+        }
+      };
 		},
 
 		/*************************
