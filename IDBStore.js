@@ -122,6 +122,12 @@
 			});
 		},
 
+    deleteDatabase: function(){
+      if(this.idb.deleteDatabase){
+        this.idb.deleteDatabase(this.dbName);
+      }
+    },
+
     enterMutationState: function(onSuccess, onError){
       if(this.newVersionAPI){
         this.dbVersion++;
