@@ -26,12 +26,26 @@
 	};
 	
 	IDBStore = function(kwArgs, onStoreReady){
+		function fixupConstants(object, constants) {
+			for (var prop in constants) {
+				if (!(prop in object))
+					object[prop] = constants[prop];
+                        }
+		}
+          
 		mixin(this, defaults);
 		mixin(this, kwArgs);
 		onStoreReady && (this.onStoreReady = onStoreReady);
 		this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
 		this.consts = window.IDBTransaction || window.webkitIDBTransaction;
+		fixupConstants(this.consts, {'READ_ONLY': 'readonly',
+						'READ_WRITE': 'readwrite',
+						'VERSION_CHANGE': 'versionchange'});
 		this.cursor = window.IDBCursor || window.webkitIDBCursor;
+		fixupConstants(this.cursor, {'NEXT': 'next',
+						'NEXT_NO_DUPLICATE': 'nextunique',
+						'PREV': 'prev',
+						'PREV_NO_DUPLICATE': 'prevunique'});
 		this.openDB();
 	};
 	
@@ -73,7 +87,13 @@
       }
 
 			openRequest.onerror = hitch(this, function(error){
-        if(error.target.errorCode == 12){ // TODO: Use const
+        var gotVersionErr = false;
+        if('error' in error.target) {
+          gotVersionErr = error.target.error.name == "VersionError";
+        } else if('errorCode' in error.target) {
+          gotVersionErr = error.target.errorCode == 12; // TODO: Use const
+        }
+        if(gotVersionErr){ 
           this.dbVersion++;
           setTimeout(hitch(this, 'openDB'));
         }else{
@@ -93,14 +113,27 @@
             setTimeout(this.onStoreReady);
           }));
         }else{
+          // getObjectStore will either call
+          //   a) openExistingObjectStore, which will create a new transaction
+          //   b) createNewObjectStore, which will try to enter mutation state,
+          //      which can only be done via a versionchange transaction
+          // Since Chrome 21, both actions require to not be inside of a
+          // versionchange transaction, which will be the case if the database
+          // is new.
           this.checkVersion(hitch(this, function(){
             this.getObjectStore(hitch(this, function(){
               setTimeout(this.onStoreReady);
             }));
-          }));
+          }), null, { waitForTransactionEnd: true });
         }
 			});
 		},
+
+    deleteDatabase: function(){
+      if(this.idb.deleteDatabase){
+        this.idb.deleteDatabase(this.dbName);
+      }
+    },
 
     enterMutationState: function(onSuccess, onError){
       if(this.newVersionAPI){
@@ -120,9 +153,10 @@
 		 * versioning *
 		 **************/
 		
-		checkVersion: function(onSuccess, onError){
+		checkVersion: function(onSuccess, onError, options){
+      options || (options = {});
 			if(this.getVersion() != this.dbVersion){
-				this.setVersion(onSuccess, onError);
+				this.setVersion(onSuccess, onError, options);
 			}else{
 				onSuccess && onSuccess();
 			}
@@ -132,12 +166,21 @@
 			return this.db.version;
 		},
 		
-		setVersion: function(onSuccess, onError){
+		setVersion: function(onSuccess, onError, options){
+      options || (options = {});
 			onError || (onError = function(error){ console.error('Failed to set version.', error); });
 			var versionRequest = this.db.setVersion(this.dbVersion);
 			versionRequest.onerror = onError;
 			versionRequest.onblocked = onError;
-			versionRequest.onsuccess = onSuccess;
+
+			versionRequest.onsuccess = function(evt){
+        if(options.waitForTransactionEnd){
+          var transaction = evt.target.result;
+          transaction.oncomplete = onSuccess;
+        } else {
+          onSuccess();
+        }
+      };
 		},
 
 		/*************************
