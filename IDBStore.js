@@ -148,10 +148,6 @@
      *************************/
 
 
-    hasObjectStore: function () {
-      return this.db.objectStoreNames.contains(this.storeName);
-    },
-
     createNewObjectStore: function (onSuccess, onError) {
       this.enterMutationState(hitch(this, function () {
         this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
