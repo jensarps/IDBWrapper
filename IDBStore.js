@@ -105,9 +105,10 @@
         } else if ('errorCode' in error.target) {
           gotVersionErr = error.target.errorCode == 12; // TODO: Use const
         }
+
         if (gotVersionErr) {
-          this.dbVersion++;
-          setTimeout(hitch(this, 'openDB'));
+          console.log('Version error');
+          //setTimeout(hitch(this, 'openDB'));
         } else {
           console.error('Could not open database, error', error);
         }
