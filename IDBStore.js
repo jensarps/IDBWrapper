@@ -147,14 +147,6 @@
      * object store handling *
      *************************/
 
-
-    createNewObjectStore: function (onSuccess, onError) {
-      this.enterMutationState(hitch(this, function () {
-        this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
-        onSuccess && onSuccess(this.store);
-      }), onError);
-    },
-
     openExistingObjectStore: function (onSuccess, onError) {
       var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       this.store = emptyTransaction.objectStore(this.storeName);
