@@ -83,6 +83,10 @@
 
       this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
 
+      if(!this.newVersionAPI){
+        throw new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.');
+      }
+
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
