@@ -114,9 +114,6 @@
       openRequest.onsuccess = hitch(this, function (event) {
         this.db = event.target.result;
 
-        this.db.onversionchange = function (event) {
-          event.target.close();
-        };
 
         if (this.newVersionAPI) {
           this.getObjectStore(hitch(this, function () {
