@@ -17,7 +17,6 @@
   var IDBStore;
 
   var defaults = {
-    dbName: 'IDB',
     storeName: 'Store',
     dbVersion: 1,
     keyPath: 'id',
@@ -37,6 +36,8 @@
 
     mixin(this, defaults);
     mixin(this, kwArgs);
+    this.dbName = 'IDBWrapper-' + this.storeName;
+
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
