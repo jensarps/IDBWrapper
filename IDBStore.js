@@ -157,42 +157,6 @@
     },
 
 
-    /**************
-     * versioning *
-     **************/
-
-    checkVersion: function (onSuccess, onError, options) {
-      options || (options = {});
-      if (this.getVersion() != this.dbVersion) {
-        this.setVersion(onSuccess, onError, options);
-      } else {
-        onSuccess && onSuccess();
-      }
-    },
-
-    getVersion: function () {
-      return this.db.version;
-    },
-
-    setVersion: function (onSuccess, onError, options) {
-      options || (options = {});
-      onError || (onError = function (error) {
-        console.error('Failed to set version.', error);
-      });
-      var versionRequest = this.db.setVersion(this.dbVersion);
-      versionRequest.onerror = onError;
-      versionRequest.onblocked = onError;
-
-      versionRequest.onsuccess = function (evt) {
-        if (options.waitForTransactionEnd) {
-          var transaction = evt.target.result;
-          transaction.oncomplete = onSuccess;
-        } else {
-          onSuccess();
-        }
-      };
-    },
-
     /*************************
      * object store handling *
      *************************/
