@@ -143,20 +143,6 @@
       }
     },
 
-    enterMutationState: function (onSuccess, onError) {
-      if (this.newVersionAPI) {
-        this.dbVersion++;
-        var openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
-        openRequest.onupgradeneeded = onSuccess;
-        openRequest.onsuccess = onError;
-        openRequest.onerror = onError;
-        openRequest.onblocked = onError;
-      } else {
-        this.setVersion(onSuccess, onError);
-      }
-    },
-
-
     /*************************
      * object store handling *
      *************************/
