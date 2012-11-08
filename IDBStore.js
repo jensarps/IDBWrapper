@@ -63,8 +63,6 @@
 
     dbName: null,
 
-    dbDescription: null,
-
     dbVersion: null,
 
     store: null,
