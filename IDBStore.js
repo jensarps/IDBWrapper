@@ -91,12 +91,9 @@
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
       var openRequest;
-      if (this.newVersionAPI) {
-        this.dbVersion = parseInt(this.dbVersion, 10);
-        openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
-      } else {
-        openRequest = this.idb.open(this.dbName, this.dbDescription);
-      }
+
+      this.dbVersion = parseInt(this.dbVersion, 10);
+      openRequest = this.idb.open(this.dbName, this.dbVersion);
 
       openRequest.onerror = hitch(this, function (error) {
         var gotVersionErr = false;
