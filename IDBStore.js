@@ -111,27 +111,28 @@
         }
       });
 
+
       openRequest.onsuccess = hitch(this, function (event) {
         this.db = event.target.result;
 
-
-        if (this.newVersionAPI) {
-          this.getObjectStore(hitch(this, function () {
-            setTimeout(this.onStoreReady);
-          }));
+        if(this.db.objectStoreNames.contains(this.storeName)){
+          console.log('object store found');
+          this.openExistingObjectStore(this.onStoreReady);
         } else {
-          // getObjectStore will either call
-          //   a) openExistingObjectStore, which will create a new transaction
-          //   b) createNewObjectStore, which will try to enter mutation state,
-          //      which can only be done via a versionchange transaction
-          // Since Chrome 21, both actions require to not be inside of a
-          // versionchange transaction, which will be the case if the database
-          // is new.
-          this.checkVersion(hitch(this, function () {
-            this.getObjectStore(hitch(this, function () {
-              setTimeout(this.onStoreReady);
-            }));
-          }), null, { waitForTransactionEnd: true });
+          console.log('object store NOT found', this.storeName);
+          throw new Error('Cannot create a new store in this db for the current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+        }
+      });
+
+      openRequest.onupgradeneeded = hitch(this, function(/* IDBVersionChangeEvent */ event){
+        this.db = event.target.result;
+
+        if(this.db.objectStoreNames.contains(this.storeName)){
+          console.log('object store found');
+        } else {
+          console.log('object store NOT found', this.storeName);
+
+          this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
         }
       });
     },
