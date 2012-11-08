@@ -80,8 +80,8 @@
     onStoreReady: null,
 
     openDB: function () {
-      // need to check for FF10, which implements the new setVersion API
-      this.newVersionAPI = !!(window.IDBFactory && IDBFactory.prototype.deleteDatabase);
+
+      this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
 
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
