@@ -34,8 +34,10 @@
       }
     }
 
-    mixin(this, defaults);
-    mixin(this, kwArgs);
+    for(var key in defaults){
+      this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
+    }
+
     this.dbName = 'IDBWrapper-' + this.storeName;
 
     onStoreReady && (this.onStoreReady = onStoreReady);
