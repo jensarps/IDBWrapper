@@ -372,24 +372,6 @@
     }
     return target;
   };
-  var hitch = function (scope, method) {
-    if (!method) {
-      method = scope;
-      scope = null;
-    }
-    if (typeof method == "string") {
-      scope = scope || window;
-      if (!scope[method]) {
-        throw(['method not found']);
-      }
-      return function () {
-        return scope[method].apply(scope, arguments || []);
-      };
-    }
-    return !scope ? method : function () {
-      return method.apply(scope, arguments || []);
-    };
-  };
 
   return IDBStore;
 
