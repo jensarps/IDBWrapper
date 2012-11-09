@@ -24,7 +24,8 @@
     keyPath: 'id',
     autoIncrement: true,
     onStoreReady: function () {
-    }
+    },
+    indexes: []
   };
 
   IDBStore = function (kwArgs, onStoreReady) {
