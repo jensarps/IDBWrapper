@@ -53,7 +53,6 @@ The options object may contain the following properties (default values are show
 
 ```javascript
 {
-  dbName: 'IDB',
   storeName: 'Store',
   dbVersion: '1.0',
   keyPath: 'id',
