@@ -42,16 +42,19 @@
     }
 
     this.dbName = 'IDBWrapper-' + this.storeName;
-
+    this.dbVersion = parseInt(this.dbVersion, 10);
+    
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+
     this.consts = window.IDBTransaction || window.webkitIDBTransaction;
     fixupConstants(this.consts, {
       'READ_ONLY': 'readonly',
       'READ_WRITE': 'readwrite',
       'VERSION_CHANGE': 'versionchange'
     });
+
     this.cursor = window.IDBCursor || window.webkitIDBCursor;
     fixupConstants(this.cursor, {
       'NEXT': 'next',
@@ -59,6 +62,7 @@
       'PREV': 'prev',
       'PREV_NO_DUPLICATE': 'prevunique'
     });
+
     this.openDB();
   };
 
@@ -93,10 +97,7 @@
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
-      var openRequest;
-
-      this.dbVersion = parseInt(this.dbVersion, 10);
-      openRequest = this.idb.open(this.dbName, this.dbVersion);
+      var openRequest = this.idb.open(this.dbName, this.dbVersion);
 
       openRequest.onerror = function (error) {
 
