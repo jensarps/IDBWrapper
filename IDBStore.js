@@ -95,7 +95,8 @@
       this.dbVersion = parseInt(this.dbVersion, 10);
       openRequest = this.idb.open(this.dbName, this.dbVersion);
 
-      openRequest.onerror = hitch(this, function (error) {
+      openRequest.onerror = function (error) {
+
         var gotVersionErr = false;
         if ('error' in error.target) {
           gotVersionErr = error.target.error.name == "VersionError";
@@ -109,10 +110,11 @@
         } else {
           console.error('Could not open database, error', error);
         }
-      });
+      }.bind(this);
 
 
-      openRequest.onsuccess = hitch(this, function (event) {
+      openRequest.onsuccess = function (event) {
+
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
@@ -122,9 +124,10 @@
           console.log('object store NOT found', this.storeName);
           throw new Error('Cannot create a new store in this db for the current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
         }
-      });
+      }.bind(this);
 
-      openRequest.onupgradeneeded = hitch(this, function(/* IDBVersionChangeEvent */ event){
+      openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
+
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
@@ -134,7 +137,7 @@
 
           this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
         }
-      });
+      }.bind(this);
     },
 
     deleteDatabase: function () {
