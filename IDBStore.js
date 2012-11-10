@@ -157,6 +157,11 @@
             throw new Error('Cannot create index: No index name given.');
           }
 
+          if(this.hasIndex(indexName)){
+          } else {
+            this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+          }
+
         }, this);
 
       }.bind(this);
