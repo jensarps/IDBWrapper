@@ -183,12 +183,12 @@
      * object store handling *
      *************************/
 
-    openExistingObjectStore: function (onSuccess, onError) {
+    openExistingObjectStore: function () {
       var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      this.store = emptyTransaction.objectStore(this.storeName);
+      var store = emptyTransaction.objectStore(this.storeName);
       emptyTransaction.abort();
 
-      onSuccess && onSuccess(this.store);
+      return store;
     },
 
     /*********************
