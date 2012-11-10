@@ -148,7 +148,7 @@
 
             if(this.hasIndex(indexName)){
               // check if it complies
-              var actualIndex = this.getIndex(indexName);
+              var actualIndex = this.store.index(indexName);
               var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
                 return indexData[key] == actualIndex[key];
               });
@@ -193,7 +193,7 @@
 
           if(this.hasIndex(indexName)){
             // check if it complies
-            var actualIndex = this.getIndex(indexName);
+            var actualIndex = this.store.index(indexName);
             var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
               return indexData[key] == actualIndex[key];
             });
@@ -335,10 +335,6 @@
     /************
      * indexing *
      ************/
-
-    getIndex: function (indexName) {
-      return this.store.index(indexName);
-    },
 
     getIndexList: function () {
       return this.store.indexNames;
