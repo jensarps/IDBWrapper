@@ -127,6 +127,35 @@
           if(!this.store){
             this.store = this.openExistingObjectStore();
           }
+          // check indexes
+
+          this.indexes.forEach(function(indexData){
+            var indexName = indexData.name;
+
+            // normalize and provide existing keys
+            indexData.keyPath = indexData.keyPath || indexName;
+            indexData.unique = !!indexData.unique;
+            indexData.multiEntry = !!indexData.multiEntry;
+
+            if(!indexName){
+              throw new Error('Cannot create index: No index name given.');
+            }
+
+            if(this.hasIndex(indexName)){
+              // check if it complies
+              var actualIndex = this.getIndex(indexName);
+              var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+                return indexData[key] == actualIndex[key];
+              });
+              if(!complies){
+                throw new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+              }
+            } else {
+              throw new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+            }
+
+          }, this);
+
           this.onStoreReady();
         } else {
           console.log('object store NOT found', this.storeName);
