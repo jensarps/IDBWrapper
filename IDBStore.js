@@ -164,7 +164,6 @@
           this.onStoreReady();
         } else {
           // We should never get here.
-          console.log('object store NOT found', this.storeName);
           throw new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
         }
       }.bind(this);
