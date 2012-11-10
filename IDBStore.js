@@ -124,7 +124,10 @@
 
         if(this.db.objectStoreNames.contains(this.storeName)){
           console.log('object store found');
-          this.openExistingObjectStore(this.onStoreReady);
+          if(!this.store){
+            this.store = this.openExistingObjectStore();
+          }
+          this.onStoreReady();
         } else {
           console.log('object store NOT found', this.storeName);
           throw new Error('Cannot create a new store in this db for the current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
