@@ -12,7 +12,7 @@ require(['../../IDBStore.js'], function(IDBStore){
 	function init(){
 		
 		// create a store ("table") for the customers
-		customers = new IDBStore({
+		customers = app.customers = new IDBStore({
       dbVersion: 1,
 			storeName: 'customer-index',
 			keyPath: 'customerid',
