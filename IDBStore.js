@@ -43,7 +43,7 @@
 
     this.dbName = 'IDBWrapper-' + this.storeName;
     this.dbVersion = parseInt(this.dbVersion, 10);
-    
+
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
@@ -112,7 +112,6 @@
 
         if (gotVersionErr) {
           console.log('Version error');
-          //setTimeout(hitch(this, 'openDB'));
         } else {
           console.error('Could not open database, error', error);
         }
@@ -137,11 +136,8 @@
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
-          console.log('object store found');
           this.store = event.target.transaction.objectStore(this.storeName);
         } else {
-          console.log('object store NOT found', this.storeName);
-
           this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
         }
 
