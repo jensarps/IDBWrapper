@@ -82,6 +82,8 @@
 
     autoIncrement: null,
 
+    indexes: null,
+
     features: null,
 
     onStoreReady: null,
