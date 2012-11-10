@@ -158,6 +158,16 @@
           }
 
           if(this.hasIndex(indexName)){
+            // check if it complies
+            var actualIndex = this.getIndex(indexName);
+            var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+              return indexData[key] == actualIndex[key];
+            });
+            if(!complies){
+              // index differs, need to delete and re-create
+              this.store.deleteIndex(indexName);
+              this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+            }
           } else {
             this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
           }
