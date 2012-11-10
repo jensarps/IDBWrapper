@@ -314,17 +314,6 @@
       return this.store.indexNames.contains(indexName);
     },
 
-    removeIndex: function (indexName, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not remove index.', error);
-      });
-      onSuccess || (onSuccess = noop);
-      this.enterMutationState(hitch(this, function (evt) {
-        evt.target.result.objectStore(this.storeName).deleteIndex(indexName);
-        onSuccess();
-      }), onError);
-    },
-
     /**********
      * cursor *
      **********/
