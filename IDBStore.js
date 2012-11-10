@@ -138,6 +138,7 @@
 
         if(this.db.objectStoreNames.contains(this.storeName)){
           console.log('object store found');
+          this.store = event.target.transaction.objectStore(this.storeName);
         } else {
           console.log('object store NOT found', this.storeName);
 
