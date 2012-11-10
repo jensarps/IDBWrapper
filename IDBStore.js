@@ -141,7 +141,7 @@
         } else {
           console.log('object store NOT found', this.storeName);
 
-          this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
         }
       }.bind(this);
     },
