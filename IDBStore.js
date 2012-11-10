@@ -120,6 +120,11 @@
 
       openRequest.onsuccess = function (event) {
 
+        if(this.db){
+          this.onStoreReady();
+          return;
+        }
+
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
