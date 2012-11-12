@@ -59,9 +59,6 @@ require(['../../IDBStore.js'], function(IDBStore){
 		['customerid','firstname','lastname', 'age'].forEach(function(key){
 			var value = nodeCache[key].value.trim();
 			if(value.length){
-				if(key == 'customerid'){ // We want the id to be numeric:
-					value = parseInt(value, 10);
-				}
 				data[key] = value;
 			}
 		});
