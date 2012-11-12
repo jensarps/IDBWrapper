@@ -69,7 +69,7 @@ a {
 #input,
 #query {
 	padding: 10px;
-	width: 300px;
+	width: 350px;
   border-left: solid 1px black;
 }
 #input div,
@@ -79,5 +79,5 @@ a {
 #input label,
 #query label{
 	display: inline-block;
-	width: 100px;
+	width: 120px;
 }
