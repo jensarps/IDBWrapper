@@ -47,6 +47,7 @@
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
 
     this.consts = window.IDBTransaction || window.webkitIDBTransaction;
     fixupConstants(this.consts, {
@@ -382,10 +383,35 @@
           options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
         }
       };
-    }
+    },
 
+    /**************/
     /* key ranges */
-    // TODO: implement
+    /**************/
+
+    makeKeyRange: function(options){
+      var keyRange,
+          hasLower = typeof options.lower != 'undefined',
+          hasUpper = typeof options.upper != 'undefined';
+
+      switch(true){
+        case hasLower && hasUpper:
+          keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
+          break;
+        case hasLower:
+          keyRange = this.keyRange.lowerBound(options.lower, options.excludeLower);
+          break;
+        case hasUpper:
+          keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
+          break;
+        default:
+          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
+          break;
+      }
+
+      return keyRange;
+
+    }
 
   };
 
