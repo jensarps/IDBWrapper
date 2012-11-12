@@ -124,8 +124,8 @@ require(['../../IDBStore.js'], function(IDBStore){
     }
 
     var keyRange = customers.makeKeyRange(options);
+    
     var onItem = function (item) {
-      console.log(item);
       content += tpls.row.replace(/\{([^\}]+)\}/g, function (_, key) {
         return item[key];
       });
