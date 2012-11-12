@@ -1,8 +1,8 @@
 require(['../../IDBStore.js'], function(IDBStore){
 	
 	var tpls = {
-		row: '<tr><td>{customerid}</td><td><input id="lastname_{customerid}" value="{lastname}"></td><td><input id="firstname_{customerid}" value="{firstname}"></td><td><button onclick="app.deleteItem({customerid});">delete</button><button onclick="app.updateItem({customerid});">update</button></td></tr>',
-		table: '<table><tr><th>ID</th><th>Last Name</th><th>First Name</th><th></th></tr>{content}</table>'
+		row: '<tr><td>{customerid}</td><td>{lastname}</td><td>{firstname}</td><td>{age}</td><td><button onclick="app.deleteItem({customerid});">delete</button></td></tr>',
+		table: '<table><tr><th>ID</th><th>Last Name</th><th>First Name</th><th>Age</th><th></th></tr>{content}</table>'
 	};
 	
 	var customers;
@@ -24,12 +24,18 @@ require(['../../IDBStore.js'], function(IDBStore){
 		});
 		
 		// create references for some nodes we have to work with
-		['submit', 'customerid', 'firstname', 'lastname', 'results-container'].forEach(function(id){
+		[
+      'submit', 'submitQuery',
+      'upper', 'lower', 'index',
+      'customerid', 'firstname', 'lastname', 'age',
+      'results-container'
+    ].forEach(function(id){
 			nodeCache[id] = document.getElementById(id);
 		});
 		
-		// and listen to the form's submit button.
+		// and listen to the form's submit buttons.
 		nodeCache.submit.addEventListener('click', enterData);
+    nodeCache.submitQuery.addEventListener('click', runQuery);
 	}
 	
 	function refreshTable(){
@@ -49,7 +55,7 @@ require(['../../IDBStore.js'], function(IDBStore){
 	function enterData(){
 		// read data from inputs…
 		var data = {};
-		['customerid','firstname','lastname'].forEach(function(key){
+		['customerid','firstname','lastname', 'age'].forEach(function(key){
 			var value = nodeCache[key].value.trim();
 			if(value.length){
 				if(key == 'customerid'){ // We want the id to be numeric:
@@ -67,7 +73,7 @@ require(['../../IDBStore.js'], function(IDBStore){
 	}
 	
 	function clearForm(){
-		['customerid','firstname','lastname'].forEach(function(id){
+		['customerid','firstname','lastname', 'age'].forEach(function(id){
 			nodeCache[id].value = '';
 		});
 	}
@@ -75,21 +81,69 @@ require(['../../IDBStore.js'], function(IDBStore){
 	function deleteItem(id){
 		customers.remove(id, refreshTable);
 	}
-	
-	function updateItem(id){
-		var data = {
-			customerid: id,
-			firstname: document.getElementById('firstname_' + id).value.trim(),
-			lastname: document.getElementById('lastname_' + id).value.trim()
-		};
-		customers.put(data, refreshTable);
-	}
+
+  function makeRandomEntry(){
+    var lastnames = ['Smith','Miller','Doe','Frankenstein','Furter'],
+        firstnames = ['Peter','John','Frank', 'James', 'Jill'];
+
+    var entry = {
+      lastname: lastnames[Math.floor(Math.random()*5)],
+      firstname: firstnames[Math.floor(Math.random()*4)],
+      age: Math.floor(Math.random() * (100 - 20)) + 20,
+      customerid: ( "" + ( Date.now() * Math.random() ) ).substring(0, 6)
+    };
+
+    return entry;
+  }
+
+  function addRandomCustomer(){
+    var data = makeRandomEntry();
+
+    customers.put(data, function(){
+      clearForm();
+      refreshTable();
+    });
+  }
+
+  function runQuery(){
+    var upperValue = nodeCache.upper.value,
+        hasUpper = upperValue != '',
+        lowerValue = nodeCache.lower.value,
+        hasLower = lowerValue != '',
+        indexName = nodeCache.index.value,
+        content = '';
+
+    var options = {};
+    if(hasUpper){
+      options.upper = upperValue;
+    }
+    if(hasLower){
+      options.lower = lowerValue;
+    }
+
+    var keyRange = customers.makeKeyRange(options);
+    var onItem = function (item) {
+      console.log(item);
+      content += tpls.row.replace(/\{([^\}]+)\}/g, function (_, key) {
+        return item[key];
+      });
+    };
+    var onEnd = function () {
+      nodeCache['results-container'].innerHTML = tpls.table.replace('{content}', content);
+    };
+
+    customers.iterate(onItem, {
+      index: indexName,
+      keyRange: keyRange,
+      onEnd: onEnd
+    });
+  }
 	
 	// export some functions to the outside to
 	// make the onclick="" attributes work.
 	window.app = {
 		deleteItem: deleteItem,
-		updateItem: updateItem
+    addRandomCustomer: addRandomCustomer
 	};
 	
 	// go!

@@ -1,29 +1,49 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>IDBWrapper Basic Index Example</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
-		<script type="text/javascript" src="../lib/requirejs/require.js"></script>
-	</head>
-	<body class="vbox">
-		<div id="head">IDBWrapper Basic Index Example</div>
-		<div class="hbox flex">
-			<div class="vbox flex" id="results-container">
-				QueryResults
-			</div>
-			<div class="vbox">
-				<div id="query"></div>
-				<div id="input">
-					<p>
-						Enter some data to save. As ID, enter a numeric value or leave blank.
-					</p>
-					<div><label>ID</label><input id="customerid"></div>
-					<div><label>First Name</label><input id="firstname"></div>
-					<div><label>Last Name</label><input id="lastname"></div>
-					<button id="submit">Enter data</button>
-				</div>
-			</div>
-		</div>
-		<script type="text/javascript" src="app.js"></script>
-	</body>
+<head>
+  <title>IDBWrapper Basic Index Example</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="../lib/requirejs/require.js"></script>
+</head>
+<body class="vbox">
+<div id="head">IDBWrapper Basic Index Example</div>
+<div class="hbox flex">
+  <div class="vbox flex" id="results-container">
+    QueryResults
+  </div>
+  <div id="query">
+    <h1>Query</h1>
+
+    <div>
+      <label>Index</label>
+      <select id="index">
+        <option value="">None (use store's keyPath)</option>
+        <option value="lastname">lastname</option>
+      </select>
+    </div>
+    <div><label>Lower Bound</label><input id="lower"></div>
+    <div><label>Upper Bound</label><input id="upper"></div>
+    <button id="submitQuery">Submit Query</button>
+  </div>
+  <div id="input">
+    <h1>Add data</h1>
+
+    <p>
+      Add a random customer:
+      <button onclick="app.addRandomCustomer()">Add random customer data
+      </button>
+    </p>
+    <p>
+      Or, enter customer data below:
+    </p>
+
+    <div><label>Customer ID</label><input id="customerid"></div>
+    <div><label>First Name</label><input id="firstname"></div>
+    <div><label>Last Name</label><input id="lastname"></div>
+    <div><label>Age</label><input id="age"></div>
+    <button id="submit">Enter data</button>
+  </div>
+</div>
+<script type="text/javascript" src="app.js"></script>
+</body>
 </html>
