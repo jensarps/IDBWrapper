@@ -26,7 +26,8 @@ require(['../../IDBStore.js'], function(IDBStore){
 		// create references for some nodes we have to work with
 		[
       'submit', 'submitQuery',
-      'upper', 'lower', 'index', 'excludeLower', 'excludeUpper',
+      'upper', 'lower', 'excludeLower', 'excludeUpper',
+      'sortOrder', 'index',
       'customerid', 'firstname', 'lastname', 'age',
       'results-container'
     ].forEach(function(id){
@@ -111,6 +112,7 @@ require(['../../IDBStore.js'], function(IDBStore){
         lowerValue = nodeCache.lower.value,
         hasLower = lowerValue != '',
         indexName = nodeCache.index.value,
+        sortOrder = nodeCache.sortOrder.value,
         content = '';
 
     var options = {};
@@ -124,7 +126,7 @@ require(['../../IDBStore.js'], function(IDBStore){
     }
 
     var keyRange = customers.makeKeyRange(options);
-    
+
     var onItem = function (item) {
       content += tpls.row.replace(/\{([^\}]+)\}/g, function (_, key) {
         return item[key];
@@ -137,6 +139,7 @@ require(['../../IDBStore.js'], function(IDBStore){
     customers.iterate(onItem, {
       index: indexName,
       keyRange: keyRange,
+      order: sortOrder,
       onEnd: onEnd
     });
   }
