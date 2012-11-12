@@ -380,7 +380,11 @@
           callback(cursor.value, cursor, cursorTransaction);
           cursor['continue']();
         } else {
-          options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
+          if(options.onEnd){
+            options.onEnd()
+          } else {
+            callback(null);
+          }
         }
       };
     },
