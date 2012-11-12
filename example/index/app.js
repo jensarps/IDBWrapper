@@ -26,7 +26,7 @@ require(['../../IDBStore.js'], function(IDBStore){
 		// create references for some nodes we have to work with
 		[
       'submit', 'submitQuery',
-      'upper', 'lower', 'index',
+      'upper', 'lower', 'index', 'excludeLower', 'excludeUpper',
       'customerid', 'firstname', 'lastname', 'age',
       'results-container'
     ].forEach(function(id){
@@ -116,9 +116,11 @@ require(['../../IDBStore.js'], function(IDBStore){
     var options = {};
     if(hasUpper){
       options.upper = upperValue;
+      options.excludeUpper = nodeCache.excludeUpper.checked;
     }
     if(hasLower){
       options.lower = lowerValue;
+      options.excludeLower = nodeCache.excludeLower.checked;
     }
 
     var keyRange = customers.makeKeyRange(options);
