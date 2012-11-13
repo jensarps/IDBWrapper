@@ -68,7 +68,7 @@ The options object may contain the following properties (default values are show
 ```javascript
 {
   storeName: 'Store',
-  dbVersion: '1.0',
+  dbVersion: 1,
   keyPath: 'id',
   autoIncrement: true,
   onStoreReady: function(){}
