@@ -22,7 +22,7 @@ Part 1: Setup and CRUD operations
 http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 
 Part 2: Running Queries against the store
-http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
+http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
 ##November Rewrite
 
@@ -78,13 +78,14 @@ The options object may contain the following properties (default values are show
   dbVersion: 1,
   keyPath: 'id',
   autoIncrement: true,
+  indexes: [],
   onStoreReady: function(){}
 }
 ```
 
 'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true, 
 the database will automatically add a unique key to the keyPath index when storing objects missing 
-that property.
+that property. 'indexes' contains objects defining indexes (see below for details on indexes).
 
 You can also pass a callback function to the options object. If a callback is provided both as second 
 parameter and inside of the options object, the function passed as second parameter will be used.
