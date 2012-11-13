@@ -5,15 +5,18 @@
   <title>IDBWrapper Basic Index Example</title>
   <link rel="stylesheet" type="text/css" href="style.css">
   <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-10931011-2']);
-      _gaq.push(['_trackPageview']);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10931011-2']);
+    _gaq.push(['_trackPageview']);
 
-      (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+    (function () {
+      var ga = document.createElement('script');
+      ga.type = 'text/javascript';
+      ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
   </script>
   <script type="text/javascript" src="../lib/requirejs/require.js"></script>
 </head>
@@ -34,9 +37,11 @@
       </select>
     </div>
     <div><label>Lower Bound</label><input id="lower"></div>
-    <div><label>Exclude Lower</label><input type="checkbox" id="excludeLower"></div>
+    <div><label>Exclude Lower</label><input type="checkbox" id="excludeLower">
+    </div>
     <div><label>Upper Bound</label><input id="upper"></div>
-    <div><label>Exclude Upper</label><input type="checkbox" id="excludeUpper"></div>
+    <div><label>Exclude Upper</label><input type="checkbox" id="excludeUpper">
+    </div>
 
     <div>
       <label>Sort Order</label>
@@ -46,7 +51,8 @@
       </select>
     </div>
 
-    <div><label>Filter Duplicates</label><input type="checkbox" id="filterDuplicates"></div>
+    <div><label>Filter Duplicates</label><input type="checkbox"
+                                                id="filterDuplicates"></div>
 
     <button id="submitQuery">Submit Query</button>
   </div>
