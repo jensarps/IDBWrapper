@@ -33,6 +33,9 @@ them), do a getAll() on the old store and write the data to the new store.
 
 I am very sorry about any inconveniences, but there was no other way.
 
+The 'old' version of IDBWrapper is till available in the `legacy` branch:
+https://github.com/jensarps/IDBWrapper/tree/legacy
+
 
 Examples
 ========
