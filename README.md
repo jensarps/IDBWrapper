@@ -293,3 +293,21 @@ The `keyRangeOptions` object must have one or more of the following properties:
 
 `excludeUpper`: Boolean, whether to exclude the upper bound itself. Default: false
 
+___
+
+
+3) The count method.
+
+
+```javascript
+iterate: function(/*Function*/ onSuccess, /*Object*/ countOptions)
+```
+
+The onSuccess receives the result of the count as only argument.
+
+The `countOptions` object may have one or more of the following properties:
+
+index: The name of an index to operate on.
+
+keyRange: A keyRange to use
+
