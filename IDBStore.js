@@ -389,6 +389,32 @@
       };
     },
 
+    count: function (onSuccess, options) {
+
+      options = mixin({
+        index: null,
+        keyRange: null
+      }, options || {});
+
+      var onError = options.onError || function (error) {
+        console.error('Could not open cursor.', error);
+      };
+
+      var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      var cursorTarget = cursorTransaction.objectStore(this.storeName);
+      if (options.index) {
+        cursorTarget = cursorTarget.index(options.index);
+      }
+
+      var countRequest = cursorTarget.count(options.keyRange);
+      countRequest.onsuccess = function (evt) {
+        onSuccess(evt.target.result);
+      };
+      countRequest.onError = function (error) {
+        onError(error);
+      };
+    },
+
     /**************/
     /* key ranges */
     /**************/
