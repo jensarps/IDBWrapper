@@ -1,10 +1,12 @@
 /*
  * IDBWrapper - A cross-browser wrapper for IndexedDB
- * Copyright (c) 2011 Jens Arps
+ * Copyright (c) 2011 - 2012 Jens Arps
  * http://jensarps.de/
  *
  * Licensed under the MIT (X11) license
  */
+
+"use strict";
 
 (function (name, definition, global) {
   if (typeof define === 'function') {
@@ -17,13 +19,13 @@
   var IDBStore;
 
   var defaults = {
-    dbName: 'IDB',
     storeName: 'Store',
     dbVersion: 1,
     keyPath: 'id',
     autoIncrement: true,
     onStoreReady: function () {
-    }
+    },
+    indexes: []
   };
 
   IDBStore = function (kwArgs, onStoreReady) {
@@ -35,17 +37,25 @@
       }
     }
 
-    mixin(this, defaults);
-    mixin(this, kwArgs);
+    for(var key in defaults){
+      this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
+    }
+
+    this.dbName = 'IDBWrapper-' + this.storeName;
+    this.dbVersion = parseInt(this.dbVersion, 10);
+
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
+
     this.consts = window.IDBTransaction || window.webkitIDBTransaction;
     fixupConstants(this.consts, {
       'READ_ONLY': 'readonly',
       'READ_WRITE': 'readwrite',
       'VERSION_CHANGE': 'versionchange'
     });
+
     this.cursor = window.IDBCursor || window.webkitIDBCursor;
     fixupConstants(this.cursor, {
       'NEXT': 'next',
@@ -53,6 +63,7 @@
       'PREV': 'prev',
       'PREV_NO_DUPLICATE': 'prevunique'
     });
+
     this.openDB();
   };
 
@@ -61,8 +72,6 @@
     db: null,
 
     dbName: null,
-
-    dbDescription: null,
 
     dbVersion: null,
 
@@ -74,66 +83,132 @@
 
     autoIncrement: null,
 
+    indexes: null,
+
     features: null,
 
     onStoreReady: null,
 
     openDB: function () {
-      // need to check for FF10, which implements the new setVersion API
-      this.newVersionAPI = !!(window.IDBFactory && IDBFactory.prototype.deleteDatabase);
+
+      this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
+
+      if(!this.newVersionAPI){
+        throw new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.');
+      }
 
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
-      var openRequest;
-      if (this.newVersionAPI) {
-        this.dbVersion = parseInt(this.dbVersion, 10);
-        openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
-      } else {
-        openRequest = this.idb.open(this.dbName, this.dbDescription);
-      }
+      var openRequest = this.idb.open(this.dbName, this.dbVersion);
 
-      openRequest.onerror = hitch(this, function (error) {
+      openRequest.onerror = function (error) {
+
         var gotVersionErr = false;
         if ('error' in error.target) {
           gotVersionErr = error.target.error.name == "VersionError";
         } else if ('errorCode' in error.target) {
           gotVersionErr = error.target.errorCode == 12; // TODO: Use const
         }
+
         if (gotVersionErr) {
-          this.dbVersion++;
-          setTimeout(hitch(this, 'openDB'));
+          console.log('Version error');
         } else {
           console.error('Could not open database, error', error);
         }
-      });
+      }.bind(this);
 
-      openRequest.onsuccess = hitch(this, function (event) {
+
+      openRequest.onsuccess = function (event) {
+
+        if(this.db){
+          this.onStoreReady();
+          return;
+        }
+
         this.db = event.target.result;
 
-        this.db.onversionchange = function (event) {
-          event.target.close();
-        };
+        if(this.db.objectStoreNames.contains(this.storeName)){
+          console.log('object store found');
+          if(!this.store){
+            this.store = this.openExistingObjectStore();
+          }
+          // check indexes
 
-        if (this.newVersionAPI) {
-          this.getObjectStore(hitch(this, function () {
-            setTimeout(this.onStoreReady);
-          }));
+          this.indexes.forEach(function(indexData){
+            var indexName = indexData.name;
+
+            // normalize and provide existing keys
+            indexData.keyPath = indexData.keyPath || indexName;
+            indexData.unique = !!indexData.unique;
+            indexData.multiEntry = !!indexData.multiEntry;
+
+            if(!indexName){
+              throw new Error('Cannot create index: No index name given.');
+            }
+
+            if(this.hasIndex(indexName)){
+              // check if it complies
+              var actualIndex = this.store.index(indexName);
+              var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+                return indexData[key] == actualIndex[key];
+              });
+              if(!complies){
+                throw new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+              }
+            } else {
+              throw new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+            }
+
+          }, this);
+
+          this.onStoreReady();
         } else {
-          // getObjectStore will either call
-          //   a) openExistingObjectStore, which will create a new transaction
-          //   b) createNewObjectStore, which will try to enter mutation state,
-          //      which can only be done via a versionchange transaction
-          // Since Chrome 21, both actions require to not be inside of a
-          // versionchange transaction, which will be the case if the database
-          // is new.
-          this.checkVersion(hitch(this, function () {
-            this.getObjectStore(hitch(this, function () {
-              setTimeout(this.onStoreReady);
-            }));
-          }), null, { waitForTransactionEnd: true });
+          // We should never get here.
+          throw new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
         }
-      });
+      }.bind(this);
+
+      openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
+
+        this.db = event.target.result;
+
+        if(this.db.objectStoreNames.contains(this.storeName)){
+          this.store = event.target.transaction.objectStore(this.storeName);
+        } else {
+          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+        }
+
+        this.indexes.forEach(function(indexData){
+          var indexName = indexData.name;
+
+          // normalize and provide existing keys
+          indexData.keyPath = indexData.keyPath || indexName;
+          indexData.unique = !!indexData.unique;
+          indexData.multiEntry = !!indexData.multiEntry;
+
+          if(!indexName){
+            throw new Error('Cannot create index: No index name given.');
+          }
+
+          if(this.hasIndex(indexName)){
+            // check if it complies
+            var actualIndex = this.store.index(indexName);
+            var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+              return indexData[key] == actualIndex[key];
+            });
+            if(!complies){
+              // index differs, need to delete and re-create
+              this.store.deleteIndex(indexName);
+              this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+            }
+          } else {
+            this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+          }
+
+        }, this);
+
+      }.bind(this);
     },
 
     deleteDatabase: function () {
@@ -142,100 +217,17 @@
       }
     },
 
-    enterMutationState: function (onSuccess, onError) {
-      if (this.newVersionAPI) {
-        this.dbVersion++;
-        var openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
-        openRequest.onupgradeneeded = onSuccess;
-        openRequest.onsuccess = onError;
-        openRequest.onerror = onError;
-        openRequest.onblocked = onError;
-      } else {
-        this.setVersion(onSuccess, onError);
-      }
-    },
-
-
-    /**************
-     * versioning *
-     **************/
-
-    checkVersion: function (onSuccess, onError, options) {
-      options || (options = {});
-      if (this.getVersion() != this.dbVersion) {
-        this.setVersion(onSuccess, onError, options);
-      } else {
-        onSuccess && onSuccess();
-      }
-    },
-
-    getVersion: function () {
-      return this.db.version;
-    },
-
-    setVersion: function (onSuccess, onError, options) {
-      options || (options = {});
-      onError || (onError = function (error) {
-        console.error('Failed to set version.', error);
-      });
-      var versionRequest = this.db.setVersion(this.dbVersion);
-      versionRequest.onerror = onError;
-      versionRequest.onblocked = onError;
-
-      versionRequest.onsuccess = function (evt) {
-        if (options.waitForTransactionEnd) {
-          var transaction = evt.target.result;
-          transaction.oncomplete = onSuccess;
-        } else {
-          onSuccess();
-        }
-      };
-    },
-
     /*************************
      * object store handling *
      *************************/
 
-
-    getObjectStore: function (onSuccess, onError) {
-      if (this.hasObjectStore()) {
-        this.openExistingObjectStore(onSuccess, onError);
-      } else {
-        this.createNewObjectStore(onSuccess, onError);
-      }
-    },
-
-    hasObjectStore: function () {
-      return this.db.objectStoreNames.contains(this.storeName);
-    },
-
-    createNewObjectStore: function (onSuccess, onError) {
-      this.enterMutationState(hitch(this, function () {
-        this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
-        onSuccess && onSuccess(this.store);
-      }), onError);
-    },
-
-    openExistingObjectStore: function (onSuccess, onError) {
+    openExistingObjectStore: function () {
       var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      this.store = emptyTransaction.objectStore(this.storeName);
+      var store = emptyTransaction.objectStore(this.storeName);
       emptyTransaction.abort();
-      onSuccess && onSuccess(this.store);
-    },
 
-    deleteObjectStore: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Failed to delete objectStore.', error);
-      });
-      this.enterMutationState(hitch(this, function (evt) {
-        var db = evt.target.result;
-        db.deleteObjectStore(this.storeName);
-        var success = !this.hasObjectStore();
-        onSuccess && success && onSuccess();
-        onError && !success && onError();
-      }), onError);
+      return store;
     },
-
 
     /*********************
      * data manipulation *
@@ -344,33 +336,6 @@
      * indexing *
      ************/
 
-    createIndex: function (indexName, propertyName, isUnique, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not create index.', error);
-      });
-      onSuccess || (onSuccess = noop);
-      propertyName || (propertyName = indexName);
-
-      var that = this;
-
-      this.enterMutationState(hitch(this, function (evt) {
-        var result = evt.target.result;
-        var index;
-        if (result.objectStore) { // transaction
-          index = db.objectStore(this.storeName).createIndex(indexName, propertyName, { unique: !!isUnique });
-        } else { // db
-          var putTransaction = result.transaction([that.storeName] /* , this.consts.READ_WRITE */);
-          var store = putTransaction.objectStore(that.storeName);
-          index = store.createIndex(indexName, propertyName, { unique: !!isUnique });
-        }
-        onSuccess(index);
-      }), onError);
-    },
-
-    getIndex: function (indexName) {
-      return this.store.index(indexName);
-    },
-
     getIndexList: function () {
       return this.store.indexNames;
     },
@@ -379,22 +344,11 @@
       return this.store.indexNames.contains(indexName);
     },
 
-    removeIndex: function (indexName, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not remove index.', error);
-      });
-      onSuccess || (onSuccess = noop);
-      this.enterMutationState(hitch(this, function (evt) {
-        evt.target.result.objectStore(this.storeName).deleteIndex(indexName);
-        onSuccess();
-      }), onError);
-    },
-
     /**********
      * cursor *
      **********/
 
-    iterate: function (callback, options) {
+    iterate: function (onItem, options) {
       options = mixin({
         index: null,
         order: 'ASC',
@@ -423,16 +377,71 @@
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
-          callback(cursor.value, cursor, cursorTransaction);
+          onItem(cursor.value, cursor, cursorTransaction);
           cursor['continue']();
         } else {
-          options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
+          if(options.onEnd){
+            options.onEnd()
+          } else {
+            onItem(null);
+          }
         }
       };
-    }
+    },
 
+    count: function (onSuccess, options) {
+
+      options = mixin({
+        index: null,
+        keyRange: null
+      }, options || {});
+
+      var onError = options.onError || function (error) {
+        console.error('Could not open cursor.', error);
+      };
+
+      var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      var cursorTarget = cursorTransaction.objectStore(this.storeName);
+      if (options.index) {
+        cursorTarget = cursorTarget.index(options.index);
+      }
+
+      var countRequest = cursorTarget.count(options.keyRange);
+      countRequest.onsuccess = function (evt) {
+        onSuccess(evt.target.result);
+      };
+      countRequest.onError = function (error) {
+        onError(error);
+      };
+    },
+
+    /**************/
     /* key ranges */
-    // TODO: implement
+    /**************/
+
+    makeKeyRange: function(options){
+      var keyRange,
+          hasLower = typeof options.lower != 'undefined',
+          hasUpper = typeof options.upper != 'undefined';
+
+      switch(true){
+        case hasLower && hasUpper:
+          keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
+          break;
+        case hasLower:
+          keyRange = this.keyRange.lowerBound(options.lower, options.excludeLower);
+          break;
+        case hasUpper:
+          keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
+          break;
+        default:
+          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
+          break;
+      }
+
+      return keyRange;
+
+    }
 
   };
 
@@ -450,24 +459,6 @@
       }
     }
     return target;
-  };
-  var hitch = function (scope, method) {
-    if (!method) {
-      method = scope;
-      scope = null;
-    }
-    if (typeof method == "string") {
-      scope = scope || window;
-      if (!scope[method]) {
-        throw(['method not found']);
-      }
-      return function () {
-        return scope[method].apply(scope, arguments || []);
-      };
-    }
-    return !scope ? method : function () {
-      return method.apply(scope, arguments || []);
-    };
   };
 
   return IDBStore;

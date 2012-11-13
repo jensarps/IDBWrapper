@@ -8,7 +8,6 @@ require(['../../IDBStore.js'], function(IDBStore){
 		
 		// create a store ("table")
 	  objStore = new IDBStore({
-			dbName: 'appdb',
 			storeName: 'objectstore',
 			keyPath: 'id',
 			autoIncrement: true,
