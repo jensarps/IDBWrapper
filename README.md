@@ -281,6 +281,8 @@ ___
 iterate: function(/*Object*/ keyRangeOptions)
 ```
 
+Returns an IDBKeyRange.
+
 The `keyRangeOptions` object must have one or more of the following properties:
 
 `lower`: The lower bound of the range
