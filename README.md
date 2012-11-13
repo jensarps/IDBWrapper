@@ -16,7 +16,12 @@ The code in IDBWrapper.js is not optimized for anything, nor minified or anythin
 It is meant to be read and easy to understand. So, please, go ahead and check out
 the source!
 
-A tutorial with some more details can be found here:
+There are two tutorials to get you up and running:
+
+Part 1: Setup and CRUD operations
+http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
+
+Part 2: Running Queries against the store
 http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 
 ##November Rewrite
@@ -35,6 +40,9 @@ I am very sorry about any inconveniences, but there was no other way.
 
 The 'old' version of IDBWrapper is still available in the `legacy` branch:
 https://github.com/jensarps/IDBWrapper/tree/legacy
+
+Also, "showing how it works" is no longer the main intention behind this. Now,
+it's rather "just works".
 
 
 Examples
