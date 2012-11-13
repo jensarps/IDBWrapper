@@ -22,7 +22,7 @@ Part 1: Setup and CRUD operations
 http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 
 Part 2: Running Queries against the store
-http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
+http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
 ##November Rewrite
 
