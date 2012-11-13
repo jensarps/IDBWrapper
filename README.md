@@ -21,21 +21,17 @@ http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 
 ##November Rewrite
 
-I am in the process of rewriting IDBWrapper to cope with all the issues. This
-has some serious implications to what you can do with IDBWrapper, and if you
-switch to the new version of IDBWrapper, you won't be able to access your old
-data, because database names changed.
+I rewrote IDBWrapper to cope with all the issues, and the new version is on
+master since Nov, 13th 2012. The API didn't change much, I just removed some
+of the methods. Method signatures remain unchanged.
 
-I am very sorry about this, but there was no other way.
+However, if you have a previous version of IDBWrapper in use, there's an
+issue: The new version won't be able to access the store created with the old
+version, because database names changed. In that case, you need to manually
+migrate the data: Include both versions of IDBWrapper (use a different name for
+them), do a getAll() on the old store and write the data to the new store.
 
-The reason for this is that IDBWrapper now handles the database name itself. The
-reason for that is that it is no longer possible to have multiple stores within
-one database. The reason for that again is that it is not possible to modify
-the structure of a database within a given version, and IDBwrapper won't
-automatically bump version numbers anymore.
-
-In general, IDBWrapper won't allow you anymore to create or delete object stores
-yourself, or to manually do setVersion() calls.
+I am very sorry about any inconveniences, but there was no other way.
 
 
 Examples
