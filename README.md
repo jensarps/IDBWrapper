@@ -177,18 +177,6 @@ Return true if an index with the given name exists in the store, false if not.
 
 ___
 
-
-3) The removeIndex method.
-
-```javascript
-removeIndex: function(/*String*/indexName, /*Function?*/onSuccess, /*Function?*/onError)
-```
-
-`onSuccess` will be called without arguments if the remove operation was successful. `onError` will be 
-called if the remove operation failed and it will recieve the error event object as first and only argument.
-
-___
-
 4) The getIndex method.
 
 ```javascript
