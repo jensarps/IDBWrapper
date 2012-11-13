@@ -33,7 +33,7 @@ them), do a getAll() on the old store and write the data to the new store.
 
 I am very sorry about any inconveniences, but there was no other way.
 
-The 'old' version of IDBWrapper is till available in the `legacy` branch:
+The 'old' version of IDBWrapper is still available in the `legacy` branch:
 https://github.com/jensarps/IDBWrapper/tree/legacy
 
 
@@ -47,10 +47,10 @@ The source for these examples are in the `example` folder of this repository.
 Usage
 =====
 
-Including the IDBStore.js file will add an IDBStore contructor to the global scope.
+Including the IDBStore.js file will add an IDBStore constructor to the global scope.
 
 Alternatively, you can use an AMD loader such as RequireJS to load the file, 
-and you will recieve the constructor in your load callback (the constructor 
+and you will receive the constructor in your load callback (the constructor
 will then, of course, have whatever name you call it).
 
 You can then create an IDB store:
@@ -101,8 +101,8 @@ put(/*Object*/ dataObj, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
 `dataObj` is the Object to store. `onSuccess` will be called when the insertion/update was successful, 
-and it will recieve the keyPath value (the id, so to say) of the inserted object as first and only 
-argument. `onError` will be called if the insertion/update failed and it will recieve the error event 
+and it will receive the keyPath value (the id, so to say) of the inserted object as first and only
+argument. `onError` will be called if the insertion/update failed and it will receive the error event
 object as first and only argument. If the store already contains an object with the given keyPath id,
 it will be overwritten by `dataObj`.
 
@@ -117,7 +117,7 @@ get(/*keyPath value*/ key, /*Function?*/onSuccess, /*Function?*/onError)
 `key` is the keyPath property value (the id) of the object to retrieve. `onSuccess` will be called if
 the get operation was successful, and it will receive the stored object as first and only argument. If
 no object was found with the given keyPath value, this argument will be null. `onError` will be called
-if the get operation failed and it will recieve the error event object as first and only argument.
+if the get operation failed and it will receive the error event object as first and only argument.
 
 ___
 
@@ -129,7 +129,7 @@ getAll: function(/*Function?*/onSuccess, /*Function?*/onError)
 
 `onSuccess` will be called if the getAll operation was successful, and it will receive an Array of
 all objects currently stored in the store as first and only argument. `onError` will be called if 
-the getAll operation failed and it will recieve the error event object as first and only argument.
+the getAll operation failed and it will receive the error event object as first and only argument.
 
 ___
 
@@ -144,10 +144,10 @@ the remove operation was successful, and it _should_ receive `false` as first an
 object to remove was not found, and `true` if it was found and removed.
 
 NOTE: FF 8 will pass the key to the onSuccess handler, no matter if there is an corresponding object
-or not. Chrome 15 will pass `null` if removal wass successful, and call the error handler if the object
+or not. Chrome 15 will pass `null` if removal was successful, and call the error handler if the object
 wasn't found. Chrome 17 will behave as described above.
 
-`onError` will be called if the remove operation failed and it will recieve the error event object as first 
+`onError` will be called if the remove operation failed and it will receive the error event object as first
 and only argument.
 
 ___
@@ -159,7 +159,7 @@ clear: function(/*Function?*/onSuccess, /*Function?*/onError)
 ```
 
 `onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear 
-operation failed and it will recieve the error event object as first and only argument.
+operation failed and it will receive the error event object as first and only argument.
 
 
 Index Operations
@@ -221,8 +221,8 @@ ___
 getIndex: function(/*String*/indexName)
 ```
 
-Will return the index with the given name. You can then open open cursors on the index or call the index' get
-method. Kepp in mind though, that IDB will throww if there is no index with the given name, so make sure to
+Will return the index with the given name. You can then open cursors on the index or call the index' get
+method. Keep in mind though, that IDB will throw if there is no index with the given name, so make sure to
 check if it exists if you are not sure.
 
 ___
