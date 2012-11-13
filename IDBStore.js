@@ -348,7 +348,7 @@
      * cursor *
      **********/
 
-    iterate: function (callback, options) {
+    iterate: function (onItem, options) {
       options = mixin({
         index: null,
         order: 'ASC',
@@ -377,13 +377,13 @@
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
-          callback(cursor.value, cursor, cursorTransaction);
+          onItem(cursor.value, cursor, cursorTransaction);
           cursor['continue']();
         } else {
           if(options.onEnd){
             options.onEnd()
           } else {
-            callback(null);
+            onItem(null);
           }
         }
       };
