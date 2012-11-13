@@ -162,12 +162,47 @@ operation failed and it will recieve the error event object as first and only ar
 Index Operations
 ----------------
 
-Use the following methods to create, retrieve and delete indices:
+To create indexes, you need to pass the index information to the IDBStore()
+constructor, for example:
+
+
+```javascript
+{
+  storeName: 'customers',
+  dbVersion: 1,
+  keyPath: 'customerid',
+  autoIncrement: true,
+  onStoreReady: function(){},
+  indexes: [
+    { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
+  ]
+}
+```
+
+An entry in the index Array is an object containing the following properties:
+
+The `name` property is the identifier of the index. If you want to work with the created index later, this name is used to identify the index. This is the only property that is mandatory.
+
+The `keyPath` property is the name of the property in your stored data that you want to index. If you omit that, IDBWrapper will assume that it is the same as the provided name, and will use this instead.
+
+The `unique` property tells the store whether the indexed property in your data is unique. If you set this to true, it will add a uniqueness constraint to the store which will make it throw if you try to store data that violates that constraint. If you omit that, IDBWrapper will set this to false.
+
+The `multiEntry` property is kinda weird. You can read up on it here: http://www.w3.org/TR/IndexedDB/#dfn-multientry. However, you can live perfectly fine with setting this to false (or just omitting it, this is set to false by default).
+
+
+If you want to add an index to an existing store, you need to increase the
+version number of your store, as adding an index changes the structure of
+the database.
+
+To modify an index, modify the object in the indexes Array in the constructor.
+Again, you need to increase the version of your store.
+
+In addition, there are still some convenience methods available:
 
 ___
 
 
-2) The hasIndex method.
+1) The hasIndex method.
 
 ```javascript
 hasIndex: function(/*String*/ indexName)
@@ -177,7 +212,7 @@ Return true if an index with the given name exists in the store, false if not.
 
 ___
 
-4) The getIndex method.
+2) The getIndex method.
 
 ```javascript
 getIndex: function(/*String*/indexName)
@@ -189,7 +224,7 @@ check if it exists if you are not sure.
 
 ___
 
-5) The getIndexList method.
+3) The getIndexList method.
 
 ```javascript
 getIndexList: function()
