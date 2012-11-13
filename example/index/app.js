@@ -27,7 +27,7 @@ require(['../../IDBStore.js'], function(IDBStore){
 		[
       'submit', 'submitQuery',
       'upper', 'lower', 'excludeLower', 'excludeUpper',
-      'sortOrder', 'index',
+      'sortOrder', 'index', 'filterDuplicates',
       'customerid', 'firstname', 'lastname', 'age',
       'results-container'
     ].forEach(function(id){
@@ -110,6 +110,7 @@ require(['../../IDBStore.js'], function(IDBStore){
         hasLower = lowerValue != '',
         indexName = nodeCache.index.value,
         sortOrder = nodeCache.sortOrder.value,
+        filterDuplicates = nodeCache.filterDuplicates.checked,
         content = '';
 
     var options = {};
@@ -136,6 +137,7 @@ require(['../../IDBStore.js'], function(IDBStore){
     customers.iterate(onItem, {
       index: indexName,
       keyRange: keyRange,
+      filterDuplicates: filterDuplicates,
       order: sortOrder,
       onEnd: onEnd
     });
