@@ -104,26 +104,30 @@ require(['../../IDBStore.js'], function(IDBStore){
   }
 
   function runQuery(){
-    var upperValue = nodeCache.upper.value,
-        hasUpper = upperValue != '',
-        lowerValue = nodeCache.lower.value,
-        hasLower = lowerValue != '',
+    var upper = nodeCache.upper.value,
+        hasUpper = upper != '',
+        lower = nodeCache.lower.value,
+        hasLower = lower != '',
+
         indexName = nodeCache.index.value,
         sortOrder = nodeCache.sortOrder.value,
         filterDuplicates = nodeCache.filterDuplicates.checked,
+        keyRange,
+
         content = '';
 
-    var options = {};
-    if(hasUpper){
-      options.upper = upperValue;
-      options.excludeUpper = nodeCache.excludeUpper.checked;
+    if(hasUpper || hasLower){ // create a keyRange only if bounds are given
+      var options = {};
+      if(hasUpper){
+        options.upper = upper;
+        options.excludeUpper = nodeCache.excludeUpper.checked;
+      }
+      if(hasLower){
+        options.lower = lower;
+        options.excludeLower = nodeCache.excludeLower.checked;
+      }
+      keyRange = customers.makeKeyRange(options);
     }
-    if(hasLower){
-      options.lower = lowerValue;
-      options.excludeLower = nodeCache.excludeLower.checked;
-    }
-
-    var keyRange = customers.makeKeyRange(options);
 
     var onItem = function (item) {
       content += tpls.row.replace(/\{([^\}]+)\}/g, function (_, key) {
