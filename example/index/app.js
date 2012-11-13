@@ -59,6 +59,9 @@ require(['../../IDBStore.js'], function(IDBStore){
 		['customerid','firstname','lastname', 'age'].forEach(function(key){
 			var value = nodeCache[key].value.trim();
 			if(value.length){
+        if(key == 'customerid'){
+          value = parseInt(value, 10);
+        }
 				data[key] = value;
 			}
 		});
@@ -88,7 +91,7 @@ require(['../../IDBStore.js'], function(IDBStore){
       lastname: lastnames[Math.floor(Math.random()*5)],
       firstname: firstnames[Math.floor(Math.random()*4)],
       age: Math.floor(Math.random() * (100 - 20)) + 20,
-      customerid: ( "" + ( Date.now() * Math.random() ) ).substring(0, 6)
+      customerid: parseInt( ( "" + ( Date.now() * Math.random() ) ).substring(0, 6), 10)
     };
 
     return entry;
