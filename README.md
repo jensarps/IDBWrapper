@@ -233,3 +233,41 @@ getIndexList: function()
 Returns a `DOMStringList` with all existing indices.
 
 
+Running Queries
+---------------
+
+To run queries, IDBWrapper provides an `iterate()` method. To create keyRanges,
+there is the `makeKeyRange()` method. In addition to these, IDBWrapper comes
+with a `count()` method.
+
+___
+
+1) The iterate method.
+
+
+```javascript
+iterate: function(/*Function*/ onItem, /*Object*/ iterateOptions)
+```
+
+The `onItem` callback will be called once for every match. It will receive three arguments: the object that matched the query, a reference to the current cursor object (IDBWrapper uses IndexedDB's Cursor internally to iterate), and a reference to the current ongoing transaction.
+
+There's one special situation: if you didn't pass an onEnd handler in the options objects (see below), the onItem handler will be called one extra time when the transaction is over. In this case, it will receive null as only argument. So, to check when the iteration is over and you won't get any more data objects, you can either pass an onEnd handler, or check for null in the onItem handler.
+
+The `iterateOptions` object can contain one or more of the following properties:
+
+
+The `index` property contains the name of the index to operate on. If you omit this, IDBWrapper will use the store's keyPath as index.
+
+In the `keyRange` property you can pass a keyRange.
+
+The `order` property can be set to 'ASC' or 'DESC', and determines the ordering direction of results. If you omit this, IDBWrapper will use 'ASC'.
+
+The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
+
+The `writeAccess` property defaults to false. If you need write access to the store during the iteration, you need to set this to true.
+
+In the `onEnd` property you can pass a callback that gets called after the iteration is over and the transaction is closed. It does not receive any arguments.
+
+In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
+
+
