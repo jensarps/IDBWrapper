@@ -164,25 +164,6 @@ Index Operations
 
 Use the following methods to create, retrieve and delete indices:
 
-
-___
-
-
-1) The createIndex method.
-
-```javascript
-createIndex: function(/*String*/indexName, /*String?*/propertyName, /*Boolean?*/isUnique, /*Function?*/onSuccess, /*Function?*/onError)
-```
-
-Creates an index with the name `indexName` that operates on the property `propertyName`. Set `isUnique`to true
-if the index is supposed to be a unique index; this will add a unique constraint to the index. If you try to
-store a data object that violates this constraint, insertion will fail. `onSuccess` will be called if
-the create operation was successful, and it will receive the created Index as first and only argument.
-`onError` will be called if the create operation failed and it will recieve the error event object as first 
-and only argument.
-Note: If you pass only `indexName` to the method, it will assume that `propertyName` equals `indexName` and that
-the index is not unique.
-
 ___
 
 
