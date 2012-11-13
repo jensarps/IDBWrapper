@@ -271,3 +271,23 @@ In the `onEnd` property you can pass a callback that gets called after the itera
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
 
 
+___
+
+
+2) The makeKeyRange method.
+
+
+```javascript
+iterate: function(/*Object*/ keyRangeOptions)
+```
+
+The `keyRangeOptions` object must have one or more of the following properties:
+
+`lower`: The lower bound of the range
+
+`excludeLower`: Boolean, whether to exclude the lower bound itself. Default: false
+
+`upper`: The upper bound of the range
+
+`excludeUpper`: Boolean, whether to exclude the upper bound itself. Default: false
+
