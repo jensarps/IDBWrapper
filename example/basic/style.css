@@ -17,18 +17,23 @@ a {
 .vbox {
 	display: -webkit-box;
 	display: -moz-box;
+  display: -ms-flexbox;
 	-webkit-box-orient: vertical;
 	-moz-box-orient: vertical;
+  -ms-flex-direction: column;
 }
 .hbox {
 	display: -webkit-box;
 	display: -moz-box;
+  display: -ms-flexbox;
 	-webkit-box-orient: horizontal;
 	-moz-box-orient: horizontal;
+  -ms-flex-direction: row;
 }
 .flex {
 	-webkit-box-flex: 1;
 	-moz-box-flex: 1;
+  -ms-flex: 1;
 }
 
 /* head */
