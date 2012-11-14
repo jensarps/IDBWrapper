@@ -17,18 +17,23 @@ a {
 .vbox {
 	display: -webkit-box;
 	display: -moz-box;
+  display: -ms-flexbox;
 	-webkit-box-orient: vertical;
 	-moz-box-orient: vertical;
+  -ms-flex-direction: column;
 }
 .hbox {
 	display: -webkit-box;
 	display: -moz-box;
+  display: -ms-flexbox;
 	-webkit-box-orient: horizontal;
 	-moz-box-orient: horizontal;
+  -ms-flex-direction: row;
 }
 .flex {
 	-webkit-box-flex: 1;
 	-moz-box-flex: 1;
+  -ms-flex: 1;
 }
 .container {
 	overflow: auto;
@@ -38,6 +43,7 @@ a {
 #head {
 	background: -moz-linear-gradient(top,  #ffffff 0%, #e5e5e5 100%);
 	background: -webkit-linear-gradient(top,  #ffffff 0%,#e5e5e5 100%);
+  background: linear-gradient(to bottom, #ffffff, #e5e5e5);
 	padding: 10px;
 	border-bottom: solid 1px #9E9E9E;
 }

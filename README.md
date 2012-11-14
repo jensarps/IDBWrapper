@@ -224,19 +224,7 @@ Return true if an index with the given name exists in the store, false if not.
 
 ___
 
-2) The getIndex method.
-
-```javascript
-getIndex: function(/*String*/indexName)
-```
-
-Will return the index with the given name. You can then open cursors on the index or call the index' get
-method. Keep in mind though, that IDB will throw if there is no index with the given name, so make sure to
-check if it exists if you are not sure.
-
-___
-
-3) The getIndexList method.
+2) The getIndexList method.
 
 ```javascript
 getIndexList: function()

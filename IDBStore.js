@@ -112,9 +112,9 @@
         }
 
         if (gotVersionErr) {
-          console.log('Version error');
+          console.error('Could not open database, version error:', error);
         } else {
-          console.error('Could not open database, error', error);
+          console.error('Could not open database, error:', error);
         }
       }.bind(this);
 
@@ -129,9 +129,9 @@
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
-          console.log('object store found');
           if(!this.store){
-            this.store = this.openExistingObjectStore();
+            var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+            this.store = emptyTransaction.objectStore(this.storeName);
           }
           // check indexes
 
@@ -151,6 +151,10 @@
               // check if it complies
               var actualIndex = this.store.index(indexName);
               var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+                // IE10 returns undefined for no multiEntry
+                if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
+                  return true;
+                }
                 return indexData[key] == actualIndex[key];
               });
               if(!complies){
@@ -195,6 +199,10 @@
             // check if it complies
             var actualIndex = this.store.index(indexName);
             var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+              // IE10 returns undefined for no multiEntry
+              if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
+                return true;
+              }
               return indexData[key] == actualIndex[key];
             });
             if(!complies){
@@ -215,18 +223,6 @@
       if (this.idb.deleteDatabase) {
         this.idb.deleteDatabase(this.dbName);
       }
-    },
-
-    /*************************
-     * object store handling *
-     *************************/
-
-    openExistingObjectStore: function () {
-      var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      var store = emptyTransaction.objectStore(this.storeName);
-      emptyTransaction.abort();
-
-      return store;
     },
 
     /*********************
