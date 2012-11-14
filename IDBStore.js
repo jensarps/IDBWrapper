@@ -129,7 +129,6 @@
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
-          console.log('object store found');
           if(!this.store){
             var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
             this.store = emptyTransaction.objectStore(this.storeName);
