@@ -112,9 +112,9 @@
         }
 
         if (gotVersionErr) {
-          console.log('Version error');
+          console.error('Could not open database, version error:', error);
         } else {
-          console.error('Could not open database, error', error);
+          console.error('Could not open database, error:', error);
         }
       }.bind(this);
 
