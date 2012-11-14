@@ -131,7 +131,9 @@
         if(this.db.objectStoreNames.contains(this.storeName)){
           console.log('object store found');
           if(!this.store){
-            this.store = this.openExistingObjectStore();
+            var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+            this.store = emptyTransaction.objectStore(this.storeName);
+            emptyTransaction.abort();
           }
           // check indexes
 
@@ -215,18 +217,6 @@
       if (this.idb.deleteDatabase) {
         this.idb.deleteDatabase(this.dbName);
       }
-    },
-
-    /*************************
-     * object store handling *
-     *************************/
-
-    openExistingObjectStore: function () {
-      var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      var store = emptyTransaction.objectStore(this.storeName);
-      emptyTransaction.abort();
-
-      return store;
     },
 
     /*********************
