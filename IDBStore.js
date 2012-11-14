@@ -152,6 +152,10 @@
               // check if it complies
               var actualIndex = this.store.index(indexName);
               var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+                // IE10 returns undefined for no multiEntry
+                if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
+                  return true;
+                }
                 return indexData[key] == actualIndex[key];
               });
               if(!complies){
@@ -196,6 +200,10 @@
             // check if it complies
             var actualIndex = this.store.index(indexName);
             var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+              // IE10 returns undefined for no multiEntry
+              if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
+                return true;
+              }
               return indexData[key] == actualIndex[key];
             });
             if(!complies){
