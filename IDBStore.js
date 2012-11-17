@@ -34,6 +34,7 @@
 
     function fixupConstants (object, constants) {
       for (var prop in constants) {
+        if (!(prop in object))
           object[prop] = constants[prop];
       }
     }
