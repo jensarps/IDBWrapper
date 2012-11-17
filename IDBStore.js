@@ -11,6 +11,8 @@
 (function (name, definition, global) {
   if (typeof define === 'function') {
     define(definition);
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = definition();
   } else {
     global[name] = definition();
   }
