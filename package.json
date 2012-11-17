@@ -1,6 +1,6 @@
 {
   "name": "idb-wrapper",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "This is a wrapper for indexedDB.",
   "keywords": [],
   "author": "jensarps <mail@jensarps.de>",
