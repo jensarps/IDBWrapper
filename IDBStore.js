@@ -34,7 +34,6 @@
 
     function fixupConstants (object, constants) {
       for (var prop in constants) {
-        if (!(prop in object))
           object[prop] = constants[prop];
       }
     }
@@ -240,6 +239,7 @@
       if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
         dataObj[this.keyPath] = this._getUID();
       }
+
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
       putRequest.onsuccess = function (event) {
