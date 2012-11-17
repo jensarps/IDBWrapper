@@ -1,5 +1,5 @@
 {
-  "name": "IDBWrapper",
+  "name": "idb-wrapper",
   "version": "0.1.0",
   "description": "This is a wrapper for indexedDB.",
   "keywords": [],
