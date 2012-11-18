@@ -11,6 +11,8 @@
 (function (name, definition, global) {
   if (typeof define === 'function') {
     define(definition);
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = definition();
   } else {
     global[name] = definition();
   }
@@ -49,12 +51,11 @@
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
     this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
 
-    this.consts = window.IDBTransaction || window.webkitIDBTransaction;
-    fixupConstants(this.consts, {
+    this.consts = {
       'READ_ONLY': 'readonly',
       'READ_WRITE': 'readwrite',
       'VERSION_CHANGE': 'versionchange'
-    });
+    }
 
     this.cursor = window.IDBCursor || window.webkitIDBCursor;
     fixupConstants(this.cursor, {
@@ -238,6 +239,7 @@
       if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
         dataObj[this.keyPath] = this._getUID();
       }
+
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
       putRequest.onsuccess = function (event) {
@@ -357,9 +359,9 @@
         }
       }, options || {});
 
-      var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
+      var directionType = options.order.toLowerCase() == 'desc' ? 'prev' : 'next';
       if (options.filterDuplicates) {
-        directionType += '_NO_DUPLICATE';
+        directionType += 'unique';
       }
 
       var cursorTransaction = this.db.transaction([this.storeName], this.consts[options.writeAccess ? 'READ_WRITE' : 'READ_ONLY']);
@@ -368,7 +370,7 @@
         cursorTarget = cursorTarget.index(options.index);
       }
 
-      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+      var cursorRequest = cursorTarget.openCursor(options.keyRange, directionType);
       cursorRequest.onerror = options.onError;
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;

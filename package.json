@@ -1,0 +1,24 @@
+{
+  "name": "idb-wrapper",
+  "version": "0.1.4",
+  "description": "This is a wrapper for indexedDB.",
+  "keywords": [],
+  "author": "jensarps <mail@jensarps.de>",
+  "repository": "git://github.com/jensarps/IDBWrapper.git",
+  "main": "IDBStore",
+  "homepage": "https://github.com/jensarps/IDBWrapper",
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/jensarps/IDBWrapper/issues",
+    "email": "mail@jensarps.de"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/jensarps/IDBWrapper/raw/master/LICENSE"
+    }
+  ],
+  "scripts": {}
+}
