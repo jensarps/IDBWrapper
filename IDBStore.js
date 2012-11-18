@@ -359,9 +359,9 @@
         }
       }, options || {});
 
-      var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
+      var directionType = options.order.toLowerCase() == 'desc' ? 'prev' : 'next';
       if (options.filterDuplicates) {
-        directionType += '_NO_DUPLICATE';
+        directionType += 'unique';
       }
 
       var cursorTransaction = this.db.transaction([this.storeName], this.consts[options.writeAccess ? 'READ_WRITE' : 'READ_ONLY']);
@@ -370,7 +370,7 @@
         cursorTarget = cursorTarget.index(options.index);
       }
 
-      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+      var cursorRequest = cursorTarget.openCursor(options.keyRange, directionType);
       cursorRequest.onerror = options.onError;
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
