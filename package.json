@@ -1,0 +1,30 @@
+{
+  "name": "IDBWrapper",
+  "version": "0.2.0",
+  "description": "A cross-browser wrapper for IndexedDB",
+  "keywords": [],
+  "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",
+  "repository": "git://github.com/jensarps/IDBWrapper.git",
+  "main": "IDBStore",
+  "homepage": "https://github.com/jensarps/IDBWrapper",
+  "contributors": [
+    "Josh Matthews <josh@joshmatthews.net> (http://www.joshmatthews.net/blog/)",
+    "Raynos <raynos2@gmail.com> (http://raynos.org)"
+  ],
+  "bugs": {
+    "url": "https://github.com/jensarps/IDBWrapper/issues",
+    "email": "mail@jensarps.de"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/jensarps/IDBWrapper/raw/master/LICENSE"
+    }
+  ],
+  "scripts": {
+  }
+}

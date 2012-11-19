@@ -4,7 +4,7 @@ About
 This is a wrapper for indexedDB. It is meant to
 
 a) ease the use of indexedDB and abstract away the differences between the 
-existing impls in Chrome and Firefox (yes, it works in both), and
+existing impls in Chrome, Firefox and IE10 (yes, it works in all three), and
 
 b) show how IDB works. The code is split up into short methods, so that it's
 easy to see what happens in what method.
@@ -57,9 +57,9 @@ Usage
 
 Including the IDBStore.js file will add an IDBStore constructor to the global scope.
 
-Alternatively, you can use an AMD loader such as RequireJS to load the file, 
-and you will receive the constructor in your load callback (the constructor
-will then, of course, have whatever name you call it).
+Alternatively, you can use an AMD loader such as RequireJS, or a CommonJS loader
+to load the module, and you will receive the constructor in your load callback
+(the constructor will then, of course, have whatever name you call it).
 
 You can then create an IDB store:
 
