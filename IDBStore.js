@@ -45,15 +45,12 @@
     this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
 
     this.consts = {
-      'READ_ONLY': 'readonly',
-      'READ_WRITE': 'readwrite',
-      'VERSION_CHANGE': 'versionchange'
-    };
-
-    this.cursor = {
-      'NEXT': 'next',
+      'READ_ONLY':         'readonly',
+      'READ_WRITE':        'readwrite',
+      'VERSION_CHANGE':    'versionchange',
+      'NEXT':              'next',
       'NEXT_NO_DUPLICATE': 'nextunique',
-      'PREV': 'prev',
+      'PREV':              'prev',
       'PREV_NO_DUPLICATE': 'prevunique'
     };
 
@@ -361,7 +358,7 @@
         cursorTarget = cursorTarget.index(options.index);
       }
 
-      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.consts[directionType]);
       cursorRequest.onerror = options.onError;
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
