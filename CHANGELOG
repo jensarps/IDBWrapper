@@ -1,5 +1,13 @@
-0.2.0
------
+0.2.1 /
+------------------
 
-Start versioning
+* Remove support for numeric transaction and cursor types.
+* Misc cleanup
+
+
+
+0.2.0 / 2012-11-20
+------------------
+
+* Start versioning
 
