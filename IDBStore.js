@@ -27,6 +27,9 @@
     autoIncrement: true,
     onStoreReady: function () {
     },
+    onError: function(error){
+      throw error;
+    },
     indexes: []
   };
 
@@ -79,12 +82,14 @@
 
     onStoreReady: null,
 
+    onError: null,
+
     openDB: function () {
 
       this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
 
       if(!this.newVersionAPI){
-        throw new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.');
+        this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
       }
 
       var features = this.features = {};
@@ -102,9 +107,9 @@
         }
 
         if (gotVersionErr) {
-          console.error('Could not open database, version error:', error);
+          this.onError(new Error('The version number provided is lower than the existing one.'));
         } else {
-          console.error('Could not open database, error:', error);
+          this.onError(error);
         }
       }.bind(this);
 
@@ -148,10 +153,10 @@
                 return indexData[key] == actualIndex[key];
               });
               if(!complies){
-                throw new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
               }
             } else {
-              throw new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
 
           }, this);
@@ -159,7 +164,7 @@
           this.onStoreReady();
         } else {
           // We should never get here.
-          throw new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+          this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
         }
       }.bind(this);
 
@@ -182,7 +187,7 @@
           indexData.multiEntry = !!indexData.multiEntry;
 
           if(!indexName){
-            throw new Error('Cannot create index: No index name given.');
+            this.onError(new Error('Cannot create index: No index name given.'));
           }
 
           if(this.hasIndex(indexName)){
