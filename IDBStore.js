@@ -27,17 +27,13 @@
     autoIncrement: true,
     onStoreReady: function () {
     },
+    onError: function(error){
+      throw error;
+    },
     indexes: []
   };
 
   IDBStore = function (kwArgs, onStoreReady) {
-
-    function fixupConstants (object, constants) {
-      for (var prop in constants) {
-        if (!(prop in object))
-          object[prop] = constants[prop];
-      }
-    }
 
     for(var key in defaults){
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
@@ -51,20 +47,15 @@
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
     this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
 
-    this.consts = window.IDBTransaction || window.webkitIDBTransaction;
-    fixupConstants(this.consts, {
-      'READ_ONLY': 'readonly',
-      'READ_WRITE': 'readwrite',
-      'VERSION_CHANGE': 'versionchange'
-    });
-
-    this.cursor = window.IDBCursor || window.webkitIDBCursor;
-    fixupConstants(this.cursor, {
-      'NEXT': 'next',
+    this.consts = {
+      'READ_ONLY':         'readonly',
+      'READ_WRITE':        'readwrite',
+      'VERSION_CHANGE':    'versionchange',
+      'NEXT':              'next',
       'NEXT_NO_DUPLICATE': 'nextunique',
-      'PREV': 'prev',
+      'PREV':              'prev',
       'PREV_NO_DUPLICATE': 'prevunique'
-    });
+    };
 
     this.openDB();
   };
@@ -91,12 +82,14 @@
 
     onStoreReady: null,
 
+    onError: null,
+
     openDB: function () {
 
       this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
 
       if(!this.newVersionAPI){
-        throw new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.');
+        this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
       }
 
       var features = this.features = {};
@@ -114,9 +107,9 @@
         }
 
         if (gotVersionErr) {
-          console.error('Could not open database, version error:', error);
+          this.onError(new Error('The version number provided is lower than the existing one.'));
         } else {
-          console.error('Could not open database, error:', error);
+          this.onError(error);
         }
       }.bind(this);
 
@@ -160,10 +153,10 @@
                 return indexData[key] == actualIndex[key];
               });
               if(!complies){
-                throw new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
               }
             } else {
-              throw new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
 
           }, this);
@@ -171,7 +164,7 @@
           this.onStoreReady();
         } else {
           // We should never get here.
-          throw new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.');
+          this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
         }
       }.bind(this);
 
@@ -194,7 +187,7 @@
           indexData.multiEntry = !!indexData.multiEntry;
 
           if(!indexName){
-            throw new Error('Cannot create index: No index name given.');
+            this.onError(new Error('Cannot create index: No index name given.'));
           }
 
           if(this.hasIndex(indexName)){
@@ -370,7 +363,7 @@
         cursorTarget = cursorTarget.index(options.index);
       }
 
-      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.consts[directionType]);
       cursorRequest.onerror = options.onError;
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
