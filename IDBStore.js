@@ -32,13 +32,6 @@
 
   IDBStore = function (kwArgs, onStoreReady) {
 
-    function fixupConstants (object, constants) {
-      for (var prop in constants) {
-        if (!(prop in object))
-          object[prop] = constants[prop];
-      }
-    }
-
     for(var key in defaults){
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
     }
