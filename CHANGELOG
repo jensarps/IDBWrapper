@@ -1,6 +1,7 @@
 0.2.1 /
 ------------------
 
+* Add error handler to constructor
 * Remove support for numeric transaction and cursor types.
 * Misc cleanup
 
