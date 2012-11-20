@@ -79,7 +79,8 @@ The options object may contain the following properties (default values are show
   keyPath: 'id',
   autoIncrement: true,
   indexes: [],
-  onStoreReady: function(){}
+  onStoreReady: function(){},
+  onError: function(error){ throw error; }
 }
 ```
 
@@ -87,8 +88,13 @@ The options object may contain the following properties (default values are show
 the database will automatically add a unique key to the keyPath index when storing objects missing 
 that property. 'indexes' contains objects defining indexes (see below for details on indexes).
 
-You can also pass a callback function to the options object. If a callback is provided both as second 
-parameter and inside of the options object, the function passed as second parameter will be used.
+'onError' gets called if an error occurred while trying to open the store. It
+receives the error instance as only argument.
+
+As an alternative to passing a ready handler as second argument, you can also
+pass it in the 'onStoreReady' property. If a callback is provided both as second
+parameter and inside of the options object, the function passed as second
+parameter will be used.
 
 Methods
 =======
