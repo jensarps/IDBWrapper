@@ -1,3 +1,10 @@
+0.2.2 /
+------------------
+
+* Fix potentially non-unique generated IDs
+
+
+
 0.2.1 / 2012-11-20
 ------------------
 
