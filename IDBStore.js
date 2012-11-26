@@ -84,6 +84,8 @@
 
     onError: null,
 
+    _insertIdCount: 0,
+
     openDB: function () {
 
       this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
@@ -319,7 +321,7 @@
     _getUID: function () {
       // FF bails at times on non-numeric ids. So we take an even
       // worse approach now, using current time as id. Sigh.
-      return +new Date();
+      return this._insertIdCount++ + Date.now();
     },
 
 
