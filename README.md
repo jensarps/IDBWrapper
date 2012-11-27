@@ -194,7 +194,6 @@ db.batch([
 ], callback)
 ```
 
-
 Index Operations
 ----------------
 
