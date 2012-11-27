@@ -267,6 +267,59 @@
       deleteRequest.onerror = onError;
     },
 
+    batch: function (arr, onSuccess, onError) {
+      onError || (onError = function (error) {
+        console.error('Could not apply batch.', error);
+      });
+      onSuccess = onSuccess || noop;
+      var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
+      var count = arr.length;
+      var called = false;
+
+      arr.forEach(function (operation) {
+        var type = operation.type;
+        var key = operation.key;
+        var value = operation.value;
+
+        if (type == "remove") {
+          var deleteRequest = batchTransaction.objectStore(this.storeName).delete(key);
+          deleteRequest.onsuccess = function (event) {
+            count--;
+            if (count == 0 && !called) {
+              called = true;
+              onSuccess();
+            }
+          };
+          deleteRequest.onerror = function (err) {
+            batchTransaction.abort();
+            if (!called) {
+              called = true;
+              onError(err);
+            }
+          };
+        } else if (type == "put") {
+          if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+            value[this.keyPath] = this._getUID()
+          }
+          var putRequest = batchTransaction.objectStore(this.storeName).put(value)
+          putRequest.onsuccess = function (event) {
+            count--;
+            if (count == 0 && !called) {
+              called = true;
+              onSuccess();
+            }
+          };
+          putRequest.onerror = function (err) {
+            batchTransaction.abort();
+            if (!called) {
+              called = true;
+              onError(err);
+            }
+          };
+        }
+      }, this);
+    },
+
     getAll: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
