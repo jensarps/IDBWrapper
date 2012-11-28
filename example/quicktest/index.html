@@ -25,6 +25,8 @@
     <button onclick="testRemove()">remove</button>
     <br/>
     <button onclick="testClear()">clear</button>
+    <br/>
+    <button onclick="testBatch()">batch</button>
   </p>
 </div>
 
@@ -79,6 +81,25 @@
     store = store || store_1_1;
     store.clear(function (result) {
       console.log('clear() call success. Result:', result);
+    });
+  }
+
+  function testBatch (store) {
+    store = store || store_1_1;
+    var list = [];
+    for (var i = 0; i < 5; i++) {
+      var dataObj = {
+        lastname: lastnames[Math.floor(Math.random() * 5)],
+        firstname: firstnames[Math.floor(Math.random() * 4)],
+        age: Math.floor(Math.random() * (100 - 20)) + 20,
+        id: id++
+      };
+      list.push({ type: "put", value: dataObj });
+    }
+    store.batch(list, function (result) {
+      console.log('batch() call success. Result:', result);
+    }, function (error) {
+      console.log("error", error);
     });
   }
 
