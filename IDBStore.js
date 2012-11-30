@@ -135,14 +135,11 @@
           this.indexes.forEach(function(indexData){
             var indexName = indexData.name;
 
-            // normalize and provide existing keys
-            indexData.keyPath = indexData.keyPath || indexName;
-            indexData.unique = !!indexData.unique;
-            indexData.multiEntry = !!indexData.multiEntry;
-
             if(!indexName){
               throw new Error('Cannot create index: No index name given.');
             }
+
+            this.normalizeIndexData(indexData);
 
             if(this.hasIndex(indexName)){
               // check if it complies
@@ -183,14 +180,11 @@
         this.indexes.forEach(function(indexData){
           var indexName = indexData.name;
 
-          // normalize and provide existing keys
-          indexData.keyPath = indexData.keyPath || indexName;
-          indexData.unique = !!indexData.unique;
-          indexData.multiEntry = !!indexData.multiEntry;
-
           if(!indexName){
             this.onError(new Error('Cannot create index: No index name given.'));
           }
+
+          this.normalizeIndexData(indexData);
 
           if(this.hasIndex(indexName)){
             // check if it complies
@@ -388,6 +382,12 @@
 
     hasIndex: function (indexName) {
       return this.store.indexNames.contains(indexName);
+    },
+
+    normalizeIndexData: function (indexData) {
+      indexData.keyPath = indexData.keyPath || indexData.name;
+      indexData.unique = !!indexData.unique;
+      indexData.multiEntry = !!indexData.multiEntry;
     },
 
     /**********
