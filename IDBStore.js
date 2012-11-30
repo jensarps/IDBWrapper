@@ -144,13 +144,7 @@
             if(this.hasIndex(indexName)){
               // check if it complies
               var actualIndex = this.store.index(indexName);
-              var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
-                // IE10 returns undefined for no multiEntry
-                if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
-                  return true;
-                }
-                return indexData[key] == actualIndex[key];
-              });
+              var complies = this.indexComplies(actualIndex, indexData);
               if(!complies){
                 this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
               }
@@ -189,13 +183,7 @@
           if(this.hasIndex(indexName)){
             // check if it complies
             var actualIndex = this.store.index(indexName);
-            var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
-              // IE10 returns undefined for no multiEntry
-              if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
-                return true;
-              }
-              return indexData[key] == actualIndex[key];
-            });
+            var complies = this.indexComplies(actualIndex, indexData);
             if(!complies){
               // index differs, need to delete and re-create
               this.store.deleteIndex(indexName);
@@ -388,6 +376,17 @@
       indexData.keyPath = indexData.keyPath || indexData.name;
       indexData.unique = !!indexData.unique;
       indexData.multiEntry = !!indexData.multiEntry;
+    },
+
+    indexComplies: function (actual, expected) {
+      var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
+        // IE10 returns undefined for no multiEntry
+        if (key == 'multiEntry' && actual[key] === undefined && expected[key] === false) {
+          return true;
+        }
+        return expected[key] == actual[key];
+      });
+      return complies;
     },
 
     /**********
