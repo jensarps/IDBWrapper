@@ -273,7 +273,7 @@
       onError || (onError = function (error) {
         console.error('Could not apply batch.', error);
       });
-      onSuccess = onSuccess || noop;
+      onSuccess || (onSuccess = noop);
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
       var count = arr.length;
       var called = false;
