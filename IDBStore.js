@@ -296,7 +296,7 @@
             batchTransaction.abort();
             if (!called) {
               called = true;
-              onError(err);
+              onError(err, type, key);
             }
           };
         } else if (type == "put") {
@@ -315,7 +315,7 @@
             batchTransaction.abort();
             if (!called) {
               called = true;
-              onError(err);
+              onError(err, type, value);
             }
           };
         }
