@@ -136,7 +136,7 @@
             var indexName = indexData.name;
 
             if(!indexName){
-              throw new Error('Cannot create index: No index name given.');
+              this.onError(new Error('Cannot create index: No index name given.'));
             }
 
             this.normalizeIndexData(indexData);
