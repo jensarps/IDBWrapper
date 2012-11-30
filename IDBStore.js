@@ -303,7 +303,7 @@
           if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
             value[this.keyPath] = this._getUID()
           }
-          var putRequest = batchTransaction.objectStore(this.storeName).put(value)
+          var putRequest = batchTransaction.objectStore(this.storeName).put(value);
           putRequest.onsuccess = function (event) {
             count--;
             if (count == 0 && !called) {
