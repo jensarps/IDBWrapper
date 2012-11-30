@@ -178,21 +178,43 @@ operation failed and it will receive the error event object as first and only ar
 
 6) The batch method.
 
-```js
+```javascript
 batch: function (/*Array*/operations, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-batch expects an array of operations that you want to apply in a
-  single indexeddb transaction.
+`batch` expects an array of operations that you want to apply in a single
+IndexedDB transaction. `operations` is an Array of objects, each containing two
+properties, defining the type of operation. There are two operations
+supported, put and remove. A put entry looks like this:
 
-Example
+```javascript
+{ type: "put", value: dataObj } // dataObj being the object to store
+```
 
-```js
+A remove entry looks like this;
+
+```javascript
+{ type: "remove", key: someKey } // someKey being the keyPath value of the item to remove
+```
+
+You can mix both types in the `operations` Array:
+
+```javascript
 db.batch([
   { type: "put", value: dataObj },
-  { type: "del", key: somekey }
-], callback)
+  { type: "remove", key: someKey }
+], onSuccess, onError)
 ```
+
+`onSuccess` will be called if all operations were successful and will receive no
+arguments. `onError` will be called if an error happens for one of the
+operations and will receive three arguments: the Error instance, the type of
+operation that caused the error and either the key or the value property
+(depending on the type).
+
+If an error occurs, no changes will be made to the store, even if some
+of the given operations would have succeeded.
+
 
 Index Operations
 ----------------
