@@ -98,6 +98,7 @@
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
+      var preventSuccessCallback = false;
 
       openRequest.onerror = function (error) {
 
@@ -115,11 +116,10 @@
         }
       }.bind(this);
 
-
       openRequest.onsuccess = function (event) {
 
         if(this.db){
-          this.onStoreReady();
+          preventSuccessCallback || this.onStoreReady();
           return;
         }
 
@@ -130,13 +130,15 @@
             var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
             this.store = emptyTransaction.objectStore(this.storeName);
           }
-          // check indexes
 
+          // check indexes
           this.indexes.forEach(function(indexData){
             var indexName = indexData.name;
 
             if(!indexName){
+              preventSuccessCallback = true;
               this.onError(new Error('Cannot create index: No index name given.'));
+              return;
             }
 
             this.normalizeIndexData(indexData);
@@ -146,15 +148,17 @@
               var actualIndex = this.store.index(indexName);
               var complies = this.indexComplies(actualIndex, indexData);
               if(!complies){
+                preventSuccessCallback = true;
                 this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
               }
             } else {
+              preventSuccessCallback = true;
               this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
 
           }, this);
 
-          this.onStoreReady();
+          preventSuccessCallback || this.onStoreReady();
         } else {
           // We should never get here.
           this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
@@ -175,6 +179,7 @@
           var indexName = indexData.name;
 
           if(!indexName){
+            preventSuccessCallback = true;
             this.onError(new Error('Cannot create index: No index name given.'));
           }
 
