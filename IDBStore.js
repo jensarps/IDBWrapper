@@ -123,7 +123,45 @@
 
         this.db = event.target.result;
 
-        if(this.db.objectStoreNames.contains(this.storeName)){
+        var versionReq = this.db.setVersion(1)
+
+        versionReq.onsuccess = function (event) {
+          var trans = event.target.result;
+          // try here. needs to be done here first time
+          try {
+            this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+          } catch (err) {
+            // lol ignore.
+          }
+
+          trans.oncomplete = function (event) {
+            openStores.call(this)
+          }.bind(this)
+        }.bind(this)
+
+        versionReq.onerror = function (error) {
+          openStores.call(this)
+        }.bind(this)
+
+        function openStores() {
+          // Don't fricking throw. create the object store
+          if (!this.db.objectStoreNames.contains(this.storeName)) {
+            this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+
+            next.call(this)
+
+            this.onStoreReady();
+          } else if(this.db.objectStoreNames.contains(this.storeName)){
+            next.call(this)
+
+            this.onStoreReady();
+          } else {
+            // We should never get here.
+            this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+          }
+        }
+
+        function next() {
           if(!this.store){
             var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
             this.store = emptyTransaction.objectStore(this.storeName);
@@ -160,16 +198,10 @@
             }
 
           }, this);
-
-          this.onStoreReady();
-        } else {
-          // We should never get here.
-          this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
         }
       }.bind(this);
 
       openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
-
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
