@@ -123,6 +123,11 @@
 
         this.db = event.target.result;
 
+        // Don't fricking throw. create the object store
+        if (!this.db.objectStoreNames.contains(this.storeName)) {
+          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+        }
+
         if(this.db.objectStoreNames.contains(this.storeName)){
           if(!this.store){
             var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
