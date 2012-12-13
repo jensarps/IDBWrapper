@@ -127,9 +127,6 @@
 
         versionReq.onsuccess = function (event) {
           var trans = event.target.result;
-
-          console.log("event", event, event.target, event.result)
-
           // try here. needs to be done here first time
           try {
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
@@ -138,19 +135,16 @@
           }
 
           trans.oncomplete = function (event) {
-            console.log("opening", event)
             openStores.call(this)
           }.bind(this)
         }.bind(this)
 
         versionReq.onerror = function (error) {
-          console.log("error?")
           openStores.call(this)
         }.bind(this)
 
         function openStores() {
           // Don't fricking throw. create the object store
-          console.log("stuff", this.db.objectStoreNames, this.storeName)
           if (!this.db.objectStoreNames.contains(this.storeName)) {
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
 
@@ -208,7 +202,6 @@
       }.bind(this);
 
       openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
-        console.log("upgradeneeded")
         this.db = event.target.result;
 
         if(this.db.objectStoreNames.contains(this.storeName)){
