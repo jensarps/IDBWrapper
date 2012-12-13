@@ -115,8 +115,53 @@
 
 
       openRequest.onsuccess = function (event) {
+
+        if(this.db){
+          this.onStoreReady();
+          return;
+        }
+
+        this.db = event.target.result;
+
+        var versionReq = this.db.setVersion("1")
+
+        versionReq.onsuccess = function (event) {
+          var trans = event.target.result;
+
+          trans.oncomplete = function () {f
+            openStores.call(this)
+          }.bind(this)
+        }.bind(this)
+
+        versionReq.onerror = function (error) {
+          openStores.call(this)
+        }.bind(this)
+
+        function openStores() {
+          // Don't fricking throw. create the object store
+          if (!this.db.objectStoreNames.contains(this.storeName)) {
+            this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+
+            next.call(this)
+
+            this.onStoreReady();
+          } else if(this.db.objectStoreNames.contains(this.storeName)){
+            next.call(this)
+
+            this.onStoreReady();
+          } else {
+            // We should never get here.
+            this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+          }
+        }
+
         function next() {
+          if(!this.store){
+            var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+            this.store = emptyTransaction.objectStore(this.storeName);
+          }
           // check indexes
+
           this.indexes.forEach(function(indexData){
             var indexName = indexData.name;
 
@@ -147,37 +192,6 @@
             }
 
           }, this);
-
-          this.onStoreReady();
-        }
-
-        if(this.db){
-          this.onStoreReady();
-          return;
-        }
-
-        this.db = event.target.result;
-
-        // Don't fricking throw. create the object store
-        if (!this.db.objectStoreNames.contains(this.storeName)) {
-          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
-        }
-
-        if(this.db.objectStoreNames.contains(this.storeName)){
-          if(!this.store) {
-            var trans = event.result
-            trans.oncomplete = function () {
-              var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-              this.store = emptyTransaction.objectStore(this.storeName);
-
-              next.call(this)
-            }.bind(this)
-          } else {
-            next.call(this)
-          }
-        } else {
-          // We should never get here.
-          this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
         }
       }.bind(this);
 
