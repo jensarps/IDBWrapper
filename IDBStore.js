@@ -128,7 +128,7 @@
         versionReq.onsuccess = function (event) {
           var trans = event.target.result;
 
-          trans.oncomplete = function () {f
+          trans.oncomplete = function () {
             openStores.call(this)
           }.bind(this)
         }.bind(this)
