@@ -115,6 +115,41 @@
 
 
       openRequest.onsuccess = function (event) {
+        function next() {
+          // check indexes
+          this.indexes.forEach(function(indexData){
+            var indexName = indexData.name;
+
+            // normalize and provide existing keys
+            indexData.keyPath = indexData.keyPath || indexName;
+            indexData.unique = !!indexData.unique;
+            indexData.multiEntry = !!indexData.multiEntry;
+
+            if(!indexName){
+              throw new Error('Cannot create index: No index name given.');
+            }
+
+            if(this.hasIndex(indexName)){
+              // check if it complies
+              var actualIndex = this.store.index(indexName);
+              var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
+                // IE10 returns undefined for no multiEntry
+                if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
+                  return true;
+                }
+                return indexData[key] == actualIndex[key];
+              });
+              if(!complies){
+                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+              }
+            } else {
+              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+            }
+
+          }, this);
+
+          this.onStoreReady();
+        }
 
         if(this.db){
           this.onStoreReady();
@@ -139,42 +174,6 @@
             }.bind(this)
           } else {
             next.call(this)
-          }
-
-          function next() {
-            // check indexes
-            this.indexes.forEach(function(indexData){
-              var indexName = indexData.name;
-
-              // normalize and provide existing keys
-              indexData.keyPath = indexData.keyPath || indexName;
-              indexData.unique = !!indexData.unique;
-              indexData.multiEntry = !!indexData.multiEntry;
-
-              if(!indexName){
-                throw new Error('Cannot create index: No index name given.');
-              }
-
-              if(this.hasIndex(indexName)){
-                // check if it complies
-                var actualIndex = this.store.index(indexName);
-                var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
-                  // IE10 returns undefined for no multiEntry
-                  if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
-                    return true;
-                  }
-                  return indexData[key] == actualIndex[key];
-                });
-                if(!complies){
-                  this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-                }
-              } else {
-                this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-              }
-
-            }, this);
-
-            this.onStoreReady();
           }
         } else {
           // We should never get here.
