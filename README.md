@@ -323,7 +323,7 @@ ___
 
 
 ```javascript
-iterate: function(/*Object*/ keyRangeOptions)
+makeKeyRange: function(/*Object*/ keyRangeOptions)
 ```
 
 Returns an IDBKeyRange.
@@ -345,7 +345,7 @@ ___
 
 
 ```javascript
-iterate: function(/*Function*/ onSuccess, /*Object*/ countOptions)
+count: function(/*Function*/ onSuccess, /*Object*/ countOptions)
 ```
 
 The onSuccess receives the result of the count as only argument.
