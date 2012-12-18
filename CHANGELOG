@@ -4,6 +4,7 @@
 * Fix potentially non-unique generated IDs
 * Add batch() method [Raynos]
 * Fix a bug where the success handler could be called even if there was an error
+* Fix a bug where old IndexedDB implementations were not detected successfully
 
 
 
