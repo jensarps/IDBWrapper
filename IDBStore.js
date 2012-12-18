@@ -124,44 +124,46 @@
           return;
         }
 
-        if(this.db.objectStoreNames.contains(this.storeName)){
-          if(!this.store){
-            var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-            this.store = emptyTransaction.objectStore(this.storeName);
+        if(!this.db.objectStoreNames.contains(this.storeName)){
+          // We should never ever get here.
+          // Lets notify the user anyway.
+          this.onError(new Error('Something is wrong with the IndexedDB implementation in this browser. Please upgrade your browser.'));
+          return;
+        }
+
+        if(!this.store){
+          var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+          this.store = emptyTransaction.objectStore(this.storeName);
+        }
+
+        // check indexes
+        this.indexes.forEach(function(indexData){
+          var indexName = indexData.name;
+
+          if(!indexName){
+            preventSuccessCallback = true;
+            this.onError(new Error('Cannot create index: No index name given.'));
+            return;
           }
 
-          // check indexes
-          this.indexes.forEach(function(indexData){
-            var indexName = indexData.name;
+          this.normalizeIndexData(indexData);
 
-            if(!indexName){
+          if(this.hasIndex(indexName)){
+            // check if it complies
+            var actualIndex = this.store.index(indexName);
+            var complies = this.indexComplies(actualIndex, indexData);
+            if(!complies){
               preventSuccessCallback = true;
-              this.onError(new Error('Cannot create index: No index name given.'));
-              return;
+              this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
+          } else {
+            preventSuccessCallback = true;
+            this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+          }
 
-            this.normalizeIndexData(indexData);
+        }, this);
 
-            if(this.hasIndex(indexName)){
-              // check if it complies
-              var actualIndex = this.store.index(indexName);
-              var complies = this.indexComplies(actualIndex, indexData);
-              if(!complies){
-                preventSuccessCallback = true;
-                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-              }
-            } else {
-              preventSuccessCallback = true;
-              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-            }
-
-          }, this);
-
-          preventSuccessCallback || this.onStoreReady();
-        } else {
-          // We should never get here.
-          this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-        }
+        preventSuccessCallback || this.onStoreReady();
       }.bind(this);
 
       openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
