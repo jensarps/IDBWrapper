@@ -1,3 +1,13 @@
+0.3.0 /
+------------------
+
+* Fix potentially non-unique generated IDs
+* Add batch() method [Raynos]
+* Fix a bug where the success handler could be called even if there was an error
+* Fix a bug where old IndexedDB implementations were not detected successfully
+
+
+
 0.2.1 / 2012-11-20
 ------------------
 
