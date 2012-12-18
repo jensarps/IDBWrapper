@@ -112,6 +112,10 @@
 
       openRequest.onsuccess = function (event) {
 
+        if (preventSuccessCallback) {
+          return;
+        }
+
         if(this.db){
           preventSuccessCallback || this.onStoreReady();
           return;
