@@ -3,16 +3,16 @@ About
 
 This is a wrapper for indexedDB. It is meant to
 
-a) ease the use of indexedDB and abstract away the differences between the 
+a) ease the use of indexedDB and abstract away the differences between the
 existing impls in Chrome, Firefox and IE10 (yes, it works in all three), and
 
 b) show how IDB works. The code is split up into short methods, so that it's
 easy to see what happens in what method.
 
-"Showing how it works" is the main intention of this project. IndexedDB is 
-all the buzz, but only a few people actually know how to use it. 
+"Showing how it works" is the main intention of this project. IndexedDB is
+all the buzz, but only a few people actually know how to use it.
 
-The code in IDBWrapper.js is not optimized for anything, nor minified or anything. 
+The code in IDBWrapper.js is not optimized for anything, nor minified or anything.
 It is meant to be read and easy to understand. So, please, go ahead and check out
 the source!
 
@@ -84,8 +84,8 @@ The options object may contain the following properties (default values are show
 }
 ```
 
-'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true, 
-the database will automatically add a unique key to the keyPath index when storing objects missing 
+'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true,
+the database will automatically add a unique key to the keyPath index when storing objects missing
 that property. 'indexes' contains objects defining indexes (see below for details on indexes).
 
 'onError' gets called if an error occurred while trying to open the store. It
@@ -115,7 +115,7 @@ ___
 put(/*Object*/ dataObj, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-`dataObj` is the Object to store. `onSuccess` will be called when the insertion/update was successful, 
+`dataObj` is the Object to store. `onSuccess` will be called when the insertion/update was successful,
 and it will receive the keyPath value (the id, so to say) of the inserted object as first and only
 argument. `onError` will be called if the insertion/update failed and it will receive the error event
 object as first and only argument. If the store already contains an object with the given keyPath id,
@@ -143,7 +143,7 @@ getAll: function(/*Function?*/onSuccess, /*Function?*/onError)
 ```
 
 `onSuccess` will be called if the getAll operation was successful, and it will receive an Array of
-all objects currently stored in the store as first and only argument. `onError` will be called if 
+all objects currently stored in the store as first and only argument. `onError` will be called if
 the getAll operation failed and it will receive the error event object as first and only argument.
 
 ___
@@ -173,8 +173,47 @@ ___
 clear: function(/*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-`onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear 
+`onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear
 operation failed and it will receive the error event object as first and only argument.
+
+6) The batch method.
+
+```javascript
+batch: function (/*Array*/operations, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`batch` expects an array of operations that you want to apply in a single
+IndexedDB transaction. `operations` is an Array of objects, each containing two
+properties, defining the type of operation. There are two operations
+supported, put and remove. A put entry looks like this:
+
+```javascript
+{ type: "put", value: dataObj } // dataObj being the object to store
+```
+
+A remove entry looks like this;
+
+```javascript
+{ type: "remove", key: someKey } // someKey being the keyPath value of the item to remove
+```
+
+You can mix both types in the `operations` Array:
+
+```javascript
+db.batch([
+  { type: "put", value: dataObj },
+  { type: "remove", key: someKey }
+], onSuccess, onError)
+```
+
+`onSuccess` will be called if all operations were successful and will receive no
+arguments. `onError` will be called if an error happens for one of the
+operations and will receive three arguments: the Error instance, the type of
+operation that caused the error and either the key or the value property
+(depending on the type).
+
+If an error occurs, no changes will be made to the store, even if some
+of the given operations would have succeeded.
 
 
 Index Operations

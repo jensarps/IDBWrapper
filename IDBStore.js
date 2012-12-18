@@ -84,18 +84,15 @@
 
     onError: null,
 
+    _insertIdCount: 0,
+
     openDB: function () {
-
-      this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
-
-      if(!this.newVersionAPI){
-        this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
-      }
 
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
+      var preventSuccessCallback = false;
 
       openRequest.onerror = function (error) {
 
@@ -113,8 +110,11 @@
         }
       }.bind(this);
 
-
       openRequest.onsuccess = function (event) {
+
+        if (preventSuccessCallback) {
+          return;
+        }
 
         if(this.db){
           this.onStoreReady();
@@ -123,49 +123,49 @@
 
         this.db = event.target.result;
 
-        if(this.db.objectStoreNames.contains(this.storeName)){
-          if(!this.store){
-            var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-            this.store = emptyTransaction.objectStore(this.storeName);
-          }
-          // check indexes
-
-          this.indexes.forEach(function(indexData){
-            var indexName = indexData.name;
-
-            // normalize and provide existing keys
-            indexData.keyPath = indexData.keyPath || indexName;
-            indexData.unique = !!indexData.unique;
-            indexData.multiEntry = !!indexData.multiEntry;
-
-            if(!indexName){
-              throw new Error('Cannot create index: No index name given.');
-            }
-
-            if(this.hasIndex(indexName)){
-              // check if it complies
-              var actualIndex = this.store.index(indexName);
-              var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
-                // IE10 returns undefined for no multiEntry
-                if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
-                  return true;
-                }
-                return indexData[key] == actualIndex[key];
-              });
-              if(!complies){
-                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-              }
-            } else {
-              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-            }
-
-          }, this);
-
-          this.onStoreReady();
-        } else {
-          // We should never get here.
-          this.onError(new Error('Cannot create a new store for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+        if(typeof this.db.version == 'string'){
+          this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
+          return;
         }
+
+        if(!this.db.objectStoreNames.contains(this.storeName)){
+          // We should never ever get here.
+          // Lets notify the user anyway.
+          this.onError(new Error('Something is wrong with the IndexedDB implementation in this browser. Please upgrade your browser.'));
+          return;
+        }
+
+        var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+        this.store = emptyTransaction.objectStore(this.storeName);
+
+        // check indexes
+        this.indexes.forEach(function(indexData){
+          var indexName = indexData.name;
+
+          if(!indexName){
+            preventSuccessCallback = true;
+            this.onError(new Error('Cannot create index: No index name given.'));
+            return;
+          }
+
+          this.normalizeIndexData(indexData);
+
+          if(this.hasIndex(indexName)){
+            // check if it complies
+            var actualIndex = this.store.index(indexName);
+            var complies = this.indexComplies(actualIndex, indexData);
+            if(!complies){
+              preventSuccessCallback = true;
+              this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+            }
+          } else {
+            preventSuccessCallback = true;
+            this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+          }
+
+        }, this);
+
+        preventSuccessCallback || this.onStoreReady();
       }.bind(this);
 
       openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
@@ -181,25 +181,17 @@
         this.indexes.forEach(function(indexData){
           var indexName = indexData.name;
 
-          // normalize and provide existing keys
-          indexData.keyPath = indexData.keyPath || indexName;
-          indexData.unique = !!indexData.unique;
-          indexData.multiEntry = !!indexData.multiEntry;
-
           if(!indexName){
+            preventSuccessCallback = true;
             this.onError(new Error('Cannot create index: No index name given.'));
           }
+
+          this.normalizeIndexData(indexData);
 
           if(this.hasIndex(indexName)){
             // check if it complies
             var actualIndex = this.store.index(indexName);
-            var complies = ['keyPath', 'unique', 'multiEntry'].every(function(key){
-              // IE10 returns undefined for no multiEntry
-              if (key == 'multiEntry' && actualIndex[key] === undefined && indexData[key] === false) {
-                return true;
-              }
-              return indexData[key] == actualIndex[key];
-            });
+            var complies = this.indexComplies(actualIndex, indexData);
             if(!complies){
               // index differs, need to delete and re-create
               this.store.deleteIndex(indexName);
@@ -267,6 +259,59 @@
       deleteRequest.onerror = onError;
     },
 
+    batch: function (arr, onSuccess, onError) {
+      onError || (onError = function (error) {
+        console.error('Could not apply batch.', error);
+      });
+      onSuccess || (onSuccess = noop);
+      var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
+      var count = arr.length;
+      var called = false;
+
+      arr.forEach(function (operation) {
+        var type = operation.type;
+        var key = operation.key;
+        var value = operation.value;
+
+        if (type == "remove") {
+          var deleteRequest = batchTransaction.objectStore(this.storeName).delete(key);
+          deleteRequest.onsuccess = function (event) {
+            count--;
+            if (count == 0 && !called) {
+              called = true;
+              onSuccess();
+            }
+          };
+          deleteRequest.onerror = function (err) {
+            batchTransaction.abort();
+            if (!called) {
+              called = true;
+              onError(err, type, key);
+            }
+          };
+        } else if (type == "put") {
+          if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+            value[this.keyPath] = this._getUID()
+          }
+          var putRequest = batchTransaction.objectStore(this.storeName).put(value);
+          putRequest.onsuccess = function (event) {
+            count--;
+            if (count == 0 && !called) {
+              called = true;
+              onSuccess();
+            }
+          };
+          putRequest.onerror = function (err) {
+            batchTransaction.abort();
+            if (!called) {
+              called = true;
+              onError(err, type, value);
+            }
+          };
+        }
+      }, this);
+    },
+
     getAll: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
@@ -319,7 +364,7 @@
     _getUID: function () {
       // FF bails at times on non-numeric ids. So we take an even
       // worse approach now, using current time as id. Sigh.
-      return +new Date();
+      return this._insertIdCount++ + Date.now();
     },
 
 
@@ -333,6 +378,23 @@
 
     hasIndex: function (indexName) {
       return this.store.indexNames.contains(indexName);
+    },
+
+    normalizeIndexData: function (indexData) {
+      indexData.keyPath = indexData.keyPath || indexData.name;
+      indexData.unique = !!indexData.unique;
+      indexData.multiEntry = !!indexData.multiEntry;
+    },
+
+    indexComplies: function (actual, expected) {
+      var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
+        // IE10 returns undefined for no multiEntry
+        if (key == 'multiEntry' && actual[key] === undefined && expected[key] === false) {
+          return true;
+        }
+        return expected[key] == actual[key];
+      });
+      return complies;
     },
 
     /**********
