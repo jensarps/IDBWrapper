@@ -200,7 +200,7 @@ A remove entry looks like this;
 You can mix both types in the `operations` Array:
 
 ```javascript
-db.batch([
+batch([
   { type: "put", value: dataObj },
   { type: "remove", key: someKey }
 ], onSuccess, onError)
