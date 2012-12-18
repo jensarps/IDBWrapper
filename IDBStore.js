@@ -135,10 +135,8 @@
           return;
         }
 
-        if(!this.store){
-          var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-          this.store = emptyTransaction.objectStore(this.storeName);
-        }
+        var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+        this.store = emptyTransaction.objectStore(this.storeName);
 
         // check indexes
         this.indexes.forEach(function(indexData){
