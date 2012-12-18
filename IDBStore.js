@@ -117,7 +117,7 @@
         }
 
         if(this.db){
-          preventSuccessCallback || this.onStoreReady();
+          this.onStoreReady();
           return;
         }
 
