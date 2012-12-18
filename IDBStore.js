@@ -88,12 +88,6 @@
 
     openDB: function () {
 
-      this.newVersionAPI = typeof this.idb.setVersion == 'undefined';
-
-      if(!this.newVersionAPI){
-        this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
-      }
-
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
@@ -124,6 +118,11 @@
         }
 
         this.db = event.target.result;
+
+        if(typeof this.db.version == 'string'){
+          this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
+          return;
+        }
 
         if(this.db.objectStoreNames.contains(this.storeName)){
           if(!this.store){
