@@ -252,7 +252,7 @@
       });
       onSuccess || (onSuccess = noop);
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      var deleteRequest = removeTransaction.objectStore(this.storeName).delete(key);
+      var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
       deleteRequest.onsuccess = function (event) {
         onSuccess(event.target.result);
       };
@@ -274,7 +274,7 @@
         var value = operation.value;
 
         if (type == "remove") {
-          var deleteRequest = batchTransaction.objectStore(this.storeName).delete(key);
+          var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
           deleteRequest.onsuccess = function (event) {
             count--;
             if (count == 0 && !called) {
