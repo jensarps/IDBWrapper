@@ -1,4 +1,4 @@
-require(['../../IDBStore.js'], function(IDBStore){
+require(['../../idbstore.js'], function(IDBStore){
 	
 	var objStore;
 	
