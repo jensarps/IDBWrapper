@@ -1,4 +1,4 @@
-require(['../../IDBStore.js'], function(IDBStore){
+require(['../../idbstore.js'], function(IDBStore){
 	
 	var tpls = {
 		row: '<tr><td>{customerid}</td><td><input id="lastname_{customerid}" value="{lastname}"></td><td><input id="firstname_{customerid}" value="{firstname}"></td><td><button onclick="app.deleteItem({customerid});">delete</button><button onclick="app.updateItem({customerid});">update</button></td></tr>',

@@ -1,11 +1,11 @@
 {
   "name": "idb-wrapper",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A cross-browser wrapper for IndexedDB",
   "keywords": [],
   "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",
   "repository": "git://github.com/jensarps/IDBWrapper.git",
-  "main": "IDBStore",
+  "main": "idbstore",
   "homepage": "https://github.com/jensarps/IDBWrapper",
   "contributors": [
     "Josh Matthews <josh@joshmatthews.net> (http://www.joshmatthews.net/blog/)",
