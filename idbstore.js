@@ -62,6 +62,8 @@
 
   IDBStore.prototype = {
 
+    version: '0.3.1',
+
     db: null,
 
     dbName: null,
@@ -513,6 +515,8 @@
     }
     return target;
   };
+
+  IDBStore.version = IDBStore.prototype.version;
 
   return IDBStore;
 

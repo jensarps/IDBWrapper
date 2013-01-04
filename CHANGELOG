@@ -1,8 +1,9 @@
-0.3.1 /
+0.3.1 / 2013-01-04
 ------------------
 
 * lowercase idbstore.js
 * Add minified version
+* Add version property to IDBStore
 
 
 
