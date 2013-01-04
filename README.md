@@ -55,7 +55,7 @@ The source for these examples are in the `example` folder of this repository.
 Usage
 =====
 
-Including the IDBStore.js file will add an IDBStore constructor to the global scope.
+Including the idbstore.js file will add an IDBStore constructor to the global scope.
 
 Alternatively, you can use an AMD loader such as RequireJS, or a CommonJS loader
 to load the module, and you will receive the constructor in your load callback

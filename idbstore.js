@@ -1,6 +1,6 @@
 /*
  * IDBWrapper - A cross-browser wrapper for IndexedDB
- * Copyright (c) 2011 - 2012 Jens Arps
+ * Copyright (c) 2011 - 2013 Jens Arps
  * http://jensarps.de/
  *
  * Licensed under the MIT (X11) license
@@ -252,7 +252,7 @@
       });
       onSuccess || (onSuccess = noop);
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      var deleteRequest = removeTransaction.objectStore(this.storeName).delete(key);
+      var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
       deleteRequest.onsuccess = function (event) {
         onSuccess(event.target.result);
       };
@@ -274,7 +274,7 @@
         var value = operation.value;
 
         if (type == "remove") {
-          var deleteRequest = batchTransaction.objectStore(this.storeName).delete(key);
+          var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
           deleteRequest.onsuccess = function (event) {
             count--;
             if (count == 0 && !called) {
