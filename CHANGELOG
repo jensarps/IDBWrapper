@@ -3,6 +3,7 @@
 
 * lowercase idbstore.js
 * Add minified version
+* Add version property to IDBStore
 
 
 
