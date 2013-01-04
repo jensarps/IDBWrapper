@@ -108,6 +108,7 @@ Use the following methods to read and write data:
 
 ___
 
+
 1) The put method.
 
 
@@ -123,6 +124,7 @@ it will be overwritten by `dataObj`.
 
 ___
 
+
 2) The get method.
 
 ```javascript
@@ -136,6 +138,7 @@ if the get operation failed and it will receive the error event object as first 
 
 ___
 
+
 3) The getAll method.
 
 ```javascript
@@ -147,6 +150,7 @@ all objects currently stored in the store as first and only argument. `onError` 
 the getAll operation failed and it will receive the error event object as first and only argument.
 
 ___
+
 
 4) The remove method.
 
@@ -167,6 +171,7 @@ and only argument.
 
 ___
 
+
 5) The clear method.
 
 ```javascript
@@ -175,6 +180,9 @@ clear: function(/*Function?*/onSuccess, /*Function?*/onError)
 
 `onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear
 operation failed and it will receive the error event object as first and only argument.
+
+___
+
 
 6) The batch method.
 
@@ -287,6 +295,7 @@ with a `count()` method.
 
 ___
 
+
 1) The iterate method.
 
 
@@ -314,7 +323,6 @@ The `writeAccess` property defaults to false. If you need write access to the st
 In the `onEnd` property you can pass a callback that gets called after the iteration is over and the transaction is closed. It does not receive any arguments.
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
-
 
 ___
 
