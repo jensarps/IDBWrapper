@@ -22,6 +22,7 @@
 
   var defaults = {
     storeName: 'Store',
+    storePrefix: 'IDBWrapper-',
     dbVersion: 1,
     keyPath: 'id',
     autoIncrement: true,
@@ -39,7 +40,7 @@
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
     }
 
-    this.dbName = 'IDBWrapper-' + this.storeName;
+    this.dbName = this.storePrefix + this.storeName;
     this.dbVersion = parseInt(this.dbVersion, 10);
 
     onStoreReady && (this.onStoreReady = onStoreReady);

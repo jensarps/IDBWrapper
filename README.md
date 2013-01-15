@@ -75,6 +75,7 @@ The options object may contain the following properties (default values are show
 ```javascript
 {
   storeName: 'Store',
+  storePrefix: 'IDBWrapper-',
   dbVersion: 1,
   keyPath: 'id',
   autoIncrement: true,
