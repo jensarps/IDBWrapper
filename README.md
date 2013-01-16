@@ -24,7 +24,7 @@ http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 Part 2: Running Queries against the store
 http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
-##November Rewrite
+###November Rewrite
 
 I rewrote IDBWrapper to cope with all the issues, and the new version is on
 master since Nov, 13th 2012. The API didn't change much, I just removed some
@@ -60,6 +60,8 @@ Including the idbstore.js file will add an IDBStore constructor to the global sc
 Alternatively, you can use an AMD loader such as RequireJS, or a CommonJS loader
 to load the module, and you will receive the constructor in your load callback
 (the constructor will then, of course, have whatever name you call it).
+
+If you use npm as your package manager, you can also just `npm install idb-wrapper`.
 
 You can then create an IDB store:
 
