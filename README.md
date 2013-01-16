@@ -72,7 +72,8 @@ var myStore = new IDBStore();
 You may pass two parameters to the constructor: the first is an object with optional parameters,
 the second is a function reference to a function that is called when the store is ready to use.
 
-The options object may contain the following properties (default values are shown):
+The options object may contain the following properties (default values are shown -- all
+properties are optional):
 
 ```javascript
 {
@@ -87,9 +88,23 @@ The options object may contain the following properties (default values are show
 }
 ```
 
+'storeName' is the name of the store: for different stores, use different names.
+
+'storePrefix' is an additional prefix; the created database will finally have
+the name "storePrefix+storeName". You can safely ignore this property, but if
+you want to have full control over the IDB name, you can pass your own prefix.
+
+'dbVersion' is the version number of your store. You'll only have to provide
+this if you change the structure of the store at a later time.
+
 'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true,
 the database will automatically add a unique key to the keyPath index when storing objects missing
 that property. 'indexes' contains objects defining indexes (see below for details on indexes).
+
+'autoIncrement' is a boolean and toggles, well, auto-increment on or off. You
+can leave it to true, even if you do provide your own ids.
+
+'indexes' is an array of indexes. See below for further info on indexes.
 
 'onError' gets called if an error occurred while trying to open the store. It
 receives the error instance as only argument.
