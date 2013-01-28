@@ -18,7 +18,6 @@
   }
 })('IDBStore', function () {
 
-  var IDBStore;
 
   var defaults = {
     storeName: 'Store',
@@ -34,7 +33,35 @@
     indexes: []
   };
 
-  IDBStore = function (kwArgs, onStoreReady) {
+  /**
+   *
+   * The IDBStore constructor
+   *
+   * @constructor
+   * @name IDBStore
+   * @version 0.3.2
+   *
+   * @param {Object} [kwArgs] An options object used to configure the store and
+   *  set callbacks
+   * @param {String} [kwArgs.storeName=Store] The name of the store
+   * @param {String} [kwArgs.storePrefix=IDBWrapper-] A prefix that is
+   *  internally used to construct the name of the database, which will be
+   *  kwArgs.storePrefix + kwArgs.storeName
+   * @param {Number} [kwArgs.dbVersion=1] The version of the store
+   * @param {String} [kwArgs.keyPath=id] The key path to use
+   * @param {Boolean} [kwArgs.autoIncrement=true] If set to true, IDBStore will
+   *  automatically make sure a unique keyPath value is present on each object
+   *  that is stored.
+   * @param {Function} [kwArgs.onStoreReady] A callback to be called when the
+   *  store is ready to be used.
+   * @param {Function} [kwArgs.onError=throw] A callback to be called when an
+   *  error occurred during instantiation of the store.
+   * @param {Array} [kwArgs.indexes=[]] An array of indexes to use with the
+   *  store.
+   * @param {Function} [onStoreReady] A callback to be called when the store
+   * is ready to be used.
+   */
+  var IDBStore = function (kwArgs, onStoreReady) {
 
     for(var key in defaults){
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
@@ -61,7 +88,7 @@
     this.openDB();
   };
 
-  IDBStore.prototype = {
+  IDBStore.prototype = /** @lends IDBStore */ {
 
     version: '0.3.2',
 
@@ -89,6 +116,16 @@
 
     _insertIdCount: 0,
 
+    /**
+     * Opens an IndexedDB.
+     *
+     * Will check if versions match and compare provided index configuration
+     * with existing ones, and update indexes if necessary.
+     *
+     * Will call this.onStoreReady() if everything went well and the store
+     * is ready to use, and this.onError() is something went wrong.
+     *
+     */
     openDB: function () {
 
       var features = this.features = {};
@@ -209,6 +246,10 @@
       }.bind(this);
     },
 
+    /**
+     * Deletes the database used for this store if the IDB implementations
+     * provides that functionality.
+     */
     deleteDatabase: function () {
       if (this.idb.deleteDatabase) {
         this.idb.deleteDatabase(this.dbName);
@@ -220,6 +261,16 @@
      *********************/
 
 
+    /**
+     * Puts an object into the store. If an entry with the given id exists,
+     * it will be overwritten.
+     *
+     * @param {Object} dataObj The object to store.
+     * @param {Function} [onSuccess] A callback that is called if insertion
+     *  was successful.
+     * @param {Function} [onError] A callback that is called if insertion
+     *  failed.
+     */
     put: function (dataObj, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not write data.', error);
@@ -236,6 +287,16 @@
       putRequest.onerror = onError;
     },
 
+    /**
+     * Retrieves an object from the store. If no entry exists with the given id,
+     * the success handler will be called with null as first and only argument.
+     *
+     * @param {*} key The id of the object to fetch.
+     * @param {Function} [onSuccess] A callback that is called if fetching
+     *  was successful. Will receive the object as only argument.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     get: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
@@ -249,6 +310,15 @@
       getRequest.onerror = onError;
     },
 
+    /**
+     * Removes an object from the store.
+     *
+     * @param {*} key The id of the object to remove.
+     * @param {Function} [onSuccess] A callback that is called if the removal
+     *  was successful.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     remove: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not remove data.', error);
@@ -262,6 +332,16 @@
       deleteRequest.onerror = onError;
     },
 
+    /**
+     * Runs a batch of put and/or remove operations on the store.
+     *
+     * @param {Array} arr An array of objects containing the operation to run
+     *  and the data object (for put operations).
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     */
     batch: function (arr, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not apply batch.', error);
@@ -315,6 +395,14 @@
       }, this);
     },
 
+    /**
+     * Fetches all entries in the store.
+     *
+     * @param {Function} [onSuccess] A callback that is called if the operation
+     *  was successful. Will receive an array of objects.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     getAll: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
@@ -333,6 +421,17 @@
       }
     },
 
+    /**
+     * Implements getAll for IDB implementations that do not have a getAll()
+     * method.
+     *
+     * @param {Object} tr An open READ transaction.
+     * @param {Function} onSuccess A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} onError A callback that will be called if an
+     *  error occurred during the operation.
+     * @private
+     */
     _getAllCursor: function (tr, onSuccess, onError) {
       var all = [];
       var store = tr.objectStore(this.storeName);
@@ -351,6 +450,14 @@
       cursorRequest.onError = onError;
     },
 
+    /**
+     * Clears the store, i.e. deletes all entries in the store.
+     *
+     * @param {Function} [onSuccess] A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} [onError] A callback that will be called if an
+     *  error occurred during the operation.
+     */
     clear: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not clear store.', error);
@@ -364,6 +471,12 @@
       clearRequest.onerror = onError;
     },
 
+    /**
+     * Generates a numeric id unique to this instance of IDBStore.
+     *
+     * @return {Number} The id
+     * @private
+     */
     _getUID: function () {
       // FF bails at times on non-numeric ids. So we take an even
       // worse approach now, using current time as id. Sigh.
@@ -375,20 +488,48 @@
      * indexing *
      ************/
 
+    /**
+     * Returns a DOMStringList of index names of the store.
+     *
+     * @return {DOMStringList} The list of index names
+     */
     getIndexList: function () {
       return this.store.indexNames;
     },
 
+    /**
+     * Checks if an index with the given name exists in the store.
+     *
+     * @param {String} indexName The name of the index to look for
+     * @return {Boolean} Whether the store contains an index with the given name
+     */
     hasIndex: function (indexName) {
       return this.store.indexNames.contains(indexName);
     },
 
+    /**
+     * Normalizes an object containing index data and assures that all
+     * proprties are set.
+     *
+     * @param {Object} indexData The index data object to normalize
+     * @param {String} indexData.name The name of the index
+     * @param {String} [indexData.keyPath] The key path of the index
+     * @param {Boolean} [indexData.unique] Whether the index is unique
+     * @param {Boolean} [indexData.multiEntry] Whether the index is multi entry
+     */
     normalizeIndexData: function (indexData) {
       indexData.keyPath = indexData.keyPath || indexData.name;
       indexData.unique = !!indexData.unique;
       indexData.multiEntry = !!indexData.multiEntry;
     },
 
+    /**
+     * Checks if an actual index complies with an expected index.
+     *
+     * @param {Object} actual The actual index found in the store
+     * @param {Object} expected An Object describing an expected index
+     * @return {Boolean} Whether both index definitions are identical
+     */
     indexComplies: function (actual, expected) {
       var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
         // IE10 returns undefined for no multiEntry
@@ -404,6 +545,25 @@
      * cursor *
      **********/
 
+    /**
+     * Iterates over the store using the given options and calling onItem
+     * for each entry matching the options.
+     *
+     * @param {Function} onItem A callback to be called for each match
+     * @param {Object} [options] An object defining specific options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {String} [options.order=ASC] The order in which to provide the
+     *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
+     *  duplicate matches
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Boolean} [options.writeAccess=false] Whether grant write access
+     *  to the store in the onItem callback
+     * @param {Function} [options.onEnd=null] A callback to be called after
+     *  iteration has ended
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
     iterate: function (onItem, options) {
       options = mixin({
         index: null,
@@ -445,6 +605,19 @@
       };
     },
 
+    /**
+     *
+     * Runs a query against the store, but only returns the number of matches
+     * instead of the matches itself.
+     *
+     * @param {Function} onSuccess A callback to be called if the opration
+     *  was successful.
+     * @param {Object} [options] An object defining specific options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
     count: function (onSuccess, options) {
 
       options = mixin({
@@ -475,6 +648,21 @@
     /* key ranges */
     /**************/
 
+    /**
+     * Creates a key range using specified options. This key range can be
+     * handed over to the count() and iterate() methods.
+     *
+     * Note: You must provide at least one or both of "lower" or "upper" value.
+     *
+     * @param {Object} options The options for the key range to create
+     * @param {*} [options.lower] The lower bound
+     * @param {Boolean} [options.excludeLower] Whether to exclude the lower
+     *  bound passed in options.lower from the key range
+     * @param {*} [options.upper] The upper bound
+     * @param {Boolean} [options.excludeUpper] Whether to exclude the upper
+     *  bound passed in options.upper from the key range
+     * @return {Object} The IDBKeyRange representing the specified options
+     */
     makeKeyRange: function(options){
       var keyRange,
           hasLower = typeof options.lower != 'undefined',
