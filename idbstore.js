@@ -1,5 +1,5 @@
-/*
- * IDBWrapper - A cross-browser wrapper for IndexedDB
+/**
+ * @license IDBWrapper - A cross-browser wrapper for IndexedDB
  * Copyright (c) 2011 - 2013 Jens Arps
  * http://jensarps.de/
  *
