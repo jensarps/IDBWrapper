@@ -670,6 +670,7 @@
      * @return {Object} The IDBKeyRange representing the specified options
      */
     makeKeyRange: function(options){
+      /*jshint onecase:true */
       var keyRange,
           hasLower = typeof options.lower != 'undefined',
           hasUpper = typeof options.upper != 'undefined';
