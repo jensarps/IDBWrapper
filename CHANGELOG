@@ -3,6 +3,11 @@
 
 * Changes to README
 * Add storePrefix property to constructor [englercj]
+* Add JSDoc
+* Add input checks to the batch() method
+* Add Closure Compiler to repository
+* Add MAKEFILE
+* Misc cleanup
 
 
 0.3.1 / 2013-01-04
