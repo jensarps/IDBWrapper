@@ -9,8 +9,6 @@
  * Licensed under the MIT (X11) license
  */
 
-"use strict";
-
 (function (name, definition, global) {
   if (typeof define === 'function') {
     define(definition);
@@ -21,6 +19,7 @@
   }
 })('IDBStore', function () {
 
+  "use strict";
 
   var defaults = {
     storeName: 'Store',
