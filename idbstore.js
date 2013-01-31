@@ -349,6 +349,10 @@
         console.error('Could not apply batch.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      if(Object.prototype.toString.call(dataArray) != '[object Array]'){
+        onError(new Error('dataArray argument must be of type Array.'));
+      }
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
       var count = dataArray.length;
       var called = false;
