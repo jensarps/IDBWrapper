@@ -686,7 +686,6 @@
           break;
         default:
           throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
-          break;
       }
 
       return keyRange;
