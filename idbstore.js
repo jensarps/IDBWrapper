@@ -380,7 +380,7 @@
           };
         } else if (type == "put") {
           if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-            value[this.keyPath] = this._getUID()
+            value[this.keyPath] = this._getUID();
           }
           var putRequest = batchTransaction.objectStore(this.storeName).put(value);
           putRequest.onsuccess = function (event) {
@@ -603,7 +603,7 @@
           cursor['continue']();
         } else {
           if(options.onEnd){
-            options.onEnd()
+            options.onEnd();
           } else {
             onItem(null);
           }
