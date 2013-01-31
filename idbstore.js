@@ -337,23 +337,23 @@
     /**
      * Runs a batch of put and/or remove operations on the store.
      *
-     * @param {Array} arr An array of objects containing the operation to run
+     * @param {Array} dataArray An array of objects containing the operation to run
      *  and the data object (for put operations).
      * @param {Function} [onSuccess] A callback that is called if all operations
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
      */
-    batch: function (arr, onSuccess, onError) {
+    batch: function (dataArray, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not apply batch.', error);
       });
       onSuccess || (onSuccess = noop);
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
-      var count = arr.length;
+      var count = dataArray.length;
       var called = false;
 
-      arr.forEach(function (operation) {
+      dataArray.forEach(function (operation) {
         var type = operation.type;
         var key = operation.key;
         var value = operation.value;
