@@ -366,7 +366,7 @@
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
           deleteRequest.onsuccess = function (event) {
             count--;
-            if (count == 0 && !called) {
+            if (count === 0 && !called) {
               called = true;
               onSuccess();
             }
@@ -385,7 +385,7 @@
           var putRequest = batchTransaction.objectStore(this.storeName).put(value);
           putRequest.onsuccess = function (event) {
             count--;
-            if (count == 0 && !called) {
+            if (count === 0 && !called) {
               called = true;
               onSuccess();
             }
