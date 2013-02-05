@@ -24,33 +24,36 @@ http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 Part 2: Running Queries against the store
 http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
-###November Rewrite
-
-I rewrote IDBWrapper to cope with all the issues, and the new version is on
-master since Nov, 13th 2012. The API didn't change much, I just removed some
-of the methods. Method signatures remain unchanged.
-
-However, if you have a previous version of IDBWrapper in use, there's an
-issue: The new version won't be able to access the store created with the old
-version, because database names changed. In that case, you need to manually
-migrate the data: Include both versions of IDBWrapper (use a different name for
-them), do a getAll() on the old store and write the data to the new store.
-
-I am very sorry about any inconveniences, but there was no other way.
-
-The 'old' version of IDBWrapper is still available in the `legacy` branch:
-https://github.com/jensarps/IDBWrapper/tree/legacy
-
-Also, "showing how it works" is no longer the main intention behind this. Now,
-it's rather "just works".
-
-
 Examples
 ========
 
 There are some examples to run right in your browser over here: http://jensarps.github.com/IDBWrapper/example/
 
 The source for these examples are in the `example` folder of this repository.
+
+API Reference
+=============
+
+There's an API reference over here: http://jensarps.github.com/IDBWrapper/jsdoc/
+
+You can create a local version of the reference using a terminal. Go into the
+IDBWrapper directory and run the following command:
+
+```bash
+$ make doc
+```
+
+Obtaining IDBWrapper
+====================
+
+You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/tags
+
+If you use NPM as your package manager, you can get it from there, too, by
+running:
+
+```bash
+$ npm install idb-wrapper
+```
 
 Usage
 =====
@@ -61,7 +64,6 @@ Alternatively, you can use an AMD loader such as RequireJS, or a CommonJS loader
 to load the module, and you will receive the constructor in your load callback
 (the constructor will then, of course, have whatever name you call it).
 
-If you use npm as your package manager, you can also just `npm install idb-wrapper`.
 
 You can then create an IDB store:
 
@@ -307,9 +309,9 @@ Returns a `DOMStringList` with all existing indices.
 Running Queries
 ---------------
 
-To run queries, IDBWrapper provides an `iterate()` method. To create keyRanges,
-there is the `makeKeyRange()` method. In addition to these, IDBWrapper comes
-with a `count()` method.
+To run queries, IDBWrapper provides a `query()` and an `iterate()` method. To
+create keyRanges, there is the `makeKeyRange()` method. In addition to these,
+IDBWrapper comes with a `count()` method.
 
 ___
 
@@ -345,7 +347,35 @@ In the `onError` property you can pass a custom error handler. In case of an err
 ___
 
 
-2) The makeKeyRange method.
+2) The query method.
+
+
+```javascript
+query: function(/*Function*/ onSuccess, /*Object*/ queryOptions)
+```
+
+The query() method is just like the iterate() method, except that it will call
+the onSuccess callback with an array of the matched objects instead of calling
+a callback for each item.
+
+The `onSuccess` callback will be called if the operation was successful, and it
+will receive an array objects as only argument.
+
+The `queryOptions` object can contain one or more of the following properties:
+
+The `index` property contains the name of the index to operate on. If you omit this, IDBWrapper will use the store's keyPath as index.
+
+In the `keyRange` property you can pass a keyRange.
+
+The `order` property can be set to 'ASC' or 'DESC', and determines the ordering direction of results. If you omit this, IDBWrapper will use 'ASC'.
+
+The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
+
+In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
+
+___
+
+3) The makeKeyRange method.
 
 
 ```javascript
@@ -367,7 +397,7 @@ The `keyRangeOptions` object must have one or more of the following properties:
 ___
 
 
-3) The count method.
+4) The count method.
 
 
 ```javascript
