@@ -309,9 +309,9 @@ Returns a `DOMStringList` with all existing indices.
 Running Queries
 ---------------
 
-To run queries, IDBWrapper provides an `iterate()` method. To create keyRanges,
-there is the `makeKeyRange()` method. In addition to these, IDBWrapper comes
-with a `count()` method.
+To run queries, IDBWrapper provides a `query()` and an `iterate()` method. To
+create keyRanges, there is the `makeKeyRange()` method. In addition to these,
+IDBWrapper comes with a `count()` method.
 
 ___
 
@@ -347,7 +347,35 @@ In the `onError` property you can pass a custom error handler. In case of an err
 ___
 
 
-2) The makeKeyRange method.
+2) The query method.
+
+
+```javascript
+query: function(/*Function*/ onSuccess, /*Object*/ queryOptions)
+```
+
+The query() method is just like the iterate() method, except that it will call
+the onSuccess callback with an array of the matched objects instead of calling
+a callback for each item.
+
+The `onSuccess` callback will be called if the operation was successful, and it
+will receive an array objects as only argument.
+
+The `queryOptions` object can contain one or more of the following properties:
+
+The `index` property contains the name of the index to operate on. If you omit this, IDBWrapper will use the store's keyPath as index.
+
+In the `keyRange` property you can pass a keyRange.
+
+The `order` property can be set to 'ASC' or 'DESC', and determines the ordering direction of results. If you omit this, IDBWrapper will use 'ASC'.
+
+The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
+
+In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
+
+___
+
+3) The makeKeyRange method.
 
 
 ```javascript
@@ -369,7 +397,7 @@ The `keyRangeOptions` object must have one or more of the following properties:
 ___
 
 
-3) The count method.
+4) The count method.
 
 
 ```javascript
