@@ -12,7 +12,7 @@ easy to see what happens in what method.
 "Showing how it works" is the main intention of this project. IndexedDB is
 all the buzz, but only a few people actually know how to use it.
 
-The code in IDBWrapper.js is not optimized for anything, nor minified or anything.
+The code in idbstore.js is not optimized for anything, nor minified or anything.
 It is meant to be read and easy to understand. So, please, go ahead and check out
 the source!
 
@@ -24,7 +24,7 @@ http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 Part 2: Running Queries against the store
 http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
-##November Rewrite
+###November Rewrite
 
 I rewrote IDBWrapper to cope with all the issues, and the new version is on
 master since Nov, 13th 2012. The API didn't change much, I just removed some
@@ -61,6 +61,8 @@ Alternatively, you can use an AMD loader such as RequireJS, or a CommonJS loader
 to load the module, and you will receive the constructor in your load callback
 (the constructor will then, of course, have whatever name you call it).
 
+If you use npm as your package manager, you can also just `npm install idb-wrapper`.
+
 You can then create an IDB store:
 
 ```javascript
@@ -70,11 +72,13 @@ var myStore = new IDBStore();
 You may pass two parameters to the constructor: the first is an object with optional parameters,
 the second is a function reference to a function that is called when the store is ready to use.
 
-The options object may contain the following properties (default values are shown):
+The options object may contain the following properties (default values are shown -- all
+properties are optional):
 
 ```javascript
 {
   storeName: 'Store',
+  storePrefix: 'IDBWrapper-',
   dbVersion: 1,
   keyPath: 'id',
   autoIncrement: true,
@@ -84,9 +88,23 @@ The options object may contain the following properties (default values are show
 }
 ```
 
+'storeName' is the name of the store: for different stores, use different names.
+
+'storePrefix' is an additional prefix; the created database will finally have
+the name "storePrefix+storeName". You can safely ignore this property, but if
+you want to have full control over the IDB name, you can pass your own prefix.
+
+'dbVersion' is the version number of your store. You'll only have to provide
+this if you change the structure of the store at a later time.
+
 'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true,
 the database will automatically add a unique key to the keyPath index when storing objects missing
 that property. 'indexes' contains objects defining indexes (see below for details on indexes).
+
+'autoIncrement' is a boolean and toggles, well, auto-increment on or off. You
+can leave it to true, even if you do provide your own ids.
+
+'indexes' is an array of indexes. See below for further info on indexes.
 
 'onError' gets called if an error occurred while trying to open the store. It
 receives the error instance as only argument.
@@ -108,6 +126,7 @@ Use the following methods to read and write data:
 
 ___
 
+
 1) The put method.
 
 
@@ -123,6 +142,7 @@ it will be overwritten by `dataObj`.
 
 ___
 
+
 2) The get method.
 
 ```javascript
@@ -136,6 +156,7 @@ if the get operation failed and it will receive the error event object as first 
 
 ___
 
+
 3) The getAll method.
 
 ```javascript
@@ -147,6 +168,7 @@ all objects currently stored in the store as first and only argument. `onError` 
 the getAll operation failed and it will receive the error event object as first and only argument.
 
 ___
+
 
 4) The remove method.
 
@@ -167,6 +189,7 @@ and only argument.
 
 ___
 
+
 5) The clear method.
 
 ```javascript
@@ -175,6 +198,9 @@ clear: function(/*Function?*/onSuccess, /*Function?*/onError)
 
 `onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear
 operation failed and it will receive the error event object as first and only argument.
+
+___
+
 
 6) The batch method.
 
@@ -287,6 +313,7 @@ with a `count()` method.
 
 ___
 
+
 1) The iterate method.
 
 
@@ -314,7 +341,6 @@ The `writeAccess` property defaults to false. If you need write access to the st
 In the `onEnd` property you can pass a callback that gets called after the iteration is over and the transaction is closed. It does not receive any arguments.
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
-
 
 ___
 

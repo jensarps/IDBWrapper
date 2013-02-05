@@ -1,12 +1,13 @@
-/*
- * IDBWrapper - A cross-browser wrapper for IndexedDB
+/*jshint expr:true */
+/*global window:false, console:false, define:false, module:false */
+
+/**
+ * @license IDBWrapper - A cross-browser wrapper for IndexedDB
  * Copyright (c) 2011 - 2013 Jens Arps
  * http://jensarps.de/
  *
  * Licensed under the MIT (X11) license
  */
-
-"use strict";
 
 (function (name, definition, global) {
   if (typeof define === 'function') {
@@ -18,10 +19,11 @@
   }
 })('IDBStore', function () {
 
-  var IDBStore;
+  "use strict";
 
   var defaults = {
     storeName: 'Store',
+    storePrefix: 'IDBWrapper-',
     dbVersion: 1,
     keyPath: 'id',
     autoIncrement: true,
@@ -33,13 +35,70 @@
     indexes: []
   };
 
-  IDBStore = function (kwArgs, onStoreReady) {
+  /**
+   *
+   * The IDBStore constructor
+   *
+   * @constructor
+   * @name IDBStore
+   * @version 1.0.0
+   *
+   * @param {Object} [kwArgs] An options object used to configure the store and
+   *  set callbacks
+   * @param {String} [kwArgs.storeName='Store'] The name of the store
+   * @param {String} [kwArgs.storePrefix='IDBWrapper-'] A prefix that is
+   *  internally used to construct the name of the database, which will be
+   *  kwArgs.storePrefix + kwArgs.storeName
+   * @param {Number} [kwArgs.dbVersion=1] The version of the store
+   * @param {String} [kwArgs.keyPath='id'] The key path to use
+   * @param {Boolean} [kwArgs.autoIncrement=true] If set to true, IDBStore will
+   *  automatically make sure a unique keyPath value is present on each object
+   *  that is stored.
+   * @param {Function} [kwArgs.onStoreReady] A callback to be called when the
+   *  store is ready to be used.
+   * @param {Function} [kwArgs.onError=throw] A callback to be called when an
+   *  error occurred during instantiation of the store.
+   * @param {Array} [kwArgs.indexes=[]] An array of indexData objects
+   *  defining the indexes to use with the store. For every index to be used
+   *  one indexData object needs to be passed in the array.
+   *  An indexData object is defined as follows:
+   * @param {Object} [kwArgs.indexes.indexData] An object defining the index to
+   *  use
+   * @param {String} kwArgs.indexes.indexData.name The name of the index
+   * @param {String} [kwArgs.indexes.indexData.keyPath] The key path of the index
+   * @param {Boolean} [kwArgs.indexes.indexData.unique] Whether the index is unique
+   * @param {Boolean} [kwArgs.indexes.indexData.multiEntry] Whether the index is multi entry
+   * @param {Function} [onStoreReady] A callback to be called when the store
+   * is ready to be used.
+   * @example
+      // create a store for customers with an additional index over the
+      // `lastname` property.
+      var myCustomerStore = new IDBStore({
+        dbVersion: 1,
+        storeName: 'customer-index',
+        keyPath: 'customerid',
+        autoIncrement: true,
+        onStoreReady: populateTable,
+        indexes: [
+          { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
+        ]
+      });
+   * @example
+      // create a generic store
+      var myCustomerStore = new IDBStore({
+        storeName: 'my-data-store',
+        onStoreReady: function(){
+          // start working with the store.
+        }
+      });
+   */
+  var IDBStore = function (kwArgs, onStoreReady) {
 
     for(var key in defaults){
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
     }
 
-    this.dbName = 'IDBWrapper-' + this.storeName;
+    this.dbName = this.storePrefix + this.storeName;
     this.dbVersion = parseInt(this.dbVersion, 10);
 
     onStoreReady && (this.onStoreReady = onStoreReady);
@@ -60,34 +119,116 @@
     this.openDB();
   };
 
-  IDBStore.prototype = {
+  IDBStore.prototype = /** @lends IDBStore */ {
 
-    version: '0.3.1',
+    /**
+     * The version of IDBStore
+     *
+     * @type String
+     */
+    version: '1.0.0',
 
+    /**
+     * A reference to the IndexedDB object
+     *
+     * @type Object
+     */
     db: null,
 
+    /**
+     * The full name of the IndexedDB used by IDBStore, composed of
+     * this.storePrefix + this.storeName
+     *
+     * @type String
+     */
     dbName: null,
 
+    /**
+     * The version of the IndexedDB used by IDBStore
+     *
+     * @type Number
+     */
     dbVersion: null,
 
+    /**
+     * A reference to the objectStore used by IDBStore
+     *
+     * @type Object
+     */
     store: null,
 
+    /**
+     * The store name
+     *
+     * @type String
+     */
     storeName: null,
 
+    /**
+     * The key path
+     *
+     * @type String
+     */
     keyPath: null,
 
+    /**
+     * Whether IDBStore uses autoIncrement
+     *
+     * @type Boolean
+     */
     autoIncrement: null,
 
+    /**
+     * The indexes used by IDBStore
+     *
+     * @type Array
+     */
     indexes: null,
 
+    /**
+     * A hashmap of features of the used IDB implementation
+     *
+     * @type Object
+     * @proprty {Boolean} autoIncrement If the implementation supports
+     *  native auto increment
+     */
     features: null,
 
+    /**
+     * The callback to be called when the store is ready to be used
+     *
+     * @type Function
+     */
     onStoreReady: null,
 
+    /**
+     * The callback to be called if an error occurred during instantiation
+     * of the store
+     *
+     * @type Function
+     */
     onError: null,
 
+    /**
+     * The internal insertID counter
+     *
+     * @type Number
+     * @private
+     */
     _insertIdCount: 0,
 
+    /**
+     * Opens an IndexedDB; called by the constructor.
+     *
+     * Will check if versions match and compare provided index configuration
+     * with existing ones, and update indexes if necessary.
+     *
+     * Will call this.onStoreReady() if everything went well and the store
+     * is ready to use, and this.onError() is something went wrong.
+     *
+     * @private
+     *
+     */
     openDB: function () {
 
       var features = this.features = {};
@@ -208,6 +349,10 @@
       }.bind(this);
     },
 
+    /**
+     * Deletes the database used for this store if the IDB implementations
+     * provides that functionality.
+     */
     deleteDatabase: function () {
       if (this.idb.deleteDatabase) {
         this.idb.deleteDatabase(this.dbName);
@@ -219,6 +364,16 @@
      *********************/
 
 
+    /**
+     * Puts an object into the store. If an entry with the given id exists,
+     * it will be overwritten.
+     *
+     * @param {Object} dataObj The object to store.
+     * @param {Function} [onSuccess] A callback that is called if insertion
+     *  was successful.
+     * @param {Function} [onError] A callback that is called if insertion
+     *  failed.
+     */
     put: function (dataObj, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not write data.', error);
@@ -235,6 +390,16 @@
       putRequest.onerror = onError;
     },
 
+    /**
+     * Retrieves an object from the store. If no entry exists with the given id,
+     * the success handler will be called with null as first and only argument.
+     *
+     * @param {*} key The id of the object to fetch.
+     * @param {Function} [onSuccess] A callback that is called if fetching
+     *  was successful. Will receive the object as only argument.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     get: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
@@ -248,6 +413,15 @@
       getRequest.onerror = onError;
     },
 
+    /**
+     * Removes an object from the store.
+     *
+     * @param {*} key The id of the object to remove.
+     * @param {Function} [onSuccess] A callback that is called if the removal
+     *  was successful.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     remove: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not remove data.', error);
@@ -261,16 +435,30 @@
       deleteRequest.onerror = onError;
     },
 
-    batch: function (arr, onSuccess, onError) {
+    /**
+     * Runs a batch of put and/or remove operations on the store.
+     *
+     * @param {Array} dataArray An array of objects containing the operation to run
+     *  and the data object (for put operations).
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     */
+    batch: function (dataArray, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not apply batch.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      if(Object.prototype.toString.call(dataArray) != '[object Array]'){
+        onError(new Error('dataArray argument must be of type Array.'));
+      }
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
-      var count = arr.length;
+      var count = dataArray.length;
       var called = false;
 
-      arr.forEach(function (operation) {
+      dataArray.forEach(function (operation) {
         var type = operation.type;
         var key = operation.key;
         var value = operation.value;
@@ -279,7 +467,7 @@
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
           deleteRequest.onsuccess = function (event) {
             count--;
-            if (count == 0 && !called) {
+            if (count === 0 && !called) {
               called = true;
               onSuccess();
             }
@@ -293,12 +481,12 @@
           };
         } else if (type == "put") {
           if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-            value[this.keyPath] = this._getUID()
+            value[this.keyPath] = this._getUID();
           }
           var putRequest = batchTransaction.objectStore(this.storeName).put(value);
           putRequest.onsuccess = function (event) {
             count--;
-            if (count == 0 && !called) {
+            if (count === 0 && !called) {
               called = true;
               onSuccess();
             }
@@ -314,6 +502,14 @@
       }, this);
     },
 
+    /**
+     * Fetches all entries in the store.
+     *
+     * @param {Function} [onSuccess] A callback that is called if the operation
+     *  was successful. Will receive an array of objects.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     getAll: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
@@ -332,6 +528,17 @@
       }
     },
 
+    /**
+     * Implements getAll for IDB implementations that do not have a getAll()
+     * method.
+     *
+     * @param {Object} tr An open READ transaction.
+     * @param {Function} onSuccess A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} onError A callback that will be called if an
+     *  error occurred during the operation.
+     * @private
+     */
     _getAllCursor: function (tr, onSuccess, onError) {
       var all = [];
       var store = tr.objectStore(this.storeName);
@@ -350,6 +557,14 @@
       cursorRequest.onError = onError;
     },
 
+    /**
+     * Clears the store, i.e. deletes all entries in the store.
+     *
+     * @param {Function} [onSuccess] A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} [onError] A callback that will be called if an
+     *  error occurred during the operation.
+     */
     clear: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not clear store.', error);
@@ -363,6 +578,12 @@
       clearRequest.onerror = onError;
     },
 
+    /**
+     * Generates a numeric id unique to this instance of IDBStore.
+     *
+     * @return {Number} The id
+     * @private
+     */
     _getUID: function () {
       // FF bails at times on non-numeric ids. So we take an even
       // worse approach now, using current time as id. Sigh.
@@ -374,20 +595,48 @@
      * indexing *
      ************/
 
+    /**
+     * Returns a DOMStringList of index names of the store.
+     *
+     * @return {DOMStringList} The list of index names
+     */
     getIndexList: function () {
       return this.store.indexNames;
     },
 
+    /**
+     * Checks if an index with the given name exists in the store.
+     *
+     * @param {String} indexName The name of the index to look for
+     * @return {Boolean} Whether the store contains an index with the given name
+     */
     hasIndex: function (indexName) {
       return this.store.indexNames.contains(indexName);
     },
 
+    /**
+     * Normalizes an object containing index data and assures that all
+     * proprties are set.
+     *
+     * @param {Object} indexData The index data object to normalize
+     * @param {String} indexData.name The name of the index
+     * @param {String} [indexData.keyPath] The key path of the index
+     * @param {Boolean} [indexData.unique] Whether the index is unique
+     * @param {Boolean} [indexData.multiEntry] Whether the index is multi entry
+     */
     normalizeIndexData: function (indexData) {
       indexData.keyPath = indexData.keyPath || indexData.name;
       indexData.unique = !!indexData.unique;
       indexData.multiEntry = !!indexData.multiEntry;
     },
 
+    /**
+     * Checks if an actual index complies with an expected index.
+     *
+     * @param {Object} actual The actual index found in the store
+     * @param {Object} expected An Object describing an expected index
+     * @return {Boolean} Whether both index definitions are identical
+     */
     indexComplies: function (actual, expected) {
       var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
         // IE10 returns undefined for no multiEntry
@@ -403,6 +652,25 @@
      * cursor *
      **********/
 
+    /**
+     * Iterates over the store using the given options and calling onItem
+     * for each entry matching the options.
+     *
+     * @param {Function} onItem A callback to be called for each match
+     * @param {Object} [options] An object defining specific options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {String} [options.order=ASC] The order in which to provide the
+     *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
+     *  duplicate matches
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Boolean} [options.writeAccess=false] Whether grant write access
+     *  to the store in the onItem callback
+     * @param {Function} [options.onEnd=null] A callback to be called after
+     *  iteration has ended
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
     iterate: function (onItem, options) {
       options = mixin({
         index: null,
@@ -436,7 +704,7 @@
           cursor['continue']();
         } else {
           if(options.onEnd){
-            options.onEnd()
+            options.onEnd();
           } else {
             onItem(null);
           }
@@ -444,6 +712,46 @@
       };
     },
 
+    /**
+     * Runs a query against the store and passes an array containing matched
+     * objects to the success handler.
+     *
+     * @param {Function} onSuccess A callback to be called when the operation
+     *  was successful.
+     * @param {Object} [options] An object defining specific query options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {String} [options.order=ASC] The order in which to provide the
+     *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
+     *  duplicate matches
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
+    query: function (onSuccess, options) {
+      var result = [];
+      options = options || {};
+      options.onEnd = function () {
+        onSuccess(result);
+      };
+      this.iterate(function (item) {
+        result.push(item);
+      }, options);
+    },
+
+    /**
+     *
+     * Runs a query against the store, but only returns the number of matches
+     * instead of the matches itself.
+     *
+     * @param {Function} onSuccess A callback to be called if the opration
+     *  was successful.
+     * @param {Object} [options] An object defining specific options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
     count: function (onSuccess, options) {
 
       options = mixin({
@@ -474,7 +782,23 @@
     /* key ranges */
     /**************/
 
+    /**
+     * Creates a key range using specified options. This key range can be
+     * handed over to the count() and iterate() methods.
+     *
+     * Note: You must provide at least one or both of "lower" or "upper" value.
+     *
+     * @param {Object} options The options for the key range to create
+     * @param {*} [options.lower] The lower bound
+     * @param {Boolean} [options.excludeLower] Whether to exclude the lower
+     *  bound passed in options.lower from the key range
+     * @param {*} [options.upper] The upper bound
+     * @param {Boolean} [options.excludeUpper] Whether to exclude the upper
+     *  bound passed in options.upper from the key range
+     * @return {Object} The IDBKeyRange representing the specified options
+     */
     makeKeyRange: function(options){
+      /*jshint onecase:true */
       var keyRange,
           hasLower = typeof options.lower != 'undefined',
           hasUpper = typeof options.upper != 'undefined';
@@ -491,7 +815,6 @@
           break;
         default:
           throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
-          break;
       }
 
       return keyRange;
