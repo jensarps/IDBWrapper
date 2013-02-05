@@ -1,6 +1,6 @@
 {
   "name": "idb-wrapper",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "description": "A cross-browser wrapper for IndexedDB",
   "keywords": [],
   "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",

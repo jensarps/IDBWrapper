@@ -1,7 +1,7 @@
-0.3.2 /
+1.0.0 /
 ------------------
 
-* Changes to README
+* Add query() method
 * Add storePrefix property to constructor [englercj]
 * Add JSDoc
 * Add input checks to the batch() method
