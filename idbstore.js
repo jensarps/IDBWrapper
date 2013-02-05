@@ -45,12 +45,12 @@
    *
    * @param {Object} [kwArgs] An options object used to configure the store and
    *  set callbacks
-   * @param {String} [kwArgs.storeName=Store] The name of the store
-   * @param {String} [kwArgs.storePrefix=IDBWrapper-] A prefix that is
+   * @param {String} [kwArgs.storeName='Store'] The name of the store
+   * @param {String} [kwArgs.storePrefix='IDBWrapper-'] A prefix that is
    *  internally used to construct the name of the database, which will be
    *  kwArgs.storePrefix + kwArgs.storeName
    * @param {Number} [kwArgs.dbVersion=1] The version of the store
-   * @param {String} [kwArgs.keyPath=id] The key path to use
+   * @param {String} [kwArgs.keyPath='id'] The key path to use
    * @param {Boolean} [kwArgs.autoIncrement=true] If set to true, IDBStore will
    *  automatically make sure a unique keyPath value is present on each object
    *  that is stored.
@@ -58,10 +58,39 @@
    *  store is ready to be used.
    * @param {Function} [kwArgs.onError=throw] A callback to be called when an
    *  error occurred during instantiation of the store.
-   * @param {Array} [kwArgs.indexes=[]] An array of indexes to use with the
-   *  store.
+   * @param {Array} [kwArgs.indexes=[]] An array of indexData objects
+   *  defining the indexes to use with the store. For every index to be used
+   *  one indexData object needs to be passed in the array.
+   *  An indexData object is defined as follows:
+   * @param {Object} [kwArgs.indexes.indexData] An object defining the index to
+   *  use
+   * @param {String} kwArgs.indexes.indexData.name The name of the index
+   * @param {String} [kwArgs.indexes.indexData.keyPath] The key path of the index
+   * @param {Boolean} [kwArgs.indexes.indexData.unique] Whether the index is unique
+   * @param {Boolean} [kwArgs.indexes.indexData.multiEntry] Whether the index is multi entry
    * @param {Function} [onStoreReady] A callback to be called when the store
    * is ready to be used.
+   * @example
+      // create a store for customers with an additional index over the
+      // `lastname` property.
+      var myCustomerStore = new IDBStore({
+        dbVersion: 1,
+        storeName: 'customer-index',
+        keyPath: 'customerid',
+        autoIncrement: true,
+        onStoreReady: populateTable,
+        indexes: [
+          { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
+        ]
+      });
+   * @example
+      // create a generic store
+      var myCustomerStore = new IDBStore({
+        storeName: 'my-data-store',
+        onStoreReady: function(){
+          // start working with the store.
+        }
+      });
    */
   var IDBStore = function (kwArgs, onStoreReady) {
 
@@ -92,40 +121,112 @@
 
   IDBStore.prototype = /** @lends IDBStore */ {
 
+    /**
+     * The version of IDBStore
+     *
+     * @type String
+     */
     version: '0.3.2',
 
+    /**
+     * A reference to the IndexedDB object
+     *
+     * @type Object
+     */
     db: null,
 
+    /**
+     * The full name of the IndexedDB used by IDBStore, composed of
+     * this.storePrefix + this.storeName
+     *
+     * @type String
+     */
     dbName: null,
 
+    /**
+     * The version of the IndexedDB used by IDBStore
+     *
+     * @type Number
+     */
     dbVersion: null,
 
+    /**
+     * A reference to the objectStore used by IDBStore
+     *
+     * @type Object
+     */
     store: null,
 
+    /**
+     * The store name
+     *
+     * @type String
+     */
     storeName: null,
 
+    /**
+     * The key path
+     *
+     * @type String
+     */
     keyPath: null,
 
+    /**
+     * Whether IDBStore uses autoIncrement
+     *
+     * @type Boolean
+     */
     autoIncrement: null,
 
+    /**
+     * The indexes used by IDBStore
+     *
+     * @type Array
+     */
     indexes: null,
 
+    /**
+     * A hashmap of features of the used IDB implementation
+     *
+     * @type Object
+     * @proprty {Boolean} autoIncrement If the implementation supports
+     *  native auto increment
+     */
     features: null,
 
+    /**
+     * The callback to be called when the store is ready to be used
+     *
+     * @type Function
+     */
     onStoreReady: null,
 
+    /**
+     * The callback to be called if an error occurred during instantiation
+     * of the store
+     *
+     * @type Function
+     */
     onError: null,
 
+    /**
+     * The internal insertID counter
+     *
+     * @type Number
+     * @private
+     */
     _insertIdCount: 0,
 
     /**
-     * Opens an IndexedDB.
+     * Opens an IndexedDB; called by the constructor.
      *
      * Will check if versions match and compare provided index configuration
      * with existing ones, and update indexes if necessary.
      *
      * Will call this.onStoreReady() if everything went well and the store
      * is ready to use, and this.onError() is something went wrong.
+     *
+     * @private
      *
      */
     openDB: function () {
