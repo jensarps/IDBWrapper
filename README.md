@@ -52,6 +52,19 @@ running:
 $ npm install idb-wrapper
 ```
 
+If you use bower as your package manager, run the following:
+
+```bash
+$ bower install idbwrapper
+```
+
+If you want to add IDBWrapper to a volo project, just run:
+
+```bash
+$ volo add idbwrapper
+```
+
+
 Usage
 =====
 
