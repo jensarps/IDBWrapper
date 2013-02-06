@@ -31,7 +31,7 @@ The source for these examples are in the `example` folder of this repository.
 API Reference
 =============
 
-There's an API reference over here: http://jensarps.github.com/IDBWrapper/jsdoc/
+There's an API reference over here: http://jensarps.github.com/IDBWrapper/jsdoc/IDBStore.html
 
 You can create a local version of the reference using a terminal. Go into the
 IDBWrapper directory and run the following command:
