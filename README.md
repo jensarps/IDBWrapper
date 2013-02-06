@@ -9,9 +9,6 @@ existing impls in Chrome, Firefox and IE10 (yes, it works in all three), and
 b) show how IDB works. The code is split up into short methods, so that it's
 easy to see what happens in what method.
 
-"Showing how it works" is the main intention of this project. IndexedDB is
-all the buzz, but only a few people actually know how to use it.
-
 The code in idbstore.js is not optimized for anything, nor minified or anything.
 It is meant to be read and easy to understand. So, please, go ahead and check out
 the source!
