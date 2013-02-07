@@ -45,6 +45,13 @@ Obtaining IDBWrapper
 
 You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/tags
 
+IDBWrapper is also available on cdnjs, so you can directly point a script tag
+there, or require() it from there. The URL is:
+
+```
+//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.0.0/idbstore.min.js
+```
+
 If you use NPM as your package manager, you can get it from there, too, by
 running:
 
