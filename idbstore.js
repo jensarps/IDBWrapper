@@ -282,33 +282,48 @@
         this.store = emptyTransaction.objectStore(this.storeName);
 
         // check indexes
-        this.indexes.forEach(function(indexData){
-          var indexName = indexData.name;
+        var checkIndexes = function(){
+          this.indexes.forEach(function(indexData){
+            var indexName = indexData.name;
 
-          if(!indexName){
-            preventSuccessCallback = true;
-            this.onError(new Error('Cannot create index: No index name given.'));
-            return;
-          }
-
-          this.normalizeIndexData(indexData);
-
-          if(this.hasIndex(indexName)){
-            // check if it complies
-            var actualIndex = this.store.index(indexName);
-            var complies = this.indexComplies(actualIndex, indexData);
-            if(!complies){
+            if(!indexName){
               preventSuccessCallback = true;
-              this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+              this.onError(new Error('Cannot create index: No index name given.'));
+              return;
             }
-          } else {
-            preventSuccessCallback = true;
-            this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-          }
 
-        }, this);
-
-        preventSuccessCallback || this.onStoreReady();
+            this.normalizeIndexData(indexData);
+  
+            if(this.hasIndex(indexName)){
+              // check if it complies
+              var actualIndex = this.store.index(indexName);
+              var complies = this.indexComplies(actualIndex, indexData);
+              if(!complies){
+                preventSuccessCallback = true;
+                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+              }
+            } else {
+              preventSuccessCallback = true;
+              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+            }
+  
+            }, this);
+  
+          preventSuccessCallback || this.onStoreReady();
+        }.bind(this);
+        
+        /** 
+         * Support for https://github.com/axemclion/IndexedDBShim/
+         * Since WebSQL transactions are asynchronous and therefore
+         * IndexedDBShim cant return a IDBObjectStore object (this.store)
+         * with filled indexes (this.store.indexNames).
+         * So we wait at least 100ms to give IndexedDBShim time to fill indexes :-)
+         */
+        if(this.idb.__useShim){ 
+            setTimeout(checkIndexes, 100)
+        } else {
+            checkIndexes();
+        }
       }.bind(this);
 
       openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
