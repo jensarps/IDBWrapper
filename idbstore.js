@@ -417,10 +417,22 @@
         console.error('Could not read data.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+      
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      getTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      getTransaction.onabort = onError;
+      getTransaction.onerror = onError;
+      
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
       getRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       getRequest.onerror = onError;
     },
