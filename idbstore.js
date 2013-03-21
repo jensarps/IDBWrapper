@@ -456,7 +456,6 @@
           result = null;
 
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-
       removeTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
         callback(result);
@@ -492,8 +491,16 @@
         onError(new Error('dataArray argument must be of type Array.'));
       }
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
+      batchTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(hasSuccess);
+      };
+      batchTransaction.onabort = onError;
+      batchTransaction.onerror = onError;
+      
       var count = dataArray.length;
       var called = false;
+      var hasSuccess = false;
 
       dataArray.forEach(function (operation) {
         var type = operation.type;
@@ -506,7 +513,7 @@
             count--;
             if (count === 0 && !called) {
               called = true;
-              onSuccess();
+              hasSuccess = true;
             }
           };
           deleteRequest.onerror = function (err) {
@@ -525,7 +532,7 @@
             count--;
             if (count === 0 && !called) {
               called = true;
-              onSuccess();
+              hasSuccess = true;
             }
           };
           putRequest.onerror = function (err) {
