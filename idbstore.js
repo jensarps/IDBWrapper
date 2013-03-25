@@ -623,7 +623,7 @@
       getAllTransaction.onabort = onError;
       getAllTransaction.onerror = onError;
 
-      var cursorRequest = store.openCursor(),
+      var cursorRequest = store.openCursor();
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
