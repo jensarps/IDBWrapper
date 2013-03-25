@@ -443,8 +443,7 @@
       this._connectTransaction(removeTransaction, cbData);
 
       var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
-      deleteRequest.onsuccess = this._makeRequestCallback(cbData);
-      deleteRequest.onerror = cbData.onError;
+      this._connectRequest(deleteRequest, cbData);
     },
 
     /**
@@ -919,6 +918,11 @@
       idbTransaction.oncomplete = this._makeTransactionCallback(callbackData);
       idbTransaction.onabort = callbackData.onError;
       idbTransaction.onerror = callbackData.onError;
+    },
+
+    _connectRequest: function (idbRequest, callbackData) {
+      idbRequest.onsuccess = this._makeRequestCallback(callbackData);
+      idbRequest.onerror = callbackData.onError;
     },
 
     _makeCallbackDataObject: function (onSuccess, onError, errorMessage) {
