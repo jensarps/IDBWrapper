@@ -701,7 +701,7 @@
 
     /**
      * Normalizes an object containing index data and assures that all
-     * proprties are set.
+     * properties are set.
      *
      * @param {Object} indexData The index data object to normalize
      * @param {String} indexData.name The name of the index
