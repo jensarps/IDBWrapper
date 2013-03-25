@@ -379,13 +379,25 @@
         console.error('Could not write data.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+
       if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
         dataObj[this.keyPath] = this._getUID();
       }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
+      putTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      putTransaction.onabort = onError;
+      putTransaction.onerror = onError;
+
       var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
       putRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       putRequest.onerror = onError;
     },
@@ -405,10 +417,22 @@
         console.error('Could not read data.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+      
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      getTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      getTransaction.onabort = onError;
+      getTransaction.onerror = onError;
+      
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
       getRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       getRequest.onerror = onError;
     },
@@ -427,10 +451,22 @@
         console.error('Could not remove data.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
+      removeTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      removeTransaction.onabort = onError;
+      removeTransaction.onerror = onError;
+
       var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
       deleteRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       deleteRequest.onerror = onError;
     },
@@ -455,49 +491,49 @@
         onError(new Error('dataArray argument must be of type Array.'));
       }
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
+      batchTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(hasSuccess);
+      };
+      batchTransaction.onabort = onError;
+      batchTransaction.onerror = onError;
+      
       var count = dataArray.length;
       var called = false;
+      var hasSuccess = false;
+
+      var onItemSuccess = function () {
+        count--;
+        if (count === 0 && !called) {
+          called = true;
+          hasSuccess = true;
+        }
+      };
 
       dataArray.forEach(function (operation) {
         var type = operation.type;
         var key = operation.key;
         var value = operation.value;
 
+        var onItemError = function (err) {
+          batchTransaction.abort();
+          if (!called) {
+            called = true;
+            onError(err, type, key);
+          }
+        };
+
         if (type == "remove") {
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
-          deleteRequest.onsuccess = function (event) {
-            count--;
-            if (count === 0 && !called) {
-              called = true;
-              onSuccess();
-            }
-          };
-          deleteRequest.onerror = function (err) {
-            batchTransaction.abort();
-            if (!called) {
-              called = true;
-              onError(err, type, key);
-            }
-          };
+          deleteRequest.onsuccess = onItemSuccess;
+          deleteRequest.onerror = onItemError;
         } else if (type == "put") {
           if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
             value[this.keyPath] = this._getUID();
           }
           var putRequest = batchTransaction.objectStore(this.storeName).put(value);
-          putRequest.onsuccess = function (event) {
-            count--;
-            if (count === 0 && !called) {
-              called = true;
-              onSuccess();
-            }
-          };
-          putRequest.onerror = function (err) {
-            batchTransaction.abort();
-            if (!called) {
-              called = true;
-              onError(err, type, value);
-            }
-          };
+          putRequest.onsuccess = onItemSuccess;
+          putRequest.onerror = onItemError;
         }
       }, this);
     },
@@ -518,32 +554,68 @@
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       var store = getAllTransaction.objectStore(this.storeName);
       if (store.getAll) {
-        var getAllRequest = store.getAll();
-        getAllRequest.onsuccess = function (event) {
-          onSuccess(event.target.result);
-        };
-        getAllRequest.onerror = onError;
+        this._getAllNative(getAllTransaction, store, onSuccess, onError);
       } else {
-        this._getAllCursor(getAllTransaction, onSuccess, onError);
+        this._getAllCursor(getAllTransaction, store, onSuccess, onError);
       }
     },
 
     /**
-     * Implements getAll for IDB implementations that do not have a getAll()
-     * method.
+     * Implements getAll for IDB implementations that have a non-standard
+     * getAll() method.
      *
-     * @param {Object} tr An open READ transaction.
+     * @param {Object} getAllTransaction An open READ transaction.
+     * @param {Object} store A reference to the store.
      * @param {Function} onSuccess A callback that will be called if the
      *  operation was successful.
      * @param {Function} onError A callback that will be called if an
      *  error occurred during the operation.
      * @private
      */
-    _getAllCursor: function (tr, onSuccess, onError) {
-      var all = [];
-      var store = tr.objectStore(this.storeName);
-      var cursorRequest = store.openCursor();
+    _getAllNative: function (getAllTransaction, store, onSuccess, onError) {
+      var hasSuccess = false,
+          result = null;
 
+      getAllTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      getAllTransaction.onabort = onError;
+      getAllTransaction.onerror = onError;
+
+      var getAllRequest = store.getAll();
+      getAllRequest.onsuccess = function (event) {
+        hasSuccess = true;
+        result = event.target.result;
+      };
+      getAllRequest.onerror = onError;
+    },
+
+    /**
+     * Implements getAll for IDB implementations that do not have a getAll()
+     * method.
+     *
+     * @param {Object} getAllTransaction An open READ transaction.
+     * @param {Object} store A reference to the store.
+     * @param {Function} onSuccess A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} onError A callback that will be called if an
+     *  error occurred during the operation.
+     * @private
+     */
+    _getAllCursor: function (getAllTransaction, store, onSuccess, onError) {
+      var all = [],
+          hasSuccess = false,
+          result = null;
+
+      getAllTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      getAllTransaction.onabort = onError;
+      getAllTransaction.onerror = onError;
+
+      var cursorRequest = store.openCursor();
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
@@ -551,7 +623,8 @@
           cursor['continue']();
         }
         else {
-          onSuccess(all);
+          hasSuccess = true;
+          result = all;
         }
       };
       cursorRequest.onError = onError;
@@ -570,10 +643,22 @@
         console.error('Could not clear store.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+
       var clearTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
+      clearTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      clearTransaction.onabort = onError;
+      clearTransaction.onerror = onError;
+
       var clearRequest = clearTransaction.objectStore(this.storeName).clear();
       clearRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       clearRequest.onerror = onError;
     },
@@ -689,11 +774,26 @@
         directionType += '_NO_DUPLICATE';
       }
 
+      var hasSuccess = false;
       var cursorTransaction = this.db.transaction([this.storeName], this.consts[options.writeAccess ? 'READ_WRITE' : 'READ_ONLY']);
       var cursorTarget = cursorTransaction.objectStore(this.storeName);
       if (options.index) {
         cursorTarget = cursorTarget.index(options.index);
       }
+
+      cursorTransaction.oncomplete = function () {
+        if (!hasSuccess) {
+          options.onError(null);
+          return;
+        }
+        if (options.onEnd) {
+          options.onEnd();
+        } else {
+          onItem(null);
+        }
+      };
+      cursorTransaction.onabort = options.onError;
+      cursorTransaction.onerror = options.onError;
 
       var cursorRequest = cursorTarget.openCursor(options.keyRange, this.consts[directionType]);
       cursorRequest.onerror = options.onError;
@@ -703,11 +803,7 @@
           onItem(cursor.value, cursor, cursorTransaction);
           cursor['continue']();
         } else {
-          if(options.onEnd){
-            options.onEnd();
-          } else {
-            onItem(null);
-          }
+          hasSuccess = true;
         }
       };
     },
@@ -763,19 +859,27 @@
         console.error('Could not open cursor.', error);
       };
 
+      var hasSuccess = false,
+          result = null;
+
       var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      cursorTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      cursorTransaction.onabort = onError;
+      cursorTransaction.onerror = onError;
+
       var cursorTarget = cursorTransaction.objectStore(this.storeName);
       if (options.index) {
         cursorTarget = cursorTarget.index(options.index);
       }
-
       var countRequest = cursorTarget.count(options.keyRange);
       countRequest.onsuccess = function (evt) {
-        onSuccess(evt.target.result);
+        hasSuccess = true;
+        result = evt.target.result;
       };
-      countRequest.onError = function (error) {
-        onError(error);
-      };
+      countRequest.onError = onError;
     },
 
     /**************/

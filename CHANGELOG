@@ -1,4 +1,10 @@
-1.0.0 /
+1.1.0 /
+------------------
+
+* Move all callbacks from request level to transaction level
+* Misc Refactoring
+
+1.0.0 / 2013-02-05
 ------------------
 
 * Add query() method
