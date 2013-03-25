@@ -502,46 +502,38 @@
       var called = false;
       var hasSuccess = false;
 
+      var onItemSuccess = function () {
+        count--;
+        if (count === 0 && !called) {
+          called = true;
+          hasSuccess = true;
+        }
+      };
+
       dataArray.forEach(function (operation) {
         var type = operation.type;
         var key = operation.key;
         var value = operation.value;
 
+        var onItemError = function (err) {
+          batchTransaction.abort();
+          if (!called) {
+            called = true;
+            onError(err, type, key);
+          }
+        };
+
         if (type == "remove") {
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
-          deleteRequest.onsuccess = function () {
-            count--;
-            if (count === 0 && !called) {
-              called = true;
-              hasSuccess = true;
-            }
-          };
-          deleteRequest.onerror = function (err) {
-            batchTransaction.abort();
-            if (!called) {
-              called = true;
-              onError(err, type, key);
-            }
-          };
+          deleteRequest.onsuccess = onItemSuccess;
+          deleteRequest.onerror = onItemError;
         } else if (type == "put") {
           if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
             value[this.keyPath] = this._getUID();
           }
           var putRequest = batchTransaction.objectStore(this.storeName).put(value);
-          putRequest.onsuccess = function () {
-            count--;
-            if (count === 0 && !called) {
-              called = true;
-              hasSuccess = true;
-            }
-          };
-          putRequest.onerror = function (err) {
-            batchTransaction.abort();
-            if (!called) {
-              called = true;
-              onError(err, type, value);
-            }
-          };
+          putRequest.onsuccess = onItemSuccess;
+          putRequest.onerror = onItemError;
         }
       }, this);
     },
