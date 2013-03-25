@@ -562,9 +562,20 @@
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       var store = getAllTransaction.objectStore(this.storeName);
       if (store.getAll) {
+        var hasSuccess = false,
+            result = null;
+
+        getAllTransaction.oncomplete = function () {
+          var callback = hasSuccess ? onSuccess : onError;
+          callback(result);
+        };
+        getAllTransaction.onabort = onError;
+        getAllTransaction.onerror = onError;
+
         var getAllRequest = store.getAll();
         getAllRequest.onsuccess = function (event) {
-          onSuccess(event.target.result);
+          hasSuccess = true;
+          result = event.target.result;
         };
         getAllRequest.onerror = onError;
       } else {
@@ -584,9 +595,18 @@
      * @private
      */
     _getAllCursor: function (tr, onSuccess, onError) {
-      var all = [];
-      var store = tr.objectStore(this.storeName);
-      var cursorRequest = store.openCursor();
+      var all = [],
+          store = tr.objectStore(this.storeName),
+          cursorRequest = store.openCursor(),
+          hasSuccess = false,
+          result = null;
+
+      tr.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      tr.onabort = onError;
+      tr.onerror = onError;
 
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
@@ -595,7 +615,8 @@
           cursor['continue']();
         }
         else {
-          onSuccess(all);
+          hasSuccess = true;
+          result = all;
         }
       };
       cursorRequest.onError = onError;
