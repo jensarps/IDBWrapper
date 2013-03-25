@@ -509,7 +509,7 @@
 
         if (type == "remove") {
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
-          deleteRequest.onsuccess = function (event) {
+          deleteRequest.onsuccess = function () {
             count--;
             if (count === 0 && !called) {
               called = true;
@@ -528,7 +528,7 @@
             value[this.keyPath] = this._getUID();
           }
           var putRequest = batchTransaction.objectStore(this.storeName).put(value);
-          putRequest.onsuccess = function (event) {
+          putRequest.onsuccess = function () {
             count--;
             if (count === 0 && !called) {
               called = true;
