@@ -437,14 +437,7 @@
      *  occurred during the operation.
      */
     remove: function (key, onSuccess, onError) {
-      var cbData = {
-        onError: onError || function (error) {
-          console.error('Could not remove data.', error);
-        },
-        onSuccess: onSuccess || noop,
-        hasSuccess: false,
-        result: null
-      };
+      var cbData = this._makeCallbackDataObject(onSuccess, onError, 'Could not remove data.');
 
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       removeTransaction.oncomplete = this._makeTransactionCallback(cbData);
@@ -921,6 +914,17 @@
       return function (event) {
         cbData.hasSuccess = true;
         cbData.result = event.target.result;
+      };
+    },
+
+    _makeCallbackDataObject: function (onSuccess, onError, errorMessage) {
+      return {
+        onError: onError || function (error) {
+          console.error(errorMessage, error);
+        },
+        onSuccess: onSuccess || noop,
+        hasSuccess: false,
+        result: null
       };
     }
 
