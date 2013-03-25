@@ -900,6 +900,15 @@
 
     },
 
+    /**
+     * Creates a default callback for a transaction complete event.
+     *
+     * @param {Object} cbData An object containing references needed for the
+     *  callbacks.
+     * @returns {Function} The handler to be attached to the transaction
+     *  complete event.
+     * @private
+     */
     _makeTransactionCallback: function (cbData) {
       return function () {
         var callback = cbData.hasSuccess ? cbData.onSuccess : cbData.onError;
@@ -907,6 +916,15 @@
       };
     },
 
+    /**
+     * Creates a default callback for a request success event.
+     *
+     * @param {Object} cbData An object containing references needed for the
+     *  callbacks.
+     * @returns {Function} The handler to be attached to the requests
+     *  success event.
+     * @private
+     */
     _makeRequestCallback: function (cbData) {
       return function (event) {
         cbData.hasSuccess = true;
@@ -914,17 +932,41 @@
       };
     },
 
+    /**
+     * Connects default handlers to the error, abort and complete events of a
+     *  transaction.
+     *
+     * @param idbTransaction
+     * @param callbackData
+     * @private
+     */
     _connectTransaction: function (idbTransaction, callbackData) {
       idbTransaction.oncomplete = this._makeTransactionCallback(callbackData);
       idbTransaction.onabort = callbackData.onError;
       idbTransaction.onerror = callbackData.onError;
     },
 
+    /**
+     * Connects default handlers to the error and success events of a request.
+     *
+     * @param idbRequest
+     * @param callbackData
+     * @private
+     */
     _connectRequest: function (idbRequest, callbackData) {
       idbRequest.onsuccess = this._makeRequestCallback(callbackData);
       idbRequest.onerror = callbackData.onError;
     },
 
+    /**
+     * Creates an object used to handle default operations.
+     *
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     * @param {String} errorMessage
+     * @returns {{onError: Function, onSuccess: Function, hasSuccess: boolean, result: null}}
+     * @private
+     */
     _makeCallbackDataObject: function (onSuccess, onError, errorMessage) {
       return {
         onError: onError || function (error) {
