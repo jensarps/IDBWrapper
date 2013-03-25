@@ -440,9 +440,7 @@
       var cbData = this._makeCallbackDataObject(onSuccess, onError, 'Could not remove data.');
 
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      removeTransaction.oncomplete = this._makeTransactionCallback(cbData);
-      removeTransaction.onabort = cbData.onError;
-      removeTransaction.onerror = cbData.onError;
+      this._connectTransaction(removeTransaction, cbData);
 
       var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
       deleteRequest.onsuccess = this._makeRequestCallback(cbData);
@@ -915,6 +913,12 @@
         cbData.hasSuccess = true;
         cbData.result = event.target.result;
       };
+    },
+
+    _connectTransaction: function (idbTransaction, callbackData) {
+      idbTransaction.oncomplete = this._makeTransactionCallback(callbackData);
+      idbTransaction.onabort = callbackData.onError;
+      idbTransaction.onerror = callbackData.onError;
     },
 
     _makeCallbackDataObject: function (onSuccess, onError, errorMessage) {
