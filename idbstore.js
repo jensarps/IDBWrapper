@@ -867,19 +867,27 @@
         console.error('Could not open cursor.', error);
       };
 
+      var hasSuccess = false,
+          result = null;
+
       var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      cursorTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      cursorTransaction.onabort = onError;
+      cursorTransaction.onerror = onError;
+
       var cursorTarget = cursorTransaction.objectStore(this.storeName);
       if (options.index) {
         cursorTarget = cursorTarget.index(options.index);
       }
-
       var countRequest = cursorTarget.count(options.keyRange);
       countRequest.onsuccess = function (evt) {
-        onSuccess(evt.target.result);
+        hasSuccess = true;
+        result = evt.target.result;
       };
-      countRequest.onError = function (error) {
-        onError(error);
-      };
+      countRequest.onError = onError;
     },
 
     /**************/
