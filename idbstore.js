@@ -564,14 +564,14 @@
       if (store.getAll) {
         this._getAllNative(getAllTransaction, store, onSuccess, onError);
       } else {
-        this._getAllCursor(getAllTransaction, onSuccess, onError);
+        this._getAllCursor(getAllTransaction, store, onSuccess, onError);
       }
     },
 
     /**
      * Implements getAll for IDB implementations that have a non-standard
      * getAll() method.
-     * 
+     *
      * @param {Object} getAllTransaction An open READ transaction.
      * @param {Object} store A reference to the store.
      * @param {Function} onSuccess A callback that will be called if the
@@ -603,27 +603,27 @@
      * Implements getAll for IDB implementations that do not have a getAll()
      * method.
      *
-     * @param {Object} tr An open READ transaction.
+     * @param {Object} getAllTransaction An open READ transaction.
+     * @param {Object} store A reference to the store.
      * @param {Function} onSuccess A callback that will be called if the
      *  operation was successful.
      * @param {Function} onError A callback that will be called if an
      *  error occurred during the operation.
      * @private
      */
-    _getAllCursor: function (tr, onSuccess, onError) {
+    _getAllCursor: function (getAllTransaction, store, onSuccess, onError) {
       var all = [],
-          store = tr.objectStore(this.storeName),
-          cursorRequest = store.openCursor(),
           hasSuccess = false,
           result = null;
 
-      tr.oncomplete = function () {
+      getAllTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
         callback(result);
       };
-      tr.onabort = onError;
-      tr.onerror = onError;
+      getAllTransaction.onabort = onError;
+      getAllTransaction.onerror = onError;
 
+      var cursorRequest = store.openCursor(),
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
