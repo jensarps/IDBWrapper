@@ -375,31 +375,26 @@
      *  failed.
      */
     put: function (dataObj, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not write data.', error);
-      });
-      onSuccess || (onSuccess = noop);
-
-      var hasSuccess = false,
-          result = null;
+      var cbData = {
+        onError: onError || function (error) {
+          console.error('Could not write data.', error);
+        },
+        onSuccess: onSuccess || noop,
+        hasSuccess: false,
+        result: null
+      };
 
       if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
         dataObj[this.keyPath] = this._getUID();
       }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      putTransaction.oncomplete = function () {
-        var callback = hasSuccess ? onSuccess : onError;
-        callback(result);
-      };
-      putTransaction.onabort = onError;
-      putTransaction.onerror = onError;
+      putTransaction.oncomplete = this._makeTransactionCallback(cbData);
+      putTransaction.onabort = cbData.onError;
+      putTransaction.onerror = cbData.onError;
 
       var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
-      putRequest.onsuccess = function (event) {
-        hasSuccess = true;
-        result = event.target.result;
-      };
-      putRequest.onerror = onError;
+      putRequest.onsuccess = this._makeRequestCallback(cbData);
+      putRequest.onerror = cbData.onError;
     },
 
     /**
@@ -413,28 +408,23 @@
      *  occurred during the operation.
      */
     get: function (key, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not read data.', error);
-      });
-      onSuccess || (onSuccess = noop);
-
-      var hasSuccess = false,
-          result = null;
+      var cbData = {
+        onError: onError || function (error) {
+          console.error('Could not read data.', error);
+        },
+        onSuccess: onSuccess || noop,
+        hasSuccess: false,
+        result: null
+      };
       
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      getTransaction.oncomplete = function () {
-        var callback = hasSuccess ? onSuccess : onError;
-        callback(result);
-      };
-      getTransaction.onabort = onError;
-      getTransaction.onerror = onError;
+      getTransaction.oncomplete = this._makeTransactionCallback(cbData);
+      getTransaction.onabort = cbData.onError;
+      getTransaction.onerror = cbData.onError;
       
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
-      getRequest.onsuccess = function (event) {
-        hasSuccess = true;
-        result = event.target.result;
-      };
-      getRequest.onerror = onError;
+      getRequest.onsuccess = this._makeRequestCallback(cbData);
+      getRequest.onerror = cbData.onError;
     },
 
     /**
@@ -447,28 +437,23 @@
      *  occurred during the operation.
      */
     remove: function (key, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not remove data.', error);
-      });
-      onSuccess || (onSuccess = noop);
-
-      var hasSuccess = false,
-          result = null;
+      var cbData = {
+        onError: onError || function (error) {
+          console.error('Could not remove data.', error);
+        },
+        onSuccess: onSuccess || noop,
+        hasSuccess: false,
+        result: null
+      };
 
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      removeTransaction.oncomplete = function () {
-        var callback = hasSuccess ? onSuccess : onError;
-        callback(result);
-      };
-      removeTransaction.onabort = onError;
-      removeTransaction.onerror = onError;
+      removeTransaction.oncomplete = this._makeTransactionCallback(cbData);
+      removeTransaction.onabort = cbData.onError;
+      removeTransaction.onerror = cbData.onError;
 
       var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
-      deleteRequest.onsuccess = function (event) {
-        hasSuccess = true;
-        result = event.target.result;
-      };
-      deleteRequest.onerror = onError;
+      deleteRequest.onsuccess = this._makeRequestCallback(cbData);
+      deleteRequest.onerror = cbData.onError;
     },
 
     /**
@@ -923,6 +908,20 @@
 
       return keyRange;
 
+    },
+
+    _makeTransactionCallback: function (cbData) {
+      return function () {
+        var callback = cbData.hasSuccess ? cbData.onSuccess : cbData.onError;
+        callback(cbData.result);
+      };
+    },
+
+    _makeRequestCallback: function (cbData) {
+      return function (event) {
+        cbData.hasSuccess = true;
+        cbData.result = event.target.result;
+      };
     }
 
   };
