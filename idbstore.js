@@ -375,14 +375,7 @@
      *  failed.
      */
     put: function (dataObj, onSuccess, onError) {
-      var cbData = {
-        onError: onError || function (error) {
-          console.error('Could not write data.', error);
-        },
-        onSuccess: onSuccess || noop,
-        hasSuccess: false,
-        result: null
-      };
+      var cbData = this._makeCallbackDataObject(onSuccess, onError, 'Could not write data.');
 
       if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
         dataObj[this.keyPath] = this._getUID();
@@ -408,14 +401,7 @@
      *  occurred during the operation.
      */
     get: function (key, onSuccess, onError) {
-      var cbData = {
-        onError: onError || function (error) {
-          console.error('Could not read data.', error);
-        },
-        onSuccess: onSuccess || noop,
-        hasSuccess: false,
-        result: null
-      };
+      var cbData = this._makeCallbackDataObject(onSuccess, onError, 'Could not read data.');
       
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       getTransaction.oncomplete = this._makeTransactionCallback(cbData);
@@ -899,6 +885,10 @@
       return keyRange;
 
     },
+
+    /***********************
+     * Transaction Helpers *
+     ***********************/
 
     /**
      * Creates a default callback for a transaction complete event.
