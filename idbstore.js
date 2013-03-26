@@ -381,13 +381,10 @@
         dataObj[this.keyPath] = this._getUID();
       }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      putTransaction.oncomplete = this._makeTransactionCallback(cbData);
-      putTransaction.onabort = cbData.onError;
-      putTransaction.onerror = cbData.onError;
+      this._connectTransaction(putTransaction, cbData);
 
       var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
-      putRequest.onsuccess = this._makeRequestCallback(cbData);
-      putRequest.onerror = cbData.onError;
+      this._connectRequest(putRequest, cbData);
     },
 
     /**
@@ -404,13 +401,10 @@
       var cbData = this._makeCallbackDataObject(onSuccess, onError, 'Could not read data.');
       
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      getTransaction.oncomplete = this._makeTransactionCallback(cbData);
-      getTransaction.onabort = cbData.onError;
-      getTransaction.onerror = cbData.onError;
+      this._connectTransaction(getTransaction, cbData);
       
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
-      getRequest.onsuccess = this._makeRequestCallback(cbData);
-      getRequest.onerror = cbData.onError;
+      this._connectRequest(getRequest, cbData);
     },
 
     /**
