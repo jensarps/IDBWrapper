@@ -41,7 +41,7 @@
    *
    * @constructor
    * @name IDBStore
-   * @version 1.0.0
+   * @version 1.1.0
    *
    * @param {Object} [kwArgs] An options object used to configure the store and
    *  set callbacks
@@ -126,7 +126,7 @@
      *
      * @type String
      */
-    version: '1.0.0',
+    version: '1.1.0',
 
     /**
      * A reference to the IndexedDB object
