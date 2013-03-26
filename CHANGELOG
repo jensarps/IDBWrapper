@@ -1,4 +1,12 @@
-1.0.0 /
+1.1.0 / 2013-03-26
+------------------
+
+* Move all callbacks from request level to transaction level
+* Misc Refactoring
+
+
+
+1.0.0 / 2013-02-05
 ------------------
 
 * Add query() method
@@ -8,6 +16,7 @@
 * Add Closure Compiler to repository
 * Add MAKEFILE
 * Misc cleanup
+
 
 
 0.3.1 / 2013-01-04
