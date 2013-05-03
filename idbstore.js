@@ -368,13 +368,19 @@
      * Puts an object into the store. If an entry with the given id exists,
      * it will be overwritten.
      *
-     * @param {Object} dataObj The object to store.
+     * @param {Object} key The key to store.
+     * @param {Object} value The value to store.
      * @param {Function} [onSuccess] A callback that is called if insertion
      *  was successful.
      * @param {Function} [onError] A callback that is called if insertion
      *  failed.
      */
-    put: function (dataObj, onSuccess, onError) {
+    put: function (key, value, onSuccess, onError) {
+      if (typeof value === 'function') {
+        onError = onSuccess
+        onSuccess = value
+        value = key
+      }
       onError || (onError = function (error) {
         console.error('Could not write data.', error);
       });
@@ -383,8 +389,8 @@
       var hasSuccess = false,
           result = null;
 
-      if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-        dataObj[this.keyPath] = this._getUID();
+      if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+        value[this.keyPath] = this._getUID();
       }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       putTransaction.oncomplete = function () {
@@ -393,8 +399,7 @@
       };
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
-
-      var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
+      var putRequest = putTransaction.objectStore(this.storeName).put(value, key);
       putRequest.onsuccess = function (event) {
         hasSuccess = true;
         result = event.target.result;
@@ -428,7 +433,6 @@
       };
       getTransaction.onabort = onError;
       getTransaction.onerror = onError;
-      
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
       getRequest.onsuccess = function (event) {
         hasSuccess = true;
@@ -531,7 +535,7 @@
           if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
             value[this.keyPath] = this._getUID();
           }
-          var putRequest = batchTransaction.objectStore(this.storeName).put(value);
+          var putRequest = batchTransaction.objectStore(this.storeName).put(value, key);
           putRequest.onsuccess = onItemSuccess;
           putRequest.onerror = onItemError;
         }
