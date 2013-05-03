@@ -760,6 +760,7 @@
       options = mixin({
         index: null,
         order: 'ASC',
+        autoContinue: true,
         filterDuplicates: false,
         keyRange: null,
         writeAccess: false,
@@ -800,8 +801,11 @@
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
-          onItem(cursor.value, cursor, cursorTransaction);
-          cursor['continue']();
+          var next = cursor['continue'];
+          onItem(cursor.value, cursor, cursorTransaction, next);
+          if (options.autoContinue) {
+            next();
+          }
         } else {
           hasSuccess = true;
         }
