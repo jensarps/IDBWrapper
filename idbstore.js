@@ -396,10 +396,10 @@
       // Note that passing success- and error-handlers is optional.
      */
     put: function (key, value, onSuccess, onError) {
-      if (typeof value === 'function') {
-        onError = onSuccess
-        onSuccess = value
-        value = key
+      if (this.keyPath !== null) {
+        onError = onSuccess;
+        onSuccess = value;
+        value = key;
       }
       onError || (onError = function (error) {
         console.error('Could not write data.', error);
@@ -407,9 +407,10 @@
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
-          result = null;
+          result = null,
+          putRequest;
 
-      if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+      if (this.keyPath !== null && typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
         value[this.keyPath] = this._getUID();
       }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
@@ -419,7 +420,12 @@
       };
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
-      var putRequest = putTransaction.objectStore(this.storeName).put(value, key);
+      
+      if (this.keyPath === null) {
+        putRequest = putTransaction.objectStore(this.storeName).put(value, key);
+      } else {
+        putRequest = putTransaction.objectStore(this.storeName).put(value);
+      }
       putRequest.onsuccess = function (event) {
         hasSuccess = true;
         result = event.target.result;
