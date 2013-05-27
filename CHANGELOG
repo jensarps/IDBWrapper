@@ -1,3 +1,9 @@
+1.2.0 /
+------------------
+
+* Add autoContinue option to iterate() method [maxogden]
+
+
 1.1.0 / 2013-03-26
 ------------------
 
