@@ -746,6 +746,8 @@
      * @param {Object} [options.index=null] An IDBIndex to operate on
      * @param {String} [options.order=ASC] The order in which to provide the
      *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.autoContinue=true] Whether to automatically
+     *  iterate the cursor to the next result
      * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
      *  duplicate matches
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
@@ -753,8 +755,8 @@
      *  to the store in the onItem callback
      * @param {Function} [options.onEnd=null] A callback to be called after
      *  iteration has ended
-     * @param {Function} [options.onError=console.error] A callback to be called if an error
-     *  occurred during the operation.
+     * @param {Function} [options.onError=console.error] A callback to be called
+     *  if an error occurred during the operation.
      */
     iterate: function (onItem, options) {
       options = mixin({
