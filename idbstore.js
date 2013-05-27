@@ -50,7 +50,9 @@
    *  internally used to construct the name of the database, which will be
    *  kwArgs.storePrefix + kwArgs.storeName
    * @param {Number} [kwArgs.dbVersion=1] The version of the store
-   * @param {String} [kwArgs.keyPath='id'] The key path to use
+   * @param {String} [kwArgs.keyPath='id'] The key path to use. If you want to
+   *  setup IDBWrapper to work with out-of-line keys, you need to set this to
+   *  `null`
    * @param {Boolean} [kwArgs.autoIncrement=true] If set to true, IDBStore will
    *  automatically make sure a unique keyPath value is present on each object
    *  that is stored.
