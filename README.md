@@ -116,9 +116,11 @@ you want to have full control over the IDB name, you can pass your own prefix.
 'dbVersion' is the version number of your store. You'll only have to provide
 this if you change the structure of the store at a later time.
 
-'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true,
+'keyPath' is the name of the property to be used as key index. If `autoIncrement` is set to true,
 the database will automatically add a unique key to the keyPath index when storing objects missing
-that property. 'indexes' contains objects defining indexes (see below for details on indexes).
+that property. If you want to use out-of-line keys, you must set this  property to `null` (see below for details on out-of-line keys).
+
+'indexes' contains objects defining indexes (see below for details on indexes).
 
 'autoIncrement' is a boolean and toggles, well, auto-increment on or off. You
 can leave it to true, even if you do provide your own ids.
@@ -132,6 +134,10 @@ As an alternative to passing a ready handler as second argument, you can also
 pass it in the 'onStoreReady' property. If a callback is provided both as second
 parameter and inside of the options object, the function passed as second
 parameter will be used.
+
+### Out-of-line Keys
+
+IDBWrapper supports working with out-of-line keys. This is a feature of IndexedDB, and it means that an object's identifier is not kept on the object itself. Usually, you'll want to go with the default way, using in-line keys. If you, however, want to use out-of-line keys, note that the `put()` and `batch()` methods behave differently, and that the `autoIncrement` property has no effect – you MUST take care of the ids yourself!
 
 Methods
 =======
@@ -158,6 +164,16 @@ and it will receive the keyPath value (the id, so to say) of the inserted object
 argument. `onError` will be called if the insertion/update failed and it will receive the error event
 object as first and only argument. If the store already contains an object with the given keyPath id,
 it will be overwritten by `dataObj`.
+
+**Out-of-line Keys**
+
+If you use out-of-line keys in your store, you must provide a key as first argument to the put method:
+
+```javascript
+put(/*Anything*/ key, /*Object*/ dataObj, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+The `onSuccess` and `onError` arguments remain optional.
 
 ___
 
@@ -259,6 +275,17 @@ operation that caused the error and either the key or the value property
 
 If an error occurs, no changes will be made to the store, even if some
 of the given operations would have succeeded.
+
+
+**Out-of-line Keys**
+
+If you use out-of-line keys, you must also provide a key to put operations: 
+
+
+```javascript
+{ type: "put", value: dataObj, key: 12345 } // also add a `key` property containing the object's identifier
+```
+
 
 
 Index Operations
