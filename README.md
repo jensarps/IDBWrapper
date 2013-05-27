@@ -380,6 +380,8 @@ In the `keyRange` property you can pass a keyRange.
 
 The `order` property can be set to 'ASC' or 'DESC', and determines the ordering direction of results. If you omit this, IDBWrapper will use 'ASC'.
 
+The `autoContinue` property defaults to true. If you set this to false, IDBWrapper will not automatically advance the cursor to next result, but instead pause after it obtained a result. It will then pass a function as fourth argument to the `onItem` callback, which you can call to go on to the next result.
+
 The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
 
 The `writeAccess` property defaults to false. If you need write access to the store during the iteration, you need to set this to true.
