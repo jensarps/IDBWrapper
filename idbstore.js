@@ -704,18 +704,8 @@
      */
     _addIdPropertyIfNeeded: function (dataObj) {
       if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-        dataObj[this.keyPath] = this._getUID();
+        dataObj[this.keyPath] = this._insertIdCount++ + Date.now();
       }
-    },
-
-    /**
-     * Generates a numeric id unique to this instance of IDBStore.
-     *
-     * @return {Number} The id
-     * @private
-     */
-    _getUID: function () {
-      return this._insertIdCount++ + Date.now();
     },
 
 
