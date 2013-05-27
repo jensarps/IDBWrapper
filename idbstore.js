@@ -410,9 +410,6 @@
           result = null,
           putRequest;
 
-      if (this.keyPath !== null && typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-        value[this.keyPath] = this._getUID();
-      }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       putTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
@@ -421,10 +418,13 @@
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
 
-      if (this.keyPath === null) {
-        putRequest = putTransaction.objectStore(this.storeName).put(value, key);
-      } else {
+      if (this.keyPath !== null) { // inline keys
+        if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+          value[this.keyPath] = this._getUID();
+        }
         putRequest = putTransaction.objectStore(this.storeName).put(value);
+      } else { // out-of-line keys
+        putRequest = putTransaction.objectStore(this.storeName).put(value, key);
       }
       putRequest.onsuccess = function (event) {
         hasSuccess = true;
