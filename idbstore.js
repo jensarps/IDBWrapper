@@ -841,9 +841,11 @@
         var cursor = event.target.result;
         if (cursor) {
           var next = cursor['continue'];
-          onItem(cursor.value, cursor, cursorTransaction, next);
           if (options.autoContinue) {
+            onItem(cursor.value, cursor, cursorTransaction);
             next();
+          } else {
+            onItem(cursor.value, cursor, cursorTransaction, next);
           }
         } else {
           hasSuccess = true;
