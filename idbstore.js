@@ -420,7 +420,7 @@
       };
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
-      
+
       if (this.keyPath === null) {
         putRequest = putTransaction.objectStore(this.storeName).put(value, key);
       } else {
