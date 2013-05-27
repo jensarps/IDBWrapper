@@ -420,10 +420,10 @@
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
 
-      if (this.keyPath !== null) { // inline keys
         if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
           value[this.keyPath] = this._getUID();
         }
+      if (this.keyPath !== null) { // in-line keys
         putRequest = putTransaction.objectStore(this.storeName).put(value);
       } else { // out-of-line keys
         putRequest = putTransaction.objectStore(this.storeName).put(value, key);
@@ -561,10 +561,10 @@
           deleteRequest.onerror = onItemError;
         } else if (type == "put") {
           var putRequest;
-          if (this.keyPath !== null) { // inline keys
             if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
               value[this.keyPath] = this._getUID();
             }
+          if (this.keyPath !== null) { // in-line keys
             putRequest = batchTransaction.objectStore(this.storeName).put(value);
           } else { // out-of-line keys
             putRequest = batchTransaction.objectStore(this.storeName).put(value, key);
