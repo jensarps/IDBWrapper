@@ -365,7 +365,6 @@
      * data manipulation *
      *********************/
 
-
     /**
      * Puts an object into the store. If an entry with the given id exists,
      * it will be overwritten. This method has a different signature for inline
@@ -420,10 +419,8 @@
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
 
-        if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-          value[this.keyPath] = this._getUID();
-        }
       if (this.keyPath !== null) { // in-line keys
+        this._addIdPropertyIfNeeded(value);
         putRequest = putTransaction.objectStore(this.storeName).put(value);
       } else { // out-of-line keys
         putRequest = putTransaction.objectStore(this.storeName).put(value, key);
@@ -561,10 +558,8 @@
           deleteRequest.onerror = onItemError;
         } else if (type == "put") {
           var putRequest;
-            if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-              value[this.keyPath] = this._getUID();
-            }
           if (this.keyPath !== null) { // in-line keys
+            this._addIdPropertyIfNeeded(value);
             putRequest = batchTransaction.objectStore(this.storeName).put(value);
           } else { // out-of-line keys
             putRequest = batchTransaction.objectStore(this.storeName).put(value, key);
@@ -698,6 +693,19 @@
         result = event.target.result;
       };
       clearRequest.onerror = onError;
+    },
+
+    /**
+     * Checks if an id property needs to present on a object and adds one if
+     * necessary.
+     *
+     * @param {Object} dataObj The data object that is about to be stored
+     * @private
+     */
+    _addIdPropertyIfNeeded: function (dataObj) {
+      if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+        dataObj[this.keyPath] = this._getUID();
+      }
     },
 
     /**
