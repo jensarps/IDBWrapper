@@ -234,7 +234,7 @@
     openDB: function () {
 
       var features = this.features = {};
-      features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
+      features.hasAutoIncrement = !window.mozIndexedDB;
 
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
       var preventSuccessCallback = false;
@@ -245,7 +245,7 @@
         if ('error' in error.target) {
           gotVersionErr = error.target.error.name == "VersionError";
         } else if ('errorCode' in error.target) {
-          gotVersionErr = error.target.errorCode == 12; // TODO: Use const
+          gotVersionErr = error.target.errorCode == 12;
         }
 
         if (gotVersionErr) {
