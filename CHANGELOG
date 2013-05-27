@@ -2,6 +2,8 @@
 ------------------
 
 * Add autoContinue option to iterate() method [maxogden]
+* Make put() method work with out-of-line keys [maxogden]
+
 
 
 1.1.0 / 2013-03-26
