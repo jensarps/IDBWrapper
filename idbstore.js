@@ -126,7 +126,7 @@
      *
      * @type String
      */
-    version: '1.1.0',
+    version: '1.2.0',
 
     /**
      * A reference to the IndexedDB object
