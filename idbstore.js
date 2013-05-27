@@ -703,11 +703,10 @@
      * @private
      */
     _addIdPropertyIfNeeded: function (dataObj) {
-      if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
+      if (!this.features.hasAutoIncrement && typeof dataObj[this.keyPath] == 'undefined') {
         dataObj[this.keyPath] = this._insertIdCount++ + Date.now();
       }
     },
-
 
     /************
      * indexing *
