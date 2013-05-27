@@ -715,8 +715,6 @@
      * @private
      */
     _getUID: function () {
-      // FF bails at times on non-numeric ids. So we take an even
-      // worse approach now, using current time as id. Sigh.
       return this._insertIdCount++ + Date.now();
     },
 
