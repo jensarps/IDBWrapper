@@ -49,7 +49,7 @@ IDBWrapper is also available on cdnjs, so you can directly point a script tag
 there, or require() it from there. The URL is:
 
 ```
-//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.0.0/idbstore.min.js
+//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.1.0/idbstore.min.js
 ```
 
 If you use NPM as your package manager, you can get it from there, too, by
@@ -116,9 +116,11 @@ you want to have full control over the IDB name, you can pass your own prefix.
 'dbVersion' is the version number of your store. You'll only have to provide
 this if you change the structure of the store at a later time.
 
-'keyPath' is the name of the property to be used as key index. If 'autoIncrement' is set to true,
+'keyPath' is the name of the property to be used as key index. If `autoIncrement` is set to true,
 the database will automatically add a unique key to the keyPath index when storing objects missing
-that property. 'indexes' contains objects defining indexes (see below for details on indexes).
+that property. If you want to use out-of-line keys, you must set this  property to `null` (see below for details on out-of-line keys).
+
+'indexes' contains objects defining indexes (see below for details on indexes).
 
 'autoIncrement' is a boolean and toggles, well, auto-increment on or off. You
 can leave it to true, even if you do provide your own ids.
@@ -132,6 +134,10 @@ As an alternative to passing a ready handler as second argument, you can also
 pass it in the 'onStoreReady' property. If a callback is provided both as second
 parameter and inside of the options object, the function passed as second
 parameter will be used.
+
+### Out-of-line Keys
+
+IDBWrapper supports working with out-of-line keys. This is a feature of IndexedDB, and it means that an object's identifier is not kept on the object itself. Usually, you'll want to go with the default way, using in-line keys. If you, however, want to use out-of-line keys, note that the `put()` and `batch()` methods behave differently, and that the `autoIncrement` property has no effect – you MUST take care of the ids yourself!
 
 Methods
 =======
@@ -158,6 +164,16 @@ and it will receive the keyPath value (the id, so to say) of the inserted object
 argument. `onError` will be called if the insertion/update failed and it will receive the error event
 object as first and only argument. If the store already contains an object with the given keyPath id,
 it will be overwritten by `dataObj`.
+
+**Out-of-line Keys**
+
+If you use out-of-line keys in your store, you must provide a key as first argument to the put method:
+
+```javascript
+put(/*Anything*/ key, /*Object*/ dataObj, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+The `onSuccess` and `onError` arguments remain optional.
 
 ___
 
@@ -261,6 +277,17 @@ If an error occurs, no changes will be made to the store, even if some
 of the given operations would have succeeded.
 
 
+**Out-of-line Keys**
+
+If you use out-of-line keys, you must also provide a key to put operations: 
+
+
+```javascript
+{ type: "put", value: dataObj, key: 12345 } // also add a `key` property containing the object's identifier
+```
+
+
+
 Index Operations
 ----------------
 
@@ -346,12 +373,13 @@ There's one special situation: if you didn't pass an onEnd handler in the option
 
 The `iterateOptions` object can contain one or more of the following properties:
 
-
 The `index` property contains the name of the index to operate on. If you omit this, IDBWrapper will use the store's keyPath as index.
 
 In the `keyRange` property you can pass a keyRange.
 
 The `order` property can be set to 'ASC' or 'DESC', and determines the ordering direction of results. If you omit this, IDBWrapper will use 'ASC'.
+
+The `autoContinue` property defaults to true. If you set this to false, IDBWrapper will not automatically advance the cursor to next result, but instead pause after it obtained a result. To move the cursor to the next result, you need to call the cursor object's `continue()` method (you get the cursor object as second argument to the `onItem` callback).
 
 The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
 
