@@ -838,7 +838,7 @@
           var next = cursor['continue'];
           if (options.autoContinue) {
             onItem(cursor.value, cursor, cursorTransaction);
-            next();
+            cursor['continue']();
           } else {
             onItem(cursor.value, cursor, cursorTransaction, next);
           }
