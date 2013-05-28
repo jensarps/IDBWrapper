@@ -50,7 +50,9 @@
    *  internally used to construct the name of the database, which will be
    *  kwArgs.storePrefix + kwArgs.storeName
    * @param {Number} [kwArgs.dbVersion=1] The version of the store
-   * @param {String} [kwArgs.keyPath='id'] The key path to use
+   * @param {String} [kwArgs.keyPath='id'] The key path to use. If you want to
+   *  setup IDBWrapper to work with out-of-line keys, you need to set this to
+   *  `null`
    * @param {Boolean} [kwArgs.autoIncrement=true] If set to true, IDBStore will
    *  automatically make sure a unique keyPath value is present on each object
    *  that is stored.
@@ -126,7 +128,7 @@
      *
      * @type String
      */
-    version: '1.1.0',
+    version: '1.2.0',
 
     /**
      * A reference to the IndexedDB object
@@ -232,7 +234,7 @@
     openDB: function () {
 
       var features = this.features = {};
-      features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
+      features.hasAutoIncrement = !window.mozIndexedDB;
 
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
       var preventSuccessCallback = false;
@@ -243,7 +245,7 @@
         if ('error' in error.target) {
           gotVersionErr = error.target.error.name == "VersionError";
         } else if ('errorCode' in error.target) {
-          gotVersionErr = error.target.errorCode == 12; // TODO: Use const
+          gotVersionErr = error.target.errorCode == 12;
         }
 
         if (gotVersionErr) {
@@ -363,29 +365,52 @@
      * data manipulation *
      *********************/
 
-
     /**
      * Puts an object into the store. If an entry with the given id exists,
-     * it will be overwritten.
+     * it will be overwritten. This method has a different signature for inline
+     * keys and out-of-line keys; please see the examples below.
      *
-     * @param {Object} dataObj The object to store.
+     * @param {*} [key] The key to store. This is only needed if IDBWrapper
+     *  is set to use out-of-line keys. For inline keys - the default scenario -
+     *  this can be omitted.
+     * @param {Object} value The data object to store.
      * @param {Function} [onSuccess] A callback that is called if insertion
      *  was successful.
      * @param {Function} [onError] A callback that is called if insertion
      *  failed.
+     * @example
+        // Storing an object, using inline keys (the default scenario):
+        var myCustomer = {
+          customerid: 2346223,
+          lastname: 'Doe',
+          firstname: 'John'
+        };
+        myCustomerStore.put(myCustomer, mySuccessHandler, myErrorHandler);
+        // Note that passing success- and error-handlers is optional.
+     * @example
+        // Storing an object, using out-of-line keys:
+       var myCustomer = {
+         lastname: 'Doe',
+         firstname: 'John'
+       };
+       myCustomerStore.put(2346223, myCustomer, mySuccessHandler, myErrorHandler);
+      // Note that passing success- and error-handlers is optional.
      */
-    put: function (dataObj, onSuccess, onError) {
+    put: function (key, value, onSuccess, onError) {
+      if (this.keyPath !== null) {
+        onError = onSuccess;
+        onSuccess = value;
+        value = key;
+      }
       onError || (onError = function (error) {
         console.error('Could not write data.', error);
       });
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
-          result = null;
+          result = null,
+          putRequest;
 
-      if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-        dataObj[this.keyPath] = this._getUID();
-      }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       putTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
@@ -394,7 +419,12 @@
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
 
-      var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
+      if (this.keyPath !== null) { // in-line keys
+        this._addIdPropertyIfNeeded(value);
+        putRequest = putTransaction.objectStore(this.storeName).put(value);
+      } else { // out-of-line keys
+        putRequest = putTransaction.objectStore(this.storeName).put(value, key);
+      }
       putRequest.onsuccess = function (event) {
         hasSuccess = true;
         result = event.target.result;
@@ -428,7 +458,6 @@
       };
       getTransaction.onabort = onError;
       getTransaction.onerror = onError;
-      
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
       getRequest.onsuccess = function (event) {
         hasSuccess = true;
@@ -528,10 +557,13 @@
           deleteRequest.onsuccess = onItemSuccess;
           deleteRequest.onerror = onItemError;
         } else if (type == "put") {
-          if (typeof value[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-            value[this.keyPath] = this._getUID();
+          var putRequest;
+          if (this.keyPath !== null) { // in-line keys
+            this._addIdPropertyIfNeeded(value);
+            putRequest = batchTransaction.objectStore(this.storeName).put(value);
+          } else { // out-of-line keys
+            putRequest = batchTransaction.objectStore(this.storeName).put(value, key);
           }
-          var putRequest = batchTransaction.objectStore(this.storeName).put(value);
           putRequest.onsuccess = onItemSuccess;
           putRequest.onerror = onItemError;
         }
@@ -664,17 +696,17 @@
     },
 
     /**
-     * Generates a numeric id unique to this instance of IDBStore.
+     * Checks if an id property needs to present on a object and adds one if
+     * necessary.
      *
-     * @return {Number} The id
+     * @param {Object} dataObj The data object that is about to be stored
      * @private
      */
-    _getUID: function () {
-      // FF bails at times on non-numeric ids. So we take an even
-      // worse approach now, using current time as id. Sigh.
-      return this._insertIdCount++ + Date.now();
+    _addIdPropertyIfNeeded: function (dataObj) {
+      if (!this.features.hasAutoIncrement && typeof dataObj[this.keyPath] == 'undefined') {
+        dataObj[this.keyPath] = this._insertIdCount++ + Date.now();
+      }
     },
-
 
     /************
      * indexing *
@@ -746,6 +778,8 @@
      * @param {Object} [options.index=null] An IDBIndex to operate on
      * @param {String} [options.order=ASC] The order in which to provide the
      *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.autoContinue=true] Whether to automatically
+     *  iterate the cursor to the next result
      * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
      *  duplicate matches
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
@@ -753,13 +787,14 @@
      *  to the store in the onItem callback
      * @param {Function} [options.onEnd=null] A callback to be called after
      *  iteration has ended
-     * @param {Function} [options.onError=console.error] A callback to be called if an error
-     *  occurred during the operation.
+     * @param {Function} [options.onError=console.error] A callback to be called
+     *  if an error occurred during the operation.
      */
     iterate: function (onItem, options) {
       options = mixin({
         index: null,
         order: 'ASC',
+        autoContinue: true,
         filterDuplicates: false,
         keyRange: null,
         writeAccess: false,
@@ -801,7 +836,9 @@
         var cursor = event.target.result;
         if (cursor) {
           onItem(cursor.value, cursor, cursorTransaction);
-          cursor['continue']();
+          if (options.autoContinue) {
+            cursor['continue']();
+          }
         } else {
           hasSuccess = true;
         }

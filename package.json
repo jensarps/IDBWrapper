@@ -1,6 +1,6 @@
 {
   "name": "idb-wrapper",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A cross-browser wrapper for IndexedDB",
   "keywords": [],
   "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",
@@ -10,7 +10,8 @@
   "contributors": [
     "Josh Matthews <josh@joshmatthews.net> (http://www.joshmatthews.net/blog/)",
     "Raynos <raynos2@gmail.com> (http://raynos.org)",
-    "Chad Engler <chad@pantherdev.com> http://chad.pantherdev.com"
+    "Chad Engler <chad@pantherdev.com> (http://chad.pantherdev.com)",
+    "Max Ogden <max+ogden@maxogden.com> (http://www.maxogden.com)"
   ],
   "bugs": {
     "url": "https://github.com/jensarps/IDBWrapper/issues",
