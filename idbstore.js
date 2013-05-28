@@ -835,11 +835,9 @@
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
+          onItem(cursor.value, cursor, cursorTransaction);
           if (options.autoContinue) {
-            onItem(cursor.value, cursor, cursorTransaction);
             cursor['continue']();
-          } else {
-            onItem(cursor.value, cursor, cursorTransaction);
           }
         } else {
           hasSuccess = true;
