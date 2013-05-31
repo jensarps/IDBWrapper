@@ -41,6 +41,10 @@ a {
 	padding: 10px;
 	border-bottom: solid 1px #9E9E9E;
 }
+#head .sourceLink {
+  float: right;
+  font-size: 14px;
+}
 
 /* table */
 #results-container {
