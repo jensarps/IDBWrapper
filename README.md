@@ -45,7 +45,7 @@ Obtaining IDBWrapper
 
 You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/tags
 
-IDBWrapper is also available on cdnjs, so you can directly point a script tag there, or require() 
+IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly point a script tag there, or require() 
 it from there. cdnjs supports http, https and spdy, so you can just leave the protocol off. The URL is:
 
 ```
