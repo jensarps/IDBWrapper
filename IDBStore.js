@@ -88,9 +88,9 @@
       var openRequest;
       if (this.newVersionAPI) {
         this.dbVersion = parseInt(this.dbVersion, 10);
-        openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
+        openRequest = this.idb.open(this.dbName, this.dbVersion);
       } else {
-        openRequest = this.idb.open(this.dbName, this.dbDescription);
+        openRequest = this.idb.open(this.dbName);
       }
 
       openRequest.onerror = hitch(this, function (error) {
