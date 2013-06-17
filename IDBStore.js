@@ -429,10 +429,123 @@
           options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
         }
       };
-    }
+    },
 
+    /**
+     * Runs a query against the store and passes an array containing matched
+     * objects to the success handler.
+     *
+     * @param {Function} onSuccess A callback to be called when the operation
+     *  was successful.
+     * @param {Object} [options] An object defining specific query options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {String} [options.order=ASC] The order in which to provide the
+     *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
+     *  duplicate matches
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
+    query: function (onSuccess, options) {
+      var result = [];
+      options = options || {};
+      options.onEnd = function () {
+        onSuccess(result);
+      };
+      this.iterate(function (item) {
+        result.push(item);
+      }, options);
+    },
+
+    /**
+     *
+     * Runs a query against the store, but only returns the number of matches
+     * instead of the matches itself.
+     *
+     * @param {Function} onSuccess A callback to be called if the opration
+     *  was successful.
+     * @param {Object} [options] An object defining specific options
+     * @param {Object} [options.index=null] An IDBIndex to operate on
+     * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     *  occurred during the operation.
+     */
+    count: function (onSuccess, options) {
+
+      options = mixin({
+        index: null,
+        keyRange: null
+      }, options || {});
+
+      var onError = options.onError || function (error) {
+        console.error('Could not open cursor.', error);
+      };
+
+      var hasSuccess = false,
+        result = null;
+
+      var cursorTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
+      cursorTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      cursorTransaction.onabort = onError;
+      cursorTransaction.onerror = onError;
+
+      var cursorTarget = cursorTransaction.objectStore(this.storeName);
+      if (options.index) {
+        cursorTarget = cursorTarget.index(options.index);
+      }
+      var countRequest = cursorTarget.count(options.keyRange);
+      countRequest.onsuccess = function (evt) {
+        hasSuccess = true;
+        result = evt.target.result;
+      };
+      countRequest.onError = onError;
+    },
+
+    /**************/
     /* key ranges */
-    // TODO: implement
+    /**************/
+
+    /**
+     * Creates a key range using specified options. This key range can be
+     * handed over to the count() and iterate() methods.
+     *
+     * Note: You must provide at least one or both of "lower" or "upper" value.
+     *
+     * @param {Object} options The options for the key range to create
+     * @param {*} [options.lower] The lower bound
+     * @param {Boolean} [options.excludeLower] Whether to exclude the lower
+     *  bound passed in options.lower from the key range
+     * @param {*} [options.upper] The upper bound
+     * @param {Boolean} [options.excludeUpper] Whether to exclude the upper
+     *  bound passed in options.upper from the key range
+     * @return {Object} The IDBKeyRange representing the specified options
+     */
+    makeKeyRange: function (options) {
+      /*jshint onecase:true */
+      var keyRange,
+        hasLower = typeof options.lower != 'undefined',
+        hasUpper = typeof options.upper != 'undefined';
+
+      switch (true) {
+        case hasLower && hasUpper:
+          keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
+          break;
+        case hasLower:
+          keyRange = this.keyRange.lowerBound(options.lower, options.excludeLower);
+          break;
+        case hasUpper:
+          keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
+          break;
+        default:
+          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
+      }
+
+      return keyRange;
+    }
 
   };
 
