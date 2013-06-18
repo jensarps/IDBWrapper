@@ -165,7 +165,7 @@ console.log('db ' + this.dbName + ' already has the store.');
           var transaction = evt.target.result;
           transaction.oncomplete = onSuccess;
         } else {
-          onSuccess();
+          onSuccess(evt.target.result);
         }
       };
     },
