@@ -132,7 +132,7 @@
           }
         }));
 
-
+        this.onStoreReady(this.store);
       });
     },
 
