@@ -304,6 +304,41 @@ this.log('opening done, calling success handler with store ref:', this.store);
      * indexing *
      ************/
 
+
+    /**
+     * Normalizes an object containing index data and assures that all
+     * properties are set.
+     *
+     * @param {Object} indexData The index data object to normalize
+     * @param {String} indexData.name The name of the index
+     * @param {String} [indexData.keyPath] The key path of the index
+     * @param {Boolean} [indexData.unique] Whether the index is unique
+     * @param {Boolean} [indexData.multiEntry] Whether the index is multi entry
+     */
+    normalizeIndexData: function (indexData) {
+      indexData.keyPath = indexData.keyPath || indexData.name;
+      indexData.unique = !!indexData.unique;
+      indexData.multiEntry = !!indexData.multiEntry;
+    },
+
+    /**
+     * Checks if an actual index complies with an expected index.
+     *
+     * @param {Object} actual The actual index found in the store
+     * @param {Object} expected An Object describing an expected index
+     * @return {Boolean} Whether both index definitions are identical
+     */
+    indexComplies: function (actual, expected) {
+      var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
+        // IE10 returns undefined for no multiEntry
+        if (key == 'multiEntry' && actual[key] === undefined && expected[key] === false) {
+          return true;
+        }
+        return expected[key] == actual[key];
+      });
+      return complies;
+    },
+
     createIndex: function (indexName, propertyName, isUnique, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not create index.', error);
