@@ -109,23 +109,6 @@
           //event.target.close();
         };
 
-
-        // getObjectStore will either call
-        //   a) openExistingObjectStore, which will create a new transaction
-        //   b) createNewObjectStore, which will try to enter mutation state,
-        //      which can only be done via a versionchange transaction
-        // Since Chrome 21, both actions require to not be inside of a
-        // versionchange transaction, which will be the case if the database
-        // is new.
-
-        /*
-        this.checkVersion(hitch(this, function () {
-          this.getObjectStore(hitch(this, function () {
-            setTimeout(this.onStoreReady);
-          }));
-        }), null, { waitForTransactionEnd: true });
-        */
-
         this.setVersion(hitch(this, function(){
           if(!this.hasObjectStore()) {
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
