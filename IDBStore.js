@@ -105,7 +105,7 @@
         this.db = event.target.result;
 
         this.db.onversionchange = function (event) {
-          
+
           //event.target.close();
         };
 
@@ -117,11 +117,20 @@
         // Since Chrome 21, both actions require to not be inside of a
         // versionchange transaction, which will be the case if the database
         // is new.
+
+        /*
         this.checkVersion(hitch(this, function () {
           this.getObjectStore(hitch(this, function () {
             setTimeout(this.onStoreReady);
           }));
         }), null, { waitForTransactionEnd: true });
+        */
+
+        this.setVersion(hitch(this, function(){
+          if(!this.hasObjectStore()) {
+            this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+          }
+        }));
 
 
       });
