@@ -38,6 +38,8 @@
     mixin(this, defaults);
     mixin(this, kwArgs);
     onStoreReady && (this.onStoreReady = onStoreReady);
+    
+    this.dbName = this.dbName + '-' + this.storeName;
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
     this.consts = window.IDBTransaction || window.webkitIDBTransaction;
@@ -88,8 +90,6 @@
 
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
-
-      this.dbName = this.dbName + '-' + this.storeName;
 
 this.log('Issuing open request');
 
