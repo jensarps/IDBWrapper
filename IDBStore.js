@@ -104,7 +104,8 @@
         this.db = event.target.result;
 
         this.db.onversionchange = function (event) {
-          event.target.close();
+          
+          //event.target.close();
         };
 
 
