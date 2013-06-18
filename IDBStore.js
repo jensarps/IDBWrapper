@@ -138,10 +138,9 @@ console.log('db ' + this.dbName + ' already has the store.');
      * versioning *
      **************/
 
-    checkVersion: function (onSuccess, onError, options) {
-      options || (options = {});
+    checkVersion: function (onSuccess, onError) {
       if (this.getVersion() != this.dbVersion) {
-        this.setVersion(onSuccess, onError, options);
+        this.setVersion(onSuccess, onError);
       } else {
         onSuccess && onSuccess();
       }
@@ -151,8 +150,7 @@ console.log('db ' + this.dbName + ' already has the store.');
       return this.db.version;
     },
 
-    setVersion: function (onSuccess, onError, options) {
-      options || (options = {});
+    setVersion: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Failed to set version.', error);
       });
@@ -161,12 +159,7 @@ console.log('db ' + this.dbName + ' already has the store.');
       versionRequest.onblocked = onError;
 
       versionRequest.onsuccess = function (evt) {
-        if (options.waitForTransactionEnd) {
-          var transaction = evt.target.result;
-          transaction.oncomplete = onSuccess;
-        } else {
-          onSuccess(evt.target.result);
-        }
+        onSuccess(evt.target.result);
       };
     },
 
