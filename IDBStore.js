@@ -378,50 +378,12 @@ this.log('opening done, calling success handler with store ref:', this.store);
       return complies;
     },
 
-    createIndex: function (indexName, propertyName, isUnique, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not create index.', error);
-      });
-      onSuccess || (onSuccess = noop);
-      propertyName || (propertyName = indexName);
-
-      var that = this;
-
-      this.enterMutationState(hitch(this, function (evt) {
-        var result = evt.target.result;
-        var index;
-        if (result.objectStore) { // transaction
-          index = db.objectStore(this.storeName).createIndex(indexName, propertyName, { unique: !!isUnique });
-        } else { // db
-          var putTransaction = result.transaction([that.storeName] /* , this.consts.READ_WRITE */);
-          var store = putTransaction.objectStore(that.storeName);
-          index = store.createIndex(indexName, propertyName, { unique: !!isUnique });
-        }
-        onSuccess(index);
-      }), onError);
-    },
-
-    getIndex: function (indexName) {
-      return this.store.index(indexName);
-    },
-
     getIndexList: function () {
       return this.store.indexNames;
     },
 
     hasIndex: function (indexName) {
       return this.store.indexNames.contains(indexName);
-    },
-
-    removeIndex: function (indexName, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not remove index.', error);
-      });
-      onSuccess || (onSuccess = noop);
-      this.enterMutationState(hitch(this, function (evt) {
-        evt.target.result.objectStore(this.storeName).deleteIndex(indexName);
-        onSuccess();
-      }), onError);
     },
 
     /**********
