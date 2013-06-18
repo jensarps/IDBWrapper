@@ -78,6 +78,12 @@
 
     onStoreReady: null,
 
+    log: function(){
+      var args = [].slice.call(arguments);
+      args.unshift('IDBWrapper @ ' + this.dbName + ': ');
+      console.log.apply(console, args);
+    },
+
     openDB: function () {
 
       var features = this.features = {};
@@ -85,7 +91,7 @@
 
       this.dbName = this.dbName + '-' + this.storeName;
 
-console.log('Issuing open request for', this.dbName);
+this.log('Issuing open request');
 
       var openRequest = this.idb.open(this.dbName);
 
@@ -102,25 +108,25 @@ console.log('Issuing open request for', this.dbName);
       });
 
       openRequest.onsuccess = hitch(this, function (event) {
-console.log('Success handler for open request for db ' + this.dbName + ' called.');
+this.log('Success handler for open request called.');
         this.db = event.target.result;
 
         this.db.onversionchange = hitch(this, function (event) {
-console.log('Version change for db ' + this.dbName + ' detected.');
+this.log('Version change detected.');
           //event.target.close();
         });
 
         this.setVersion(hitch(this, function(transaction){
           if(!this.hasObjectStore()) {
-console.log('db ' + this.dbName + ' doesn\'t have the store, creating it.');
+this.log('db doesn\'t have the store, creating it.');
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
           } else {
-console.log('db ' + this.dbName + ' already has the store.');
+this.log('db already has the store.');
             this.store = transaction.objectStore(this.storeName);
           }
         }));
 
-console.log('db ' + this.dbName + ' opening done, calling success handler with store ref:', this.store);
+this.log('opening done, calling success handler with store ref:', this.store);
         this.onStoreReady(this.store);
       });
     },
