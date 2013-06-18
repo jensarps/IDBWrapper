@@ -38,7 +38,7 @@
     mixin(this, defaults);
     mixin(this, kwArgs);
     onStoreReady && (this.onStoreReady = onStoreReady);
-    
+
     this.dbName = this.dbName + '-' + this.storeName;
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
@@ -124,10 +124,12 @@ this.log('db doesn\'t have the store, creating it.');
 this.log('db already has the store.');
             this.store = transaction.objectStore(this.storeName);
           }
-        }));
 
 this.log('opening done, calling success handler with store ref:', this.store);
-        this.onStoreReady(this.store);
+          this.onStoreReady(this.store);
+
+        }));
+
       });
     },
 
