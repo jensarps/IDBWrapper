@@ -110,15 +110,17 @@ console.log('Version change for db ' + this.dbName + ' detected.');
           //event.target.close();
         });
 
-        this.setVersion(hitch(this, function(){
+        this.setVersion(hitch(this, function(transaction){
           if(!this.hasObjectStore()) {
 console.log('db ' + this.dbName + ' doesn\'t have the store, creating it.');
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
           } else {
 console.log('db ' + this.dbName + ' already has the store.');
+            this.store = transaction.objectStore(this.storeName);
           }
         }));
 
+console.log('db ' + this.dbName + ' opening done, calling success handler with store ref:', this.store);
         this.onStoreReady(this.store);
       });
     },
