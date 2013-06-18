@@ -108,10 +108,10 @@ console.log('Issuing open request for', this.dbName);
 console.log('Success handler for open request for db ' + this.dbName + ' called.');
         this.db = event.target.result;
 
-        this.db.onversionchange = function (event) {
+        this.db.onversionchange = hitch(this, function (event) {
 console.log('Version change for db ' + this.dbName + ' detected.');
           //event.target.close();
-        };
+        });
 
         this.setVersion(hitch(this, function(){
           if(!this.hasObjectStore()) {
