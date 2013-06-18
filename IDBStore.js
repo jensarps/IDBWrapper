@@ -117,8 +117,10 @@ this.log('db already has the store.');
             this.store = transaction.objectStore(this.storeName);
           }
 
+          transaction.oncomplete = hitch(this, function(){
 this.log('opening done, calling success handler with store ref:', this.store);
-          this.onStoreReady(this.store);
+            this.onStoreReady(this.store);
+          });
 
         }));
 
