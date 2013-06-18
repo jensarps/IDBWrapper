@@ -80,9 +80,13 @@
 
     autoIncrement: null,
 
+    indexes: null,
+
     features: null,
 
     onStoreReady: null,
+
+    onError: null,
 
     log: function(){
       var args = [].slice.call(arguments);
