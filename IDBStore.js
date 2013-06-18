@@ -83,9 +83,12 @@
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
+console.log('Issuing open request for', ths.dbName);
+
       var openRequest = this.idb.open(this.dbName);
 
       openRequest.onerror = hitch(this, function (error) {
+
         var gotVersionErr = false;
         if ('error' in error.target) {
           gotVersionErr = error.target.error.name == "VersionError";
@@ -102,16 +105,20 @@
       });
 
       openRequest.onsuccess = hitch(this, function (event) {
+console.log('Success handler for open request for db ' + this.dbName + ' called.');
         this.db = event.target.result;
 
         this.db.onversionchange = function (event) {
-
+console.log('Version change for db ' + this.dbName + ' detected.');
           //event.target.close();
         };
 
         this.setVersion(hitch(this, function(){
           if(!this.hasObjectStore()) {
+console.log('db ' + this.dbName + ' doesn\'t have the store, creating it.');
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+          } else {
+console.log('db ' + this.dbName + ' already has the store.');
           }
         }));
 
