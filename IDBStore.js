@@ -79,19 +79,11 @@
     onStoreReady: null,
 
     openDB: function () {
-      // need to check for FF10, which implements the new setVersion API
-      this.newVersionAPI = !!(window.IDBFactory && IDBFactory.prototype.deleteDatabase);
 
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
-      var openRequest;
-      if (this.newVersionAPI) {
-        this.dbVersion = parseInt(this.dbVersion, 10);
-        openRequest = this.idb.open(this.dbName, this.dbVersion);
-      } else {
-        openRequest = this.idb.open(this.dbName);
-      }
+      var openRequest = this.idb.open(this.dbName);
 
       openRequest.onerror = hitch(this, function (error) {
         var gotVersionErr = false;
@@ -115,24 +107,21 @@
           event.target.close();
         };
 
-        if (this.newVersionAPI) {
+
+        // getObjectStore will either call
+        //   a) openExistingObjectStore, which will create a new transaction
+        //   b) createNewObjectStore, which will try to enter mutation state,
+        //      which can only be done via a versionchange transaction
+        // Since Chrome 21, both actions require to not be inside of a
+        // versionchange transaction, which will be the case if the database
+        // is new.
+        this.checkVersion(hitch(this, function () {
           this.getObjectStore(hitch(this, function () {
             setTimeout(this.onStoreReady);
           }));
-        } else {
-          // getObjectStore will either call
-          //   a) openExistingObjectStore, which will create a new transaction
-          //   b) createNewObjectStore, which will try to enter mutation state,
-          //      which can only be done via a versionchange transaction
-          // Since Chrome 21, both actions require to not be inside of a
-          // versionchange transaction, which will be the case if the database
-          // is new.
-          this.checkVersion(hitch(this, function () {
-            this.getObjectStore(hitch(this, function () {
-              setTimeout(this.onStoreReady);
-            }));
-          }), null, { waitForTransactionEnd: true });
-        }
+        }), null, { waitForTransactionEnd: true });
+
+
       });
     },
 
@@ -143,16 +132,7 @@
     },
 
     enterMutationState: function (onSuccess, onError) {
-      if (this.newVersionAPI) {
-        this.dbVersion++;
-        var openRequest = this.idb.open(this.dbName, this.dbVersion, this.dbDescription);
-        openRequest.onupgradeneeded = onSuccess;
-        openRequest.onsuccess = onError;
-        openRequest.onerror = onError;
-        openRequest.onblocked = onError;
-      } else {
-        this.setVersion(onSuccess, onError);
-      }
+      this.setVersion(onSuccess, onError);
     },
 
 
