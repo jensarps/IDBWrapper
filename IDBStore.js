@@ -83,7 +83,7 @@
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
-console.log('Issuing open request for', ths.dbName);
+console.log('Issuing open request for', this.dbName);
 
       var openRequest = this.idb.open(this.dbName);
 
