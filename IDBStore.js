@@ -96,12 +96,7 @@ console.log('Issuing open request for', this.dbName);
           gotVersionErr = error.target.errorCode == 12; // TODO: Use const
         }
 
-//        if (gotVersionErr) {
-//          this.dbVersion++;
-//          setTimeout(hitch(this, 'openDB'));
-//        } else {
-            console.error('Could not open database, error', error);
-//        }
+        console.error('Could not open database, error', error);
       });
 
       openRequest.onsuccess = hitch(this, function (event) {
