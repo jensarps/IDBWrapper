@@ -171,14 +171,6 @@
      *************************/
 
 
-    getObjectStore: function (onSuccess, onError) {
-      if (this.hasObjectStore()) {
-        this.openExistingObjectStore(onSuccess, onError);
-      } else {
-        this.createNewObjectStore(onSuccess, onError);
-      }
-    },
-
     hasObjectStore: function () {
       return this.db.objectStoreNames.contains(this.storeName);
     },
