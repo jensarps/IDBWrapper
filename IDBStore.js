@@ -96,14 +96,6 @@ this.log('Issuing open request');
       var openRequest = this.idb.open(this.dbName);
 
       openRequest.onerror = hitch(this, function (error) {
-
-        var gotVersionErr = false;
-        if ('error' in error.target) {
-          gotVersionErr = error.target.error.name == "VersionError";
-        } else if ('errorCode' in error.target) {
-          gotVersionErr = error.target.errorCode == 12; // TODO: Use const
-        }
-
         console.error('Could not open database, error', error);
       });
 
