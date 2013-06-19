@@ -172,10 +172,6 @@ this.log('opening done, calling success handler with store ref:', this.store);
       }
     },
 
-    enterMutationState: function (onSuccess, onError) {
-      this.setVersion(onSuccess, onError);
-    },
-
 
     /**************
      * versioning *
