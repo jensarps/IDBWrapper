@@ -118,7 +118,7 @@
       this.db.onversionchange = function (event) {
         this.log('Version change detected.');
         //event.target.close();
-      };
+      }.bind(this);
 
       var currentVersion = this.db.version;
       var desiredVersion = this.dbVersion;
