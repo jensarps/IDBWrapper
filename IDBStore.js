@@ -103,11 +103,11 @@ this.log('Issuing open request');
 
       var openRequest = this.idb.open(this.dbName);
 
-      openRequest.onerror = hitch(this, function (error) {
+      openRequest.onerror = function (error) {
         console.error('Could not open database, error', error);
-      });
+      }.bind(this);
 
-      openRequest.onsuccess = hitch(this, function (event) {
+      openRequest.onsuccess = function (event) {
 this.log('Success handler for open request called.');
         this.db = event.target.result;
 
@@ -116,7 +116,7 @@ this.log('Version change detected.');
           //event.target.close();
         });
 
-        this.setVersion(hitch(this, function(transaction){
+        this.setVersion(function(transaction){
           if(!this.hasObjectStore()) {
 this.log('db doesn\'t have the store, creating it.');
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
@@ -156,14 +156,14 @@ this.log(' - Index missing, creating');
 
           }
 
-          transaction.oncomplete = hitch(this, function(){
+          transaction.oncomplete = function(){
 this.log('opening done, calling success handler with store ref:', this.store);
             this.onStoreReady(this.store);
-          });
+          }.bind(this);
 
-        }));
+        }.bind(this));
 
-      });
+      }.bind(this);
     },
 
     deleteDatabase: function () {
