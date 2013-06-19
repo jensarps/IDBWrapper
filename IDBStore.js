@@ -120,6 +120,10 @@
         //event.target.close();
       };
 
+      var currentVersion = this.db.version;
+      var desiredVersion = this.dbVersion;
+      this.log('Current version is', currentVersion, 'Desired version is', desiredVersion);
+
       this.setVersion(function (transaction) {
         if (!this.db.objectStoreNames.contains(this.storeName)) {
           this.log('db doesn\'t have the store, creating it.');
@@ -128,7 +132,7 @@
           this.log('db already has the store.');
           this.store = transaction.objectStore(this.storeName);
         }
-        
+
         var indexesSetup = this._handleIndexSetup();
 
         transaction.oncomplete = function () {
