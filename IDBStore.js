@@ -124,23 +124,43 @@
       var desiredVersion = this.dbVersion;
       this.log('Current version is', currentVersion, 'Desired version is', desiredVersion);
 
-      this.setVersion(function (transaction) {
-        if (!this.db.objectStoreNames.contains(this.storeName)) {
-          this.log('db doesn\'t have the store, creating it.');
-          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
-        } else {
-          this.log('db already has the store.');
-          this.store = transaction.objectStore(this.storeName);
-        }
 
-        var indexesSetup = this._handleIndexSetup();
 
-        transaction.oncomplete = function () {
-          this.log('opening done, calling success handler with store ref:', this.store);
-          this.onStoreReady(this.store);
+      if (typeof this.db.setVersion != 'undefined') {
+        this.log('setVersion() is available');
+
+        var onError = function (error) { console.error('Failed to set version.', error); };
+        var versionRequest = this.db.setVersion(this.dbVersion);
+        versionRequest.onerror = onError;
+        versionRequest.onblocked = onError;
+
+        versionRequest.onsuccess = function versionRequestSuccessHandler (evt) {
+          this._handleObjectStoreCreation(evt.target.result);
         }.bind(this);
 
-      }.bind(this));
+      } else {
+        this.log('setVersion() is not available');
+
+        var rwTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
+        this._handleObjectStoreCreation(rwTransaction);
+      }
+    },
+
+    _handleObjectStoreCreation: function (transaction) {
+      if (!this.db.objectStoreNames.contains(this.storeName)) {
+        this.log('db doesn\'t have the store, creating it.');
+        this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+      } else {
+        this.log('db already has the store.');
+        this.store = transaction.objectStore(this.storeName);
+      }
+
+      var indexesSetup = this._handleIndexSetup();
+
+      transaction.oncomplete = function () {
+        this.log('opening done, calling success handler with store ref:', this.store);
+        this.onStoreReady(this.store);
+      }.bind(this);
     },
 
     _handleIndexSetup: function () {
