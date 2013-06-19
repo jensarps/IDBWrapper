@@ -24,7 +24,7 @@
     autoIncrement: true,
     onStoreReady: function () {
     },
-    onError: function(error){
+    onError: function (error) {
       throw error;
     },
     indexes: []
@@ -88,7 +88,7 @@
 
     onError: null,
 
-    log: function(){
+    log: function () {
       var args = [].slice.call(arguments);
       args.unshift('IDBWrapper @ ' + this.dbName + ': ');
       console.log.apply(console, args);
@@ -99,7 +99,7 @@
       var features = this.features = {};
       features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
 
-this.log('Issuing open request');
+      this.log('Issuing open request');
 
       var openRequest = this.idb.open(this.dbName);
 
@@ -108,27 +108,28 @@ this.log('Issuing open request');
       }.bind(this);
 
       openRequest.onsuccess = function (event) {
-this.log('Success handler for open request called.');
+        this.log('Success handler for open request called.');
         this.db = event.target.result;
 
         this.db.onversionchange = function (event) {
-this.log('Version change detected.');
+          this.log('Version change detected.');
           //event.target.close();
+        };
 
-        this.setVersion(function(transaction){
-          if(!this.db.objectStoreNames.contains(this.storeName)) {
-this.log('db doesn\'t have the store, creating it.');
+        this.setVersion(function (transaction) {
+          if (!this.db.objectStoreNames.contains(this.storeName)) {
+            this.log('db doesn\'t have the store, creating it.');
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
           } else {
-this.log('db already has the store.');
+            this.log('db already has the store.');
             this.store = transaction.objectStore(this.storeName);
           }
 
-          for(var i = 0, m = this.indexes.length; i<m; i++) {
+          for (var i = 0, m = this.indexes.length; i < m; i++) {
             var indexData = this.indexes[i],
-                indexName = indexData.name;
+              indexName = indexData.name;
 
-this.log('Checking index:', indexName);
+            this.log('Checking index:', indexName);
 
             if (!indexName) {
               this.onError(new Error('Cannot create index: No index name given.'));
@@ -138,25 +139,25 @@ this.log('Checking index:', indexName);
             this.normalizeIndexData(indexData);
 
             if (this.hasIndex(indexName)) {
-this.log(' - Index already present');
+              this.log(' - Index already present');
               // check if it complies
               var actualIndex = this.store.index(indexName);
               var complies = this.indexComplies(actualIndex, indexData);
               if (!complies) {
-this.log(' - - Index differs, recreating');
+                this.log(' - - Index differs, recreating');
                 // index differs, need to delete and re-create
                 this.store.deleteIndex(indexName);
                 this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
               }
             } else {
-this.log(' - Index missing, creating');
+              this.log(' - Index missing, creating');
               this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
             }
 
           }
 
-          transaction.oncomplete = function(){
-this.log('opening done, calling success handler with store ref:', this.store);
+          transaction.oncomplete = function () {
+            this.log('opening done, calling success handler with store ref:', this.store);
             this.onStoreReady(this.store);
           }.bind(this);
 
