@@ -215,26 +215,6 @@ this.log('opening done, calling success handler with store ref:', this.store);
       return this.db.objectStoreNames.contains(this.storeName);
     },
 
-    openExistingObjectStore: function (onSuccess, onError) {
-      var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      this.store = emptyTransaction.objectStore(this.storeName);
-      emptyTransaction.abort();
-      onSuccess && onSuccess(this.store);
-    },
-
-    deleteObjectStore: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Failed to delete objectStore.', error);
-      });
-      this.enterMutationState(hitch(this, function (evt) {
-        var db = evt.target.result;
-        db.deleteObjectStore(this.storeName);
-        var success = !this.hasObjectStore();
-        onSuccess && success && onSuccess();
-        onError && !success && onError();
-      }), onError);
-    },
-
 
     /*********************
      * data manipulation *
