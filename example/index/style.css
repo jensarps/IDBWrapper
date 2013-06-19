@@ -35,9 +35,6 @@ a {
 	-moz-box-flex: 1;
   -ms-flex: 1;
 }
-.container {
-	overflow: auto;
-}
 
 /* head */
 #head {
@@ -57,7 +54,6 @@ a {
 
 /* table */
 #results-container {
-	border-right: solid 1px black;
 	padding: 10px;
 	overflow: auto;
 }
@@ -83,18 +79,18 @@ a {
 }
 
 /* input */
-#input {
+#input,
+#query {
 	padding: 10px;
-	width: 300px;
+	width: 350px;
+  border-left: solid 1px black;
 }
-#input div {
+#input div,
+#query div{
 	padding: 5px;
 }
-#input label {
+#input label,
+#query label{
 	display: inline-block;
-	width: 100px;
-}
-
-#clear {
-	padding: 10px;
+	width: 120px;
 }
