@@ -128,37 +128,8 @@
           this.log('db already has the store.');
           this.store = transaction.objectStore(this.storeName);
         }
-
-        for (var i = 0, m = this.indexes.length; i < m; i++) {
-          var indexData = this.indexes[i],
-            indexName = indexData.name;
-
-          this.log('Checking index:', indexName);
-
-          if (!indexName) {
-            this.onError(new Error('Cannot create index: No index name given.'));
-            return;
-          }
-
-          this.normalizeIndexData(indexData);
-
-          if (this.hasIndex(indexName)) {
-            this.log(' - Index already present');
-            // check if it complies
-            var actualIndex = this.store.index(indexName);
-            var complies = this.indexComplies(actualIndex, indexData);
-            if (!complies) {
-              this.log(' - - Index differs, recreating');
-              // index differs, need to delete and re-create
-              this.store.deleteIndex(indexName);
-              this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
-            }
-          } else {
-            this.log(' - Index missing, creating');
-            this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
-          }
-
-        }
+        
+        var indexesSetup = this._handleIndexSetup();
 
         transaction.oncomplete = function () {
           this.log('opening done, calling success handler with store ref:', this.store);
@@ -166,6 +137,40 @@
         }.bind(this);
 
       }.bind(this));
+    },
+
+    _handleIndexSetup: function () {
+      for (var i = 0, m = this.indexes.length; i < m; i++) {
+        var indexData = this.indexes[i],
+            indexName = indexData.name;
+
+        this.log('Checking index:', indexName);
+
+        if (!indexName) {
+          this.onError(new Error('Cannot create index: No index name given.'));
+          return false;
+        }
+
+        this.normalizeIndexData(indexData);
+
+        if (this.hasIndex(indexName)) {
+          this.log(' - Index already present');
+          // check if it complies
+          var actualIndex = this.store.index(indexName);
+          var complies = this.indexComplies(actualIndex, indexData);
+          if (!complies) {
+            this.log(' - - Index differs, recreating');
+            // index differs, need to delete and re-create
+            this.store.deleteIndex(indexName);
+            this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+          }
+        } else {
+          this.log(' - Index missing, creating');
+          this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+        }
+
+        return true;
+      }
     },
 
     deleteDatabase: function () {
