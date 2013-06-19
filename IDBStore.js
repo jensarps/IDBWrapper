@@ -117,7 +117,7 @@ this.log('Version change detected.');
         });
 
         this.setVersion(function(transaction){
-          if(!this.hasObjectStore()) {
+          if(!this.db.objectStoreNames.contains(this.storeName)) {
 this.log('db doesn\'t have the store, creating it.');
             this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
           } else {
