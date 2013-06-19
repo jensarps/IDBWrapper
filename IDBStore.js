@@ -107,63 +107,65 @@
         console.error('Could not open database, error', error);
       }.bind(this);
 
-      openRequest.onsuccess = function (event) {
-        this.log('Success handler for open request called.');
-        this.db = event.target.result;
+      openRequest.onsuccess = this._onOpenRequestSuccess.bind(this);
+    },
 
-        this.db.onversionchange = function (event) {
-          this.log('Version change detected.');
-          //event.target.close();
-        };
+    _onOpenRequestSuccess: function(event){
 
-        this.setVersion(function (transaction) {
-          if (!this.db.objectStoreNames.contains(this.storeName)) {
-            this.log('db doesn\'t have the store, creating it.');
-            this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
-          } else {
-            this.log('db already has the store.');
-            this.store = transaction.objectStore(this.storeName);
+      this.log('Success handler for open request called.');
+      this.db = event.target.result;
+
+      this.db.onversionchange = function (event) {
+        this.log('Version change detected.');
+        //event.target.close();
+      };
+
+      this.setVersion(function (transaction) {
+        if (!this.db.objectStoreNames.contains(this.storeName)) {
+          this.log('db doesn\'t have the store, creating it.');
+          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+        } else {
+          this.log('db already has the store.');
+          this.store = transaction.objectStore(this.storeName);
+        }
+
+        for (var i = 0, m = this.indexes.length; i < m; i++) {
+          var indexData = this.indexes[i],
+            indexName = indexData.name;
+
+          this.log('Checking index:', indexName);
+
+          if (!indexName) {
+            this.onError(new Error('Cannot create index: No index name given.'));
+            return;
           }
 
-          for (var i = 0, m = this.indexes.length; i < m; i++) {
-            var indexData = this.indexes[i],
-              indexName = indexData.name;
+          this.normalizeIndexData(indexData);
 
-            this.log('Checking index:', indexName);
-
-            if (!indexName) {
-              this.onError(new Error('Cannot create index: No index name given.'));
-              return;
-            }
-
-            this.normalizeIndexData(indexData);
-
-            if (this.hasIndex(indexName)) {
-              this.log(' - Index already present');
-              // check if it complies
-              var actualIndex = this.store.index(indexName);
-              var complies = this.indexComplies(actualIndex, indexData);
-              if (!complies) {
-                this.log(' - - Index differs, recreating');
-                // index differs, need to delete and re-create
-                this.store.deleteIndex(indexName);
-                this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
-              }
-            } else {
-              this.log(' - Index missing, creating');
+          if (this.hasIndex(indexName)) {
+            this.log(' - Index already present');
+            // check if it complies
+            var actualIndex = this.store.index(indexName);
+            var complies = this.indexComplies(actualIndex, indexData);
+            if (!complies) {
+              this.log(' - - Index differs, recreating');
+              // index differs, need to delete and re-create
+              this.store.deleteIndex(indexName);
               this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
             }
-
+          } else {
+            this.log(' - Index missing, creating');
+            this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
           }
 
-          transaction.oncomplete = function () {
-            this.log('opening done, calling success handler with store ref:', this.store);
-            this.onStoreReady(this.store);
-          }.bind(this);
+        }
 
-        }.bind(this));
+        transaction.oncomplete = function () {
+          this.log('opening done, calling success handler with store ref:', this.store);
+          this.onStoreReady(this.store);
+        }.bind(this);
 
-      }.bind(this);
+      }.bind(this));
     },
 
     deleteDatabase: function () {
