@@ -202,15 +202,6 @@ this.log('opening done, calling success handler with store ref:', this.store);
       };
     },
 
-    /*************************
-     * object store handling *
-     *************************/
-
-
-    hasObjectStore: function () {
-      return this.db.objectStoreNames.contains(this.storeName);
-    },
-
 
     /*********************
      * data manipulation *
