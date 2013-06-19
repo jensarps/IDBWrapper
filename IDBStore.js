@@ -111,10 +111,9 @@ this.log('Issuing open request');
 this.log('Success handler for open request called.');
         this.db = event.target.result;
 
-        this.db.onversionchange = hitch(this, function (event) {
+        this.db.onversionchange = function (event) {
 this.log('Version change detected.');
           //event.target.close();
-        });
 
         this.setVersion(function(transaction){
           if(!this.db.objectStoreNames.contains(this.storeName)) {
@@ -526,24 +525,6 @@ this.log('opening done, calling success handler with store ref:', this.store);
       }
     }
     return target;
-  };
-  var hitch = function (scope, method) {
-    if (!method) {
-      method = scope;
-      scope = null;
-    }
-    if (typeof method == "string") {
-      scope = scope || window;
-      if (!scope[method]) {
-        throw(['method not found']);
-      }
-      return function () {
-        return scope[method].apply(scope, arguments || []);
-      };
-    }
-    return !scope ? method : function () {
-      return method.apply(scope, arguments || []);
-    };
   };
 
   return IDBStore;
