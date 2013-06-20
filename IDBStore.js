@@ -89,9 +89,7 @@
       this.log('Issuing open request');
 
       var openRequest = this.idb.open(this.dbName);
-
       openRequest.onerror = this.onError;
-
       openRequest.onsuccess = this._onOpenRequestSuccess.bind(this);
     },
 
@@ -108,8 +106,6 @@
       var currentVersion = this.db.version;
       var desiredVersion = this.dbVersion;
       this.log('Current version is', currentVersion, 'Desired version is', desiredVersion);
-
-
 
       if (typeof this.db.setVersion != 'undefined') {
         this.log('setVersion() is available');
@@ -283,12 +279,6 @@
         onSuccess(event.target.result);
       };
       clearRequest.onerror = onError;
-    },
-
-    _getUID: function () {
-      // FF bails at times on non-numeric ids. So we take an even
-      // worse approach now, using current time as id. Sigh.
-      return +new Date();
     },
 
 
