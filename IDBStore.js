@@ -353,7 +353,7 @@
         cursorTarget = cursorTarget.index(options.index);
       }
 
-      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.cursor[directionType]);
+      var cursorRequest = cursorTarget.openCursor(options.keyRange, this.consts[directionType]);
       cursorRequest.onerror = options.onError;
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
