@@ -47,20 +47,17 @@
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
     this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
-    
-    this.consts = window.IDBTransaction || window.webkitIDBTransaction;
-    fixupConstants(this.consts, {
-      'READ_ONLY': 'readonly',
-      'READ_WRITE': 'readwrite',
-      'VERSION_CHANGE': 'versionchange'
-    });
-    this.cursor = window.IDBCursor || window.webkitIDBCursor;
-    fixupConstants(this.cursor, {
-      'NEXT': 'next',
+
+    this.consts = {
+      'READ_ONLY':         'readonly',
+      'READ_WRITE':        'readwrite',
+      'VERSION_CHANGE':    'versionchange',
+      'NEXT':              'next',
       'NEXT_NO_DUPLICATE': 'nextunique',
-      'PREV': 'prev',
+      'PREV':              'prev',
       'PREV_NO_DUPLICATE': 'prevunique'
-    });
+    };
+
     this.openDB();
   };
 
