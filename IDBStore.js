@@ -32,13 +32,6 @@
 
   IDBStore = function (kwArgs, onStoreReady) {
 
-    function fixupConstants (object, constants) {
-      for (var prop in constants) {
-        if (!(prop in object))
-          object[prop] = constants[prop];
-      }
-    }
-
     mixin(this, defaults);
     mixin(this, kwArgs);
     onStoreReady && (this.onStoreReady = onStoreReady);
