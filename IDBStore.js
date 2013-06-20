@@ -88,9 +88,10 @@
 
     openDB: function () {
 
-      var features = this.features = {};
-      features.hasAutoIncrement = !window.mozIndexedDB; // TODO: Still, really?
-
+      this.features = {
+        hasAutoIncrement: true
+      };
+      
       this.log('Issuing open request');
 
       var openRequest = this.idb.open(this.dbName);
