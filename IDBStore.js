@@ -334,10 +334,6 @@
      */
     indexComplies: function (actual, expected) {
       var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
-        // IE10 returns undefined for no multiEntry
-        if (key == 'multiEntry' && actual[key] === undefined && expected[key] === false) {
-          return true;
-        }
         return expected[key] == actual[key];
       });
       return complies;
