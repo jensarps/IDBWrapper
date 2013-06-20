@@ -38,8 +38,8 @@
 
     this.dbName = this.dbName + '-' + this.storeName;
 
-    this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
-    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
+    this.idb = window.webkitIndexedDB;
+    this.keyRange = window.webkitIDBKeyRange;
 
     this.consts = {
       'READ_ONLY':         'readonly',
