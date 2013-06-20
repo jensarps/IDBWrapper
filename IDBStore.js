@@ -90,9 +90,7 @@
 
       var openRequest = this.idb.open(this.dbName);
 
-      openRequest.onerror = function (error) {
-        console.error('Could not open database, error', error);
-      }.bind(this);
+      openRequest.onerror = this.onError;
 
       openRequest.onsuccess = this._onOpenRequestSuccess.bind(this);
     },
@@ -116,10 +114,9 @@
       if (typeof this.db.setVersion != 'undefined') {
         this.log('setVersion() is available');
 
-        var onError = function (error) { console.error('Failed to set version.', error); };
         var versionRequest = this.db.setVersion(this.dbVersion);
-        versionRequest.onerror = onError;
-        versionRequest.onblocked = onError;
+        versionRequest.onerror = this.onError;
+        versionRequest.onblocked = this.onError;
 
         versionRequest.onsuccess = function versionRequestSuccessHandler (evt) {
           this._handleObjectStoreCreation(evt.target.result);
