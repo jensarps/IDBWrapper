@@ -74,8 +74,6 @@
 
     indexes: null,
 
-    features: null,
-
     onStoreReady: null,
 
     onError: null,
@@ -87,10 +85,6 @@
     },
 
     openDB: function () {
-
-      this.features = {
-        hasAutoIncrement: true
-      };
 
       this.log('Issuing open request');
 
