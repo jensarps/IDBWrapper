@@ -91,7 +91,7 @@
       this.features = {
         hasAutoIncrement: true
       };
-      
+
       this.log('Issuing open request');
 
       var openRequest = this.idb.open(this.dbName);
@@ -149,6 +149,10 @@
       }
 
       var indexesSetup = this._handleIndexSetup();
+
+      if(!indexesSetup) {
+        return;
+      }
 
       transaction.oncomplete = function () {
         this.log('opening done, calling success handler with store ref:', this.store);
