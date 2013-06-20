@@ -98,11 +98,6 @@
       this.log('Success handler for open request called.');
       this.db = event.target.result;
 
-      this.db.onversionchange = function (event) {
-        this.log('Version change detected.');
-        //event.target.close();
-      }.bind(this);
-
       var currentVersion = this.db.version;
       var desiredVersion = this.dbVersion;
       this.log('Current version is', currentVersion, 'Desired version is', desiredVersion);
