@@ -192,9 +192,9 @@
           this.log(' - Index missing, creating');
           this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
         }
-
-        return true;
       }
+      
+      return true;
     },
 
     deleteDatabase: function () {
