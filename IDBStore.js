@@ -201,28 +201,6 @@
     },
 
 
-    /**************
-     * versioning *
-     **************/
-
-    getVersion: function () {
-      return this.db.version;
-    },
-
-    setVersion: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Failed to set version.', error);
-      });
-      var versionRequest = this.db.setVersion(this.dbVersion);
-      versionRequest.onerror = onError;
-      versionRequest.onblocked = onError;
-
-      versionRequest.onsuccess = function (evt) {
-        onSuccess(evt.target.result);
-      };
-    },
-
-
     /*********************
      * data manipulation *
      *********************/
