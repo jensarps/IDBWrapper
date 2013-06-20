@@ -205,14 +205,6 @@
      * versioning *
      **************/
 
-    checkVersion: function (onSuccess, onError) {
-      if (this.getVersion() != this.dbVersion) {
-        this.setVersion(onSuccess, onError);
-      } else {
-        onSuccess && onSuccess();
-      }
-    },
-
     getVersion: function () {
       return this.db.version;
     },
