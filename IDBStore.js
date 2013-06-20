@@ -211,9 +211,6 @@
         console.error('Could not write data.', error);
       });
       onSuccess || (onSuccess = noop);
-      if (typeof dataObj[this.keyPath] == 'undefined' && !this.features.hasAutoIncrement) {
-        dataObj[this.keyPath] = this._getUID();
-      }
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
       putRequest.onsuccess = function (event) {
