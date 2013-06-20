@@ -46,6 +46,8 @@
     this.dbName = this.dbName + '-' + this.storeName;
 
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
+    
     this.consts = window.IDBTransaction || window.webkitIDBTransaction;
     fixupConstants(this.consts, {
       'READ_ONLY': 'readonly',
@@ -193,7 +195,7 @@
           this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
         }
       }
-      
+
       return true;
     },
 
