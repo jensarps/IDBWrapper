@@ -285,6 +285,14 @@
       cursorRequest.onError = onError;
     },
 
+    /**
+     * Clears the store, i.e. deletes all entries in the store.
+     *
+     * @param {Function} [onSuccess] A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} [onError] A callback that will be called if an
+     *  error occurred during the operation.
+     */
     clear: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not clear store.', error);
