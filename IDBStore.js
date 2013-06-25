@@ -231,10 +231,27 @@
         console.error('Could not write data.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null,
+          putRequest;
+
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      var putRequest = putTransaction.objectStore(this.storeName).put(dataObj);
+      putTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      putTransaction.onabort = onError;
+      putTransaction.onerror = onError;
+
+      if (this.keyPath !== null) { // in-line keys
+        putRequest = putTransaction.objectStore(this.storeName).put(value);
+      } else { // out-of-line keys
+        putRequest = putTransaction.objectStore(this.storeName).put(value, key);
+      }
       putRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       putRequest.onerror = onError;
     },
@@ -501,7 +518,6 @@
       };
       clearRequest.onerror = onError;
     },
-
 
     /************
      * indexing *
