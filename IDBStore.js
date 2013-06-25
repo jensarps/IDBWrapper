@@ -335,21 +335,68 @@
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       var store = getAllTransaction.objectStore(this.storeName);
       if (store.getAll) {
-        var getAllRequest = store.getAll();
-        getAllRequest.onsuccess = function (event) {
-          onSuccess(event.target.result);
-        };
-        getAllRequest.onerror = onError;
+        this._getAllNative(getAllTransaction, store, onSuccess, onError);
       } else {
-        this._getAllCursor(getAllTransaction, onSuccess, onError);
+        this._getAllCursor(getAllTransaction, store, onSuccess, onError);
       }
     },
 
-    _getAllCursor: function (tr, onSuccess, onError) {
-      var all = [];
-      var store = tr.objectStore(this.storeName);
-      var cursorRequest = store.openCursor();
+    /**
+     * Implements getAll for IDB implementations that have a non-standard
+     * getAll() method.
+     *
+     * @param {Object} getAllTransaction An open READ transaction.
+     * @param {Object} store A reference to the store.
+     * @param {Function} onSuccess A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} onError A callback that will be called if an
+     *  error occurred during the operation.
+     * @private
+     */
+    _getAllNative: function (getAllTransaction, store, onSuccess, onError) {
+      var hasSuccess = false,
+          result = null;
 
+      getAllTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      getAllTransaction.onabort = onError;
+      getAllTransaction.onerror = onError;
+
+      var getAllRequest = store.getAll();
+      getAllRequest.onsuccess = function (event) {
+        hasSuccess = true;
+        result = event.target.result;
+      };
+      getAllRequest.onerror = onError;
+    },
+
+    /**
+     * Implements getAll for IDB implementations that do not have a getAll()
+     * method.
+     *
+     * @param {Object} getAllTransaction An open READ transaction.
+     * @param {Object} store A reference to the store.
+     * @param {Function} onSuccess A callback that will be called if the
+     *  operation was successful.
+     * @param {Function} onError A callback that will be called if an
+     *  error occurred during the operation.
+     * @private
+     */
+    _getAllCursor: function (getAllTransaction, store, onSuccess, onError) {
+      var all = [],
+          hasSuccess = false,
+          result = null;
+
+      getAllTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      getAllTransaction.onabort = onError;
+      getAllTransaction.onerror = onError;
+
+      var cursorRequest = store.openCursor();
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
@@ -357,7 +404,8 @@
           cursor['continue']();
         }
         else {
-          onSuccess(all);
+          hasSuccess = true;
+          result = all;
         }
       };
       cursorRequest.onError = onError;
@@ -376,10 +424,22 @@
         console.error('Could not clear store.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+
       var clearTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
+      clearTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      clearTransaction.onabort = onError;
+      clearTransaction.onerror = onError;
+
       var clearRequest = clearTransaction.objectStore(this.storeName).clear();
       clearRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       clearRequest.onerror = onError;
     },
