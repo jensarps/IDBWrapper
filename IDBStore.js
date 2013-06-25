@@ -249,6 +249,14 @@
       deleteRequest.onerror = onError;
     },
 
+    /**
+     * Fetches all entries in the store.
+     *
+     * @param {Function} [onSuccess] A callback that is called if the operation
+     *  was successful. Will receive an array of objects.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     getAll: function (onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
