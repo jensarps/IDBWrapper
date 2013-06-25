@@ -227,7 +227,9 @@
         onSuccess = value;
         value = key;
       }
+      this.log('put() called for', value);
       onError || (onError = function (error) {
+        this.log('Error encountered during out(). Error is', error);
         console.error('Could not write data.', error);
       });
       onSuccess || (onSuccess = noop);
@@ -236,20 +238,24 @@
           result = null,
           putRequest;
 
+      this.log('starting put transaction');
       var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      putTransaction.oncomplete = function () {
+      putTransaction.oncomplete = function (event) {
+        this.log('put transaction complete. Event is', event);
         var callback = hasSuccess ? onSuccess : onError;
         callback(result);
       };
       putTransaction.onabort = onError;
       putTransaction.onerror = onError;
 
+      this.log('starting put request');
       if (this.keyPath !== null) { // in-line keys
         putRequest = putTransaction.objectStore(this.storeName).put(value);
       } else { // out-of-line keys
         putRequest = putTransaction.objectStore(this.storeName).put(value, key);
       }
       putRequest.onsuccess = function (event) {
+        this.log('put request success. Event is:', event);
         hasSuccess = true;
         result = event.target.result;
       };
@@ -267,7 +273,9 @@
      *  occurred during the operation.
      */
     get: function (key, onSuccess, onError) {
+      this.log('get() called for key', key);
       onError || (onError = function (error) {
+        this.log('Error encountered during get(). Error is', error);
         console.error('Could not read data.', error);
       });
       onSuccess || (onSuccess = noop);
@@ -275,15 +283,19 @@
       var hasSuccess = false,
           result = null;
 
+      this.log('opening get transaction');
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
-      getTransaction.oncomplete = function () {
+      getTransaction.oncomplete = function (event) {
+        this.log('get transaction complete. Event is', event);
         var callback = hasSuccess ? onSuccess : onError;
         callback(result);
       };
       getTransaction.onabort = onError;
       getTransaction.onerror = onError;
+      this.log('starting get request');
       var getRequest = getTransaction.objectStore(this.storeName).get(key);
       getRequest.onsuccess = function (event) {
+        this.log('get request success. Event is', event);
         hasSuccess = true;
         result = event.target.result;
       };
