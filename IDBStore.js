@@ -191,7 +191,12 @@
      *********************/
 
 
-    put: function (dataObj, onSuccess, onError) {
+    put: function (key, value, onSuccess, onError) {
+      if (this.keyPath !== null) {
+        onError = onSuccess;
+        onSuccess = value;
+        value = key;
+      }
       onError || (onError = function (error) {
         console.error('Could not write data.', error);
       });
