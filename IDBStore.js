@@ -204,6 +204,16 @@
       putRequest.onerror = onError;
     },
 
+    /**
+     * Retrieves an object from the store. If no entry exists with the given id,
+     * the success handler will be called with null as first and only argument.
+     *
+     * @param {*} key The id of the object to fetch.
+     * @param {Function} [onSuccess] A callback that is called if fetching
+     *  was successful. Will receive the object as only argument.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     get: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not read data.', error);
