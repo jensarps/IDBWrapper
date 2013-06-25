@@ -241,10 +241,22 @@
         console.error('Could not remove data.', error);
       });
       onSuccess || (onSuccess = noop);
+
+      var hasSuccess = false,
+          result = null;
+
       var removeTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
-      var deleteRequest = removeTransaction.objectStore(this.storeName).delete(key);
+      removeTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      removeTransaction.onabort = onError;
+      removeTransaction.onerror = onError;
+
+      var deleteRequest = removeTransaction.objectStore(this.storeName)['delete'](key);
       deleteRequest.onsuccess = function (event) {
-        onSuccess(event.target.result);
+        hasSuccess = true;
+        result = event.target.result;
       };
       deleteRequest.onerror = onError;
     },
