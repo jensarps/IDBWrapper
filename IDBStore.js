@@ -386,7 +386,7 @@
           callback(cursor.value, cursor, cursorTransaction);
           cursor['continue']();
         } else {
-          options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction)
+          options.onEnd && options.onEnd() || callback(null, cursor, cursorTransaction);
         }
       };
     },
