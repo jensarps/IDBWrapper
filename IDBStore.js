@@ -383,7 +383,6 @@
         } else if (type == "put") {
           var putRequest;
           if (this.keyPath !== null) { // in-line keys
-            this._addIdPropertyIfNeeded(value);
             putRequest = batchTransaction.objectStore(this.storeName).put(value);
           } else { // out-of-line keys
             putRequest = batchTransaction.objectStore(this.storeName).put(value, key);
