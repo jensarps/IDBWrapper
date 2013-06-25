@@ -227,6 +227,15 @@
       getRequest.onerror = onError;
     },
 
+    /**
+     * Removes an object from the store.
+     *
+     * @param {*} key The id of the object to remove.
+     * @param {Function} [onSuccess] A callback that is called if the removal
+     *  was successful.
+     * @param {Function} [onError] A callback that will be called if an error
+     *  occurred during the operation.
+     */
     remove: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
         console.error('Could not remove data.', error);
