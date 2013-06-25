@@ -547,10 +547,9 @@
      * @return {Boolean} Whether both index definitions are identical
      */
     indexComplies: function (actual, expected) {
-      var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
+      return ['keyPath', 'unique', 'multiEntry'].every(function (key) {
         return expected[key] == actual[key];
       });
-      return complies;
     },
 
     getIndexList: function () {
