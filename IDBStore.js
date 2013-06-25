@@ -1,3 +1,6 @@
+/*jshint expr:true */
+/*global window:false, console:false, define:false */
+
 /*
  * IDBWrapper - A cross-browser wrapper for IndexedDB
  * Copyright (c) 2011 Jens Arps
