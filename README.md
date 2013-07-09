@@ -4,7 +4,7 @@ About
 This is a wrapper for indexedDB. It is meant to
 
 a) ease the use of indexedDB and abstract away the differences between the
-existing impls in Chrome, Firefox and IE10 (yes, it works in all three), and
+existing impls in Chrome, Firefox, IE10 and Opera 15 (yes, it works in all four), and
 
 b) show how IDB works. The code is split up into short methods, so that it's
 easy to see what happens in what method.
