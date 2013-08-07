@@ -105,8 +105,8 @@
 
     onStoreReady && (this.onStoreReady = onStoreReady);
 
-    this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
-    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
+    this.idb = global.indexedDB || global.webkitIndexedDB || global.mozIndexedDB;
+    this.keyRange = global.IDBKeyRange || global.webkitIDBKeyRange || global.mozIDBKeyRange;
 
     this.consts = {
       'READ_ONLY':         'readonly',
@@ -234,7 +234,7 @@
     openDB: function () {
 
       var features = this.features = {};
-      features.hasAutoIncrement = !window.mozIndexedDB;
+      features.hasAutoIncrement = !global.mozIndexedDB;
 
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
       var preventSuccessCallback = false;
@@ -450,7 +450,7 @@
 
       var hasSuccess = false,
           result = null;
-      
+
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       getTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
@@ -526,7 +526,7 @@
       };
       batchTransaction.onabort = onError;
       batchTransaction.onerror = onError;
-      
+
       var count = dataArray.length;
       var called = false;
       var hasSuccess = false;
