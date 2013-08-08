@@ -1,4 +1,3 @@
-/*jshint expr:true */
 /*global window:false, self:false, console:false, define:false, module:false */
 
 /**
