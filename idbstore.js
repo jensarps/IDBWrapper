@@ -1,4 +1,4 @@
-/*global window:false, self:false, console:false, define:false, module:false */
+/*global window:false, self:false, define:false, module:false */
 
 /**
  * @license IDBWrapper - A cross-browser wrapper for IndexedDB
@@ -404,7 +404,7 @@
         value = key;
       }
       onError || (onError = function (error) {
-        console.error('Could not write data.', error);
+        throw error;
       });
       onSuccess || (onSuccess = noop);
 
@@ -445,7 +445,7 @@
      */
     get: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
-        console.error('Could not read data.', error);
+        throw error;
       });
       onSuccess || (onSuccess = noop);
 
@@ -478,7 +478,7 @@
      */
     remove: function (key, onSuccess, onError) {
       onError || (onError = function (error) {
-        console.error('Could not remove data.', error);
+        throw error;
       });
       onSuccess || (onSuccess = noop);
 
@@ -513,7 +513,7 @@
      */
     batch: function (dataArray, onSuccess, onError) {
       onError || (onError = function (error) {
-        console.error('Could not apply batch.', error);
+        throw error;
       });
       onSuccess || (onSuccess = noop);
 
@@ -581,7 +581,7 @@
      */
     getAll: function (onSuccess, onError) {
       onError || (onError = function (error) {
-        console.error('Could not read data.', error);
+        throw error;
       });
       onSuccess || (onSuccess = noop);
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
@@ -673,7 +673,7 @@
      */
     clear: function (onSuccess, onError) {
       onError || (onError = function (error) {
-        console.error('Could not clear store.', error);
+        throw error;
       });
       onSuccess || (onSuccess = noop);
 
@@ -788,7 +788,7 @@
      *  to the store in the onItem callback
      * @param {Function} [options.onEnd=null] A callback to be called after
      *  iteration has ended
-     * @param {Function} [options.onError=console.error] A callback to be called
+     * @param {Function} [options.onError=throw] A callback to be called
      *  if an error occurred during the operation.
      */
     iterate: function (onItem, options) {
@@ -801,7 +801,7 @@
         writeAccess: false,
         onEnd: null,
         onError: function (error) {
-          console.error('Could not open cursor.', error);
+          throw error;
         }
       }, options || {});
 
@@ -859,7 +859,7 @@
      * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
      *  duplicate matches
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
-     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
      */
     query: function (onSuccess, options) {
@@ -883,7 +883,7 @@
      * @param {Object} [options] An object defining specific options
      * @param {Object} [options.index=null] An IDBIndex to operate on
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
-     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
      */
     count: function (onSuccess, options) {
@@ -894,7 +894,7 @@
       }, options || {});
 
       var onError = options.onError || function (error) {
-        console.error('Could not open cursor.', error);
+        throw error;
       };
 
       var hasSuccess = false,
