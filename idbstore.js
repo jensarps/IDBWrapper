@@ -20,6 +20,10 @@
 
   'use strict';
 
+  var defaultErrorHandler = function (error) {
+    throw error;
+  };
+
   var defaults = {
     storeName: 'Store',
     storePrefix: 'IDBWrapper-',
@@ -28,9 +32,7 @@
     autoIncrement: true,
     onStoreReady: function () {
     },
-    onError: function(error){
-      throw error;
-    },
+    onError: defaultErrorHandler,
     indexes: []
   };
 
@@ -403,9 +405,7 @@
         onSuccess = value;
         value = key;
       }
-      onError || (onError = function (error) {
-        throw error;
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -444,9 +444,7 @@
      *  occurred during the operation.
      */
     get: function (key, onSuccess, onError) {
-      onError || (onError = function (error) {
-        throw error;
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -477,9 +475,7 @@
      *  occurred during the operation.
      */
     remove: function (key, onSuccess, onError) {
-      onError || (onError = function (error) {
-        throw error;
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -512,9 +508,7 @@
      *  occurred during one of the operations.
      */
     batch: function (dataArray, onSuccess, onError) {
-      onError || (onError = function (error) {
-        throw error;
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       if(Object.prototype.toString.call(dataArray) != '[object Array]'){
@@ -580,9 +574,7 @@
      *  occurred during the operation.
      */
     getAll: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        throw error;
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       var store = getAllTransaction.objectStore(this.storeName);
@@ -672,9 +664,7 @@
      *  error occurred during the operation.
      */
     clear: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        throw error;
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -800,9 +790,7 @@
         keyRange: null,
         writeAccess: false,
         onEnd: null,
-        onError: function (error) {
-          throw error;
-        }
+        onError: defaultErrorHandler
       }, options || {});
 
       var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
@@ -893,9 +881,7 @@
         keyRange: null
       }, options || {});
 
-      var onError = options.onError || function (error) {
-        throw error;
-      };
+      var onError = options.onError || defaultErrorHandler;
 
       var hasSuccess = false,
           result = null;
