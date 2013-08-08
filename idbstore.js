@@ -104,7 +104,7 @@
 
     onStoreReady && (this.onStoreReady = onStoreReady);
 
-    var env = Object.prototype.toString.call(window) == '[object global]' ? window : self;
+    var env = typeof window == 'object' ? window : self;
     this.idb = env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
     this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
 
