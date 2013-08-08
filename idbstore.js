@@ -1,5 +1,5 @@
 /*jshint expr:true */
-/*global window:false, console:false, define:false, module:false */
+/*global window:false, self:false, console:false, define:false, module:false */
 
 /**
  * @license IDBWrapper - A cross-browser wrapper for IndexedDB
@@ -105,11 +105,12 @@
 
     onStoreReady && (this.onStoreReady = onStoreReady);
 
-    this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
-    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
+    var env = Object.prototype.toString.call(window) == '[object global]' ? window : self;
+    this.idb = env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
+    this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
 
     this.features = {
-      hasAutoIncrement: !window.mozIndexedDB
+      hasAutoIncrement: !env.mozIndexedDB
     };
 
     this.consts = {
