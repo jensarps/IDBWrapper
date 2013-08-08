@@ -108,6 +108,10 @@
     this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
     this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
 
+    this.features = {
+      hasAutoIncrement: !window.mozIndexedDB
+    };
+
     this.consts = {
       'READ_ONLY':         'readonly',
       'READ_WRITE':        'readwrite',
@@ -232,9 +236,6 @@
      *
      */
     openDB: function () {
-
-      var features = this.features = {};
-      features.hasAutoIncrement = !window.mozIndexedDB;
 
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
       var preventSuccessCallback = false;
