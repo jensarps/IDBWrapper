@@ -19,7 +19,7 @@
   }
 })('IDBStore', function () {
 
-  "use strict";
+  'use strict';
 
   var defaults = {
     storeName: 'Store',
@@ -245,7 +245,7 @@
 
         var gotVersionErr = false;
         if ('error' in error.target) {
-          gotVersionErr = error.target.error.name == "VersionError";
+          gotVersionErr = error.target.error.name == 'VersionError';
         } else if ('errorCode' in error.target) {
           gotVersionErr = error.target.errorCode == 12;
         }
@@ -554,11 +554,11 @@
           }
         };
 
-        if (type == "remove") {
+        if (type == 'remove') {
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
           deleteRequest.onsuccess = onItemSuccess;
           deleteRequest.onerror = onItemError;
-        } else if (type == "put") {
+        } else if (type == 'put') {
           var putRequest;
           if (this.keyPath !== null) { // in-line keys
             this._addIdPropertyIfNeeded(value);
