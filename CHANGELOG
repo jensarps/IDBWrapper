@@ -3,6 +3,8 @@
 
 * Make IDBWrapper able to run inside of Workers
 * Add putBatch() and removeBatch() methods
+* Add worker example
+
 
 
 1.2.0 / 2013-05-31
