@@ -4,6 +4,7 @@
 * Make IDBWrapper able to run inside of Workers
 * Add putBatch() and removeBatch() methods
 * Add worker example
+* Move JSHint settings to own config file
 
 
 
