@@ -287,6 +287,30 @@ If you use out-of-line keys, you must also provide a key to put operations:
 ```
 
 
+___
+
+
+7) The putBatch method.
+
+```javascript
+putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`putBatch` takes an array of objects and stores them in a single transaction.
+
+
+
+___
+
+
+8) The removeBatch method.
+
+```javascript
+removeBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`removeBatch` takes an array of keys and removes matching objects in a single transaction.
+
 
 Index Operations
 ----------------
