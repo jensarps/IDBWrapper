@@ -566,6 +566,41 @@
     },
 
     /**
+     * Takes an array of objects and stores them in a single transaction.
+     *
+     * @param {Array} dataArray An array of objects to store
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     */
+    putBatch: function (dataArray, onSuccess, onError) {
+      var batchData = dataArray.map(function(item){
+        return { type: 'put', value: item };
+      });
+
+      this.batch(batchData, onSuccess, onError);
+    },
+
+    /**
+     * Takes an array of keys and removes matching objects in a single
+     * transaction.
+     *
+     * @param {Array} keyArray An array of keys to remove
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     */
+    removeBatch: function (keyArray, onSuccess, onError) {
+      var batchData = keyArray.map(function(key){
+        return { type: 'remove', key: key };
+      });
+
+      this.batch(batchData, onSuccess, onError);
+    },
+
+    /**
      * Fetches all entries in the store.
      *
      * @param {Function} [onSuccess] A callback that is called if the operation
