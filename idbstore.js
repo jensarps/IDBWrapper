@@ -1,5 +1,4 @@
-/*jshint expr:true */
-/*global window:false, console:false, define:false, module:false */
+/*global window:false, self:false, define:false, module:false */
 
 /**
  * @license IDBWrapper - A cross-browser wrapper for IndexedDB
@@ -19,7 +18,11 @@
   }
 })('IDBStore', function () {
 
-  "use strict";
+  'use strict';
+
+  var defaultErrorHandler = function (error) {
+    throw error;
+  };
 
   var defaults = {
     storeName: 'Store',
@@ -29,9 +32,7 @@
     autoIncrement: true,
     onStoreReady: function () {
     },
-    onError: function(error){
-      throw error;
-    },
+    onError: defaultErrorHandler,
     indexes: []
   };
 
@@ -105,8 +106,13 @@
 
     onStoreReady && (this.onStoreReady = onStoreReady);
 
-    this.idb = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
-    this.keyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange;
+    var env = typeof window == 'object' ? window : self;
+    this.idb = env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
+    this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
+
+    this.features = {
+      hasAutoIncrement: !env.mozIndexedDB
+    };
 
     this.consts = {
       'READ_ONLY':         'readonly',
@@ -233,9 +239,6 @@
      */
     openDB: function () {
 
-      var features = this.features = {};
-      features.hasAutoIncrement = !window.mozIndexedDB;
-
       var openRequest = this.idb.open(this.dbName, this.dbVersion);
       var preventSuccessCallback = false;
 
@@ -243,7 +246,7 @@
 
         var gotVersionErr = false;
         if ('error' in error.target) {
-          gotVersionErr = error.target.error.name == "VersionError";
+          gotVersionErr = error.target.error.name == 'VersionError';
         } else if ('errorCode' in error.target) {
           gotVersionErr = error.target.errorCode == 12;
         }
@@ -402,9 +405,7 @@
         onSuccess = value;
         value = key;
       }
-      onError || (onError = function (error) {
-        console.error('Could not write data.', error);
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -443,9 +444,7 @@
      *  occurred during the operation.
      */
     get: function (key, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not read data.', error);
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -476,9 +475,7 @@
      *  occurred during the operation.
      */
     remove: function (key, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not remove data.', error);
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -511,9 +508,7 @@
      *  occurred during one of the operations.
      */
     batch: function (dataArray, onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not apply batch.', error);
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       if(Object.prototype.toString.call(dataArray) != '[object Array]'){
@@ -552,11 +547,11 @@
           }
         };
 
-        if (type == "remove") {
+        if (type == 'remove') {
           var deleteRequest = batchTransaction.objectStore(this.storeName)['delete'](key);
           deleteRequest.onsuccess = onItemSuccess;
           deleteRequest.onerror = onItemError;
-        } else if (type == "put") {
+        } else if (type == 'put') {
           var putRequest;
           if (this.keyPath !== null) { // in-line keys
             this._addIdPropertyIfNeeded(value);
@@ -571,6 +566,41 @@
     },
 
     /**
+     * Takes an array of objects and stores them in a single transaction.
+     *
+     * @param {Array} dataArray An array of objects to store
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     */
+    putBatch: function (dataArray, onSuccess, onError) {
+      var batchData = dataArray.map(function(item){
+        return { type: 'put', value: item };
+      });
+
+      this.batch(batchData, onSuccess, onError);
+    },
+
+    /**
+     * Takes an array of keys and removes matching objects in a single
+     * transaction.
+     *
+     * @param {Array} keyArray An array of keys to remove
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     */
+    removeBatch: function (keyArray, onSuccess, onError) {
+      var batchData = keyArray.map(function(key){
+        return { type: 'remove', key: key };
+      });
+
+      this.batch(batchData, onSuccess, onError);
+    },
+
+    /**
      * Fetches all entries in the store.
      *
      * @param {Function} [onSuccess] A callback that is called if the operation
@@ -579,9 +609,7 @@
      *  occurred during the operation.
      */
     getAll: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not read data.', error);
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       var store = getAllTransaction.objectStore(this.storeName);
@@ -671,9 +699,7 @@
      *  error occurred during the operation.
      */
     clear: function (onSuccess, onError) {
-      onError || (onError = function (error) {
-        console.error('Could not clear store.', error);
-      });
+      onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = noop);
 
       var hasSuccess = false,
@@ -787,7 +813,7 @@
      *  to the store in the onItem callback
      * @param {Function} [options.onEnd=null] A callback to be called after
      *  iteration has ended
-     * @param {Function} [options.onError=console.error] A callback to be called
+     * @param {Function} [options.onError=throw] A callback to be called
      *  if an error occurred during the operation.
      */
     iterate: function (onItem, options) {
@@ -799,9 +825,7 @@
         keyRange: null,
         writeAccess: false,
         onEnd: null,
-        onError: function (error) {
-          console.error('Could not open cursor.', error);
-        }
+        onError: defaultErrorHandler
       }, options || {});
 
       var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
@@ -858,7 +882,7 @@
      * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
      *  duplicate matches
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
-     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
      */
     query: function (onSuccess, options) {
@@ -882,7 +906,7 @@
      * @param {Object} [options] An object defining specific options
      * @param {Object} [options.index=null] An IDBIndex to operate on
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
-     * @param {Function} [options.onError=console.error] A callback to be called if an error
+     * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
      */
     count: function (onSuccess, options) {
@@ -892,9 +916,7 @@
         keyRange: null
       }, options || {});
 
-      var onError = options.onError || function (error) {
-        console.error('Could not open cursor.', error);
-      };
+      var onError = options.onError || defaultErrorHandler;
 
       var hasSuccess = false,
           result = null;
