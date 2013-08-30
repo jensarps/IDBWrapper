@@ -958,15 +958,22 @@
      * @param {*} [options.upper] The upper bound
      * @param {Boolean} [options.excludeUpper] Whether to exclude the upper
      *  bound passed in options.upper from the key range
+     * @param {*} [options.only] A single key value. Use this if you need a key
+     *  range that only includes one value for a key. Providing this
+     *  property invalidates all other properties.
      * @return {Object} The IDBKeyRange representing the specified options
      */
     makeKeyRange: function(options){
       /*jshint onecase:true */
       var keyRange,
           hasLower = typeof options.lower != 'undefined',
-          hasUpper = typeof options.upper != 'undefined';
+          hasUpper = typeof options.upper != 'undefined',
+          isOnly = typeof options.only != 'undefined';
 
       switch(true){
+        case isOnly:
+          keyRange = this.keyRange.only(options.only);
+          break;
         case hasLower && hasUpper:
           keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
           break;
@@ -977,7 +984,7 @@
           keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
           break;
         default:
-          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
+          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value, or an "only" value.');
       }
 
       return keyRange;
