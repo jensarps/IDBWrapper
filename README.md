@@ -4,7 +4,7 @@ About
 This is a wrapper for indexedDB. It is meant to
 
 a) ease the use of indexedDB and abstract away the differences between the
-existing impls in Chrome, Firefox and IE10 (yes, it works in all three), and
+existing impls in Chrome, Firefox, IE10 and Opera 15 (yes, it works in all four), and
 
 b) show how IDB works. The code is split up into short methods, so that it's
 easy to see what happens in what method.
@@ -286,6 +286,30 @@ If you use out-of-line keys, you must also provide a key to put operations:
 { type: "put", value: dataObj, key: 12345 } // also add a `key` property containing the object's identifier
 ```
 
+
+___
+
+
+7) The putBatch method.
+
+```javascript
+putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`putBatch` takes an array of objects and stores them in a single transaction.
+
+
+
+___
+
+
+8) The removeBatch method.
+
+```javascript
+removeBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`removeBatch` takes an array of keys and removes matching objects in a single transaction.
 
 
 Index Operations
