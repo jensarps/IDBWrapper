@@ -98,13 +98,13 @@
   var IDBStore = function (kwArgs, onStoreReady) {
 
     if (typeof onStoreReady == 'undefined' && typeof kwArgs == 'function') {
-        onStoreReady = kwArgs;
+      onStoreReady = kwArgs;
     }
     if (Object.prototype.toString.call(kwArgs) != '[object Object]') {
       kwArgs = {};
     }
-    
-    for(var key in defaults){
+
+    for (var key in defaults) {
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
     }
 
