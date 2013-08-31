@@ -2,6 +2,10 @@
 ------------------
 
 * Add .only property to makeKeyRange() options
+* Fix bug when calling IDBStore without arguments
+* Fix bug when calling IDBStore with callback as only argument
+* Stability improvements
+
 
 
 1.3.0 / 2013-08-13
