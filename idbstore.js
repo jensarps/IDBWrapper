@@ -97,6 +97,9 @@
    */
   var IDBStore = function (kwArgs, onStoreReady) {
 
+    if (typeof onStoreReady == 'undefined' && typeof kwArgs == 'function') {
+        onStoreReady = kwArgs;
+    }
     if (Object.prototype.toString.call(kwArgs) != '[object Object]') {
       kwArgs = {};
     }
