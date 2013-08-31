@@ -97,6 +97,10 @@
    */
   var IDBStore = function (kwArgs, onStoreReady) {
 
+    if (Object.prototype.toString.call(kwArgs) != '[object Object]') {
+      kwArgs = {};
+    }
+    
     for(var key in defaults){
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
     }
