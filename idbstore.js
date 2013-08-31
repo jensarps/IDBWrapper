@@ -109,7 +109,7 @@
     }
 
     this.dbName = this.storePrefix + this.storeName;
-    this.dbVersion = parseInt(this.dbVersion, 10);
+    this.dbVersion = parseInt(this.dbVersion, 10) || 1;
 
     onStoreReady && (this.onStoreReady = onStoreReady);
 
