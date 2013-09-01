@@ -608,6 +608,114 @@
     },
 
     /**
+     * Takes an array of keys and fetches matching objects
+     *
+     * @param {Array} keyArray An array of keys identifying the objects to fetch
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     * @param {String} [arrayType='sparse'] The type of array to pass to the
+     *  success handler. May be one of 'sparse', 'dense' or 'skip'. Defaults to
+     *  'sparse'. This parameter specifies how to handle the situation if a get
+     *  operation did not throw an error, but there was no matching object in
+     *  the database. In most cases, 'sparse' provides the most desired
+     *  behavior. See the examples for details.
+     * @example
+     // given that there are two objects in the database with the keypath
+     // values 1 and 2, and the call looks like this:
+     myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
+
+     // this is what the `data` will be like:
+
+     // arrayType == 'sparse':
+     // data is a sparse array containing two entries and having a length of 3:
+       [Object, 2: Object]
+         0: Object
+         2: Object
+         length: 3
+         __proto__: Array[0]
+     // calling forEach on data will result in the callback being called two
+     // times, with the index parameter matching the index of the key in the
+     // keyArray.
+
+     // arrayType == 'dense':
+     // data is a dense array containing three entries and having a length of 3,
+     // where data[1] is of type undefined:
+       [Object, undefined, Object]
+         0: Object
+         1: undefined
+         2: Object
+         length: 3
+         __proto__: Array[0]
+     // calling forEach on data will result in the callback being called three
+     // times, with the index parameter matching the index of the key in the
+     // keyArray, but the second call will have undefined as first argument.
+
+     // arrayType == 'skip':
+     // data is a dense array containing two entries and having a length of 2:
+       [Object, Object]
+         0: Object
+         1: Object
+         length: 2
+         __proto__: Array[0]
+     // calling forEach on data will result in the callback being called two
+     // times, with the index parameter not matching the index of the key in the
+     // keyArray.
+     */
+    getBatch: function (keyArray, onSuccess, onError, arrayType) {
+      onError || (onError = defaultErrorHandler);
+      onSuccess || (onSuccess = noop);
+      arrayType || (arrayType = 'sparse');
+
+      if(Object.prototype.toString.call(keyArray) != '[object Array]'){
+        onError(new Error('keyArray argument must be of type Array.'));
+      }
+      var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_ONLY);
+      batchTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      batchTransaction.onabort = onError;
+      batchTransaction.onerror = onError;
+
+      var data = [];
+      var count = keyArray.length;
+      var called = false;
+      var hasSuccess = false;
+      var result = null;
+
+      var onItemSuccess = function (event) {
+        if (event.target.result || arrayType == 'dense') {
+          data.push(event.target.result);
+        } else if (arrayType == 'sparse') {
+          data.length++;
+        }
+        count--;
+        if (count === 0) {
+          called = true;
+          hasSuccess = true;
+          result = data;
+        }
+      };
+
+      keyArray.forEach(function (key) {
+
+        var onItemError = function (err) {
+          called = true;
+          result = err;
+          onError(err);
+          batchTransaction.abort();
+        };
+
+        var getRequest = batchTransaction.objectStore(this.storeName).get(key);
+        getRequest.onsuccess = onItemSuccess;
+        getRequest.onerror = onItemError;
+
+      }, this);
+    },
+
+    /**
      * Fetches all entries in the store.
      *
      * @param {Function} [onSuccess] A callback that is called if the operation
