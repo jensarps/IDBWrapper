@@ -1,17 +1,39 @@
 About
 =====
 
-This is a wrapper for indexedDB. It is meant to
+IDBWrapper is a cross-browser wrapper for the HTML5 IndexedDB API. While this
+API is the future of offline storage, it is not very intuitive to use.
+IDBWrapper is there to provide easy access to IndexedDB's features.
 
-a) ease the use of indexedDB and abstract away the differences between the
-existing impls in Chrome, Firefox, IE10 and Opera 15 (yes, it works in all four), and
+##Browser Support
 
-b) show how IDB works. The code is split up into short methods, so that it's
-easy to see what happens in what method.
+It works with all browsers supperting this API, which are:
 
-The code in idbstore.js is not optimized for anything, nor minified or anything.
-It is meant to be read and easy to understand. So, please, go ahead and check out
-the source!
+**Desktop**
+
+* Chrome
+* Firefox
+* Opera 15+
+* IE 10+
+
+**Mobile**
+
+* Chrome for Android
+* Firefox for Android
+* Opera for Android
+* IE10 for WP8
+
+**Worker** IDBWrapper runs inside of a worker on following browsers:
+
+* Chrome
+* Chrome for Android
+* Firefox
+* Opera
+* Opera for Android
+* IE10
+* IE10 for WP8
+
+##Tutorials
 
 There are two tutorials to get you up and running:
 
