@@ -4,7 +4,7 @@
 * Add .only property to makeKeyRange() options
 * Add getBatch() method
 * Fix bug when calling IDBStore without arguments
-* Fix bug when calling IDBStore with callback as only argument
+* Fix bug when calling IDBStore with ready callback as only argument
 * Stability improvements
 
 
