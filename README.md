@@ -49,7 +49,7 @@ IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly 
 it from there. cdnjs supports http, https and spdy, so you can just leave the protocol off. The URL is:
 
 ```
-//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.2.0/idbstore.min.js
+//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.3.0/idbstore.min.js
 ```
 
 If you use NPM as your package manager, you can get it from there, too, by
