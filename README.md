@@ -169,7 +169,7 @@ Here's an overview of available methods in IDBStore:
 Data Manipulation
 -----------------
 
-Use the following methods to read and write data:
+Use the following methods to read and write data (all methods in this section return the `IDBTransaction` they open):
 
 ___
 
@@ -258,7 +258,7 @@ operation failed and it will receive the error event object as first and only ar
 
 ##Batch Operations
 
-IDBWrapper allows to run a single method when dealing with multiple objects.
+IDBWrapper allows to run a single method when dealing with multiple objects. All methods in this section return the `IDBTransaction` they open.
 
 
 1) The batch method.
@@ -405,9 +405,7 @@ Returns a `DOMStringList` with all existing indices.
 Running Queries
 ---------------
 
-To run queries, IDBWrapper provides a `query()` and an `iterate()` method. To
-create keyRanges, there is the `makeKeyRange()` method. In addition to these,
-IDBWrapper comes with a `count()` method.
+To run queries, IDBWrapper provides a `query()` and an `iterate()` method. To create keyRanges, there is the `makeKeyRange()` method. In addition to these, IDBWrapper comes with a `count()` method. The `query`, `iterate` and `count` methods return the `IDBTransaction` they open.
 
 ___
 
