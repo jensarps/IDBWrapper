@@ -485,6 +485,8 @@ The `keyRangeOptions` object must have one or more of the following properties:
 
 `excludeUpper`: Boolean, whether to exclude the upper bound itself. Default: false
 
+`only`: If you want a key range around only one value, pass just this property.
+
 ___
 
 
