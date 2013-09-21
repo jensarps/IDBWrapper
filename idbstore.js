@@ -136,9 +136,11 @@
 
   IDBStore.prototype = /** @lends IDBStore */ {
 
-    // The prototype of a function naturally has a constructor property. Since
-    // this prototype is being replaced the constructor needs to be restored
-    // to allow inheritance.
+    /**
+     * A pointer to the IDBStore ctor
+     *
+     * @type IDBStore
+     */
     constructor: IDBStore,
 
     /**
