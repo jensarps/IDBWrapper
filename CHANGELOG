@@ -5,6 +5,7 @@
 * Add getBatch() method
 * Fix bug when calling IDBStore without arguments
 * Fix bug when calling IDBStore with ready callback as only argument
+* Point IDBStore prototype's constructor property to IDBStore
 * Stability improvements
 
 
