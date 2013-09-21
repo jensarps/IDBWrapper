@@ -323,6 +323,10 @@ putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onE
 `putBatch` takes an array of objects and stores them in a single transaction.
 
 
+**Out-of-line Keys**
+
+The `putBatch` method does not support out-of-line keys. If you need to store multiple out-of-line objects, use the `batch` method.
+
 
 ___
 
