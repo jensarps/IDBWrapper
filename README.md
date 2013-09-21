@@ -7,7 +7,7 @@ IDBWrapper is there to provide easy access to IndexedDB's features.
 
 ##Browser Support
 
-It works with all browsers supperting this API, which are:
+IDBWrapper works on all browsers supperting the IndexedDB API, which are:
 
 **Desktop**
 
