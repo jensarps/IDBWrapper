@@ -6,6 +6,9 @@
 * Fix bug when calling IDBStore without arguments
 * Fix bug when calling IDBStore with ready callback as only argument
 * Point IDBStore prototype's constructor property to IDBStore
+* Make all methods that open a transaction return this transaction. These
+  methods are: put, get, remove, getAll, clear, batch, putBatch, removeBatch,
+  getBatch, iterate, query and count
 * Stability improvements
 
 

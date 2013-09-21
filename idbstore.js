@@ -395,6 +395,7 @@
      *  was successful.
      * @param {Function} [onError] A callback that is called if insertion
      *  failed.
+     * @returns {IDBTransaction} The transaction used for this operation.
      * @example
         // Storing an object, using inline keys (the default scenario):
         var myCustomer = {
@@ -445,6 +446,8 @@
         result = event.target.result;
       };
       putRequest.onerror = onError;
+
+      return putTransaction;
     },
 
     /**
@@ -456,6 +459,7 @@
      *  was successful. Will receive the object as only argument.
      * @param {Function} [onError] A callback that will be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     get: function (key, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -477,6 +481,8 @@
         result = event.target.result;
       };
       getRequest.onerror = onError;
+
+      return getTransaction;
     },
 
     /**
@@ -487,6 +493,7 @@
      *  was successful.
      * @param {Function} [onError] A callback that will be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     remove: function (key, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -509,6 +516,8 @@
         result = event.target.result;
       };
       deleteRequest.onerror = onError;
+
+      return removeTransaction;
     },
 
     /**
@@ -520,6 +529,7 @@
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     batch: function (dataArray, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -577,6 +587,8 @@
           putRequest.onerror = onItemError;
         }
       }, this);
+
+      return batchTransaction;
     },
 
     /**
@@ -587,13 +599,14 @@
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     putBatch: function (dataArray, onSuccess, onError) {
       var batchData = dataArray.map(function(item){
         return { type: 'put', value: item };
       });
 
-      this.batch(batchData, onSuccess, onError);
+      return this.batch(batchData, onSuccess, onError);
     },
 
     /**
@@ -605,13 +618,14 @@
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     removeBatch: function (keyArray, onSuccess, onError) {
       var batchData = keyArray.map(function(key){
         return { type: 'remove', key: key };
       });
 
-      this.batch(batchData, onSuccess, onError);
+      return this.batch(batchData, onSuccess, onError);
     },
 
     /**
@@ -628,12 +642,13 @@
      *  operation did not throw an error, but there was no matching object in
      *  the database. In most cases, 'sparse' provides the most desired
      *  behavior. See the examples for details.
+     * @returns {IDBTransaction} The transaction used for this operation.
      * @example
      // given that there are two objects in the database with the keypath
      // values 1 and 2, and the call looks like this:
      myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
 
-     // this is what the `data` will be like:
+     // this is what the `data` array will be like:
 
      // arrayType == 'sparse':
      // data is a sparse array containing two entries and having a length of 3:
@@ -720,6 +735,8 @@
         getRequest.onerror = onItemError;
 
       }, this);
+
+      return batchTransaction;
     },
 
     /**
@@ -729,6 +746,7 @@
      *  was successful. Will receive an array of objects.
      * @param {Function} [onError] A callback that will be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     getAll: function (onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -740,6 +758,8 @@
       } else {
         this._getAllCursor(getAllTransaction, store, onSuccess, onError);
       }
+
+      return getAllTransaction;
     },
 
     /**
@@ -819,6 +839,7 @@
      *  operation was successful.
      * @param {Function} [onError] A callback that will be called if an
      *  error occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     clear: function (onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -841,6 +862,8 @@
         result = event.target.result;
       };
       clearRequest.onerror = onError;
+
+      return clearTransaction;
     },
 
     /**
@@ -937,6 +960,7 @@
      *  iteration has ended
      * @param {Function} [options.onError=throw] A callback to be called
      *  if an error occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     iterate: function (onItem, options) {
       options = mixin({
@@ -989,6 +1013,8 @@
           hasSuccess = true;
         }
       };
+
+      return cursorTransaction;
     },
 
     /**
@@ -1006,6 +1032,7 @@
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
      * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     query: function (onSuccess, options) {
       var result = [];
@@ -1013,7 +1040,7 @@
       options.onEnd = function () {
         onSuccess(result);
       };
-      this.iterate(function (item) {
+      return this.iterate(function (item) {
         result.push(item);
       }, options);
     },
@@ -1030,6 +1057,7 @@
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
      * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     count: function (onSuccess, options) {
 
@@ -1061,6 +1089,8 @@
         result = evt.target.result;
       };
       countRequest.onError = onError;
+
+      return cursorTransaction;
     },
 
     /**************/
