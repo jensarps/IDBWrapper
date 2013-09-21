@@ -256,10 +256,12 @@ clear: function(/*Function?*/onSuccess, /*Function?*/onError)
 `onSuccess` will be called if the clear operation was successful. `onError` will be called if the clear
 operation failed and it will receive the error event object as first and only argument.
 
-___
+##Batch Operations
+
+IDBWrapper allows to run a single method when dealing with multiple objects.
 
 
-6) The batch method.
+1) The batch method.
 
 ```javascript
 batch: function (/*Array*/operations, /*Function?*/onSuccess, /*Function?*/onError)
@@ -312,7 +314,7 @@ If you use out-of-line keys, you must also provide a key to put operations:
 ___
 
 
-7) The putBatch method.
+2) The putBatch method.
 
 ```javascript
 putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onError)
@@ -325,7 +327,7 @@ putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onE
 ___
 
 
-8) The removeBatch method.
+3) The removeBatch method.
 
 ```javascript
 removeBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError)
