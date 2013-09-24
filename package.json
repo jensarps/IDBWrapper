@@ -1,8 +1,10 @@
 {
   "name": "idb-wrapper",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A cross-browser wrapper for IndexedDB",
-  "keywords": [],
+  "keywords": [
+    "storage", "offline", "IndexedDB"
+  ],
   "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",
   "repository": "git://github.com/jensarps/IDBWrapper.git",
   "main": "idbstore",
@@ -11,7 +13,8 @@
     "Josh Matthews <josh@joshmatthews.net> (http://www.joshmatthews.net/blog/)",
     "Raynos <raynos2@gmail.com> (http://raynos.org)",
     "Chad Engler <chad@pantherdev.com> (http://chad.pantherdev.com)",
-    "Max Ogden <max+ogden@maxogden.com> (http://www.maxogden.com)"
+    "Max Ogden <max+ogden@maxogden.com> (http://www.maxogden.com)",
+    "Asa Ayers <asa.ayers@gmail.com>"
   ],
   "bugs": {
     "url": "https://github.com/jensarps/IDBWrapper/issues",

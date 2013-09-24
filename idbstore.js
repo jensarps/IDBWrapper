@@ -42,7 +42,7 @@
    *
    * @constructor
    * @name IDBStore
-   * @version 1.1.0
+   * @version 1.4.0
    *
    * @param {Object} [kwArgs] An options object used to configure the store and
    *  set callbacks
@@ -97,12 +97,19 @@
    */
   var IDBStore = function (kwArgs, onStoreReady) {
 
-    for(var key in defaults){
+    if (typeof onStoreReady == 'undefined' && typeof kwArgs == 'function') {
+      onStoreReady = kwArgs;
+    }
+    if (Object.prototype.toString.call(kwArgs) != '[object Object]') {
+      kwArgs = {};
+    }
+
+    for (var key in defaults) {
       this[key] = typeof kwArgs[key] != 'undefined' ? kwArgs[key] : defaults[key];
     }
 
     this.dbName = this.storePrefix + this.storeName;
-    this.dbVersion = parseInt(this.dbVersion, 10);
+    this.dbVersion = parseInt(this.dbVersion, 10) || 1;
 
     onStoreReady && (this.onStoreReady = onStoreReady);
 
@@ -130,11 +137,18 @@
   IDBStore.prototype = /** @lends IDBStore */ {
 
     /**
+     * A pointer to the IDBStore ctor
+     *
+     * @type IDBStore
+     */
+    constructor: IDBStore,
+
+    /**
      * The version of IDBStore
      *
      * @type String
      */
-    version: '1.3.0',
+    version: '1.4.0',
 
     /**
      * A reference to the IndexedDB object
@@ -381,6 +395,7 @@
      *  was successful.
      * @param {Function} [onError] A callback that is called if insertion
      *  failed.
+     * @returns {IDBTransaction} The transaction used for this operation.
      * @example
         // Storing an object, using inline keys (the default scenario):
         var myCustomer = {
@@ -431,6 +446,8 @@
         result = event.target.result;
       };
       putRequest.onerror = onError;
+
+      return putTransaction;
     },
 
     /**
@@ -442,6 +459,7 @@
      *  was successful. Will receive the object as only argument.
      * @param {Function} [onError] A callback that will be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     get: function (key, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -463,6 +481,8 @@
         result = event.target.result;
       };
       getRequest.onerror = onError;
+
+      return getTransaction;
     },
 
     /**
@@ -473,6 +493,7 @@
      *  was successful.
      * @param {Function} [onError] A callback that will be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     remove: function (key, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -495,6 +516,8 @@
         result = event.target.result;
       };
       deleteRequest.onerror = onError;
+
+      return removeTransaction;
     },
 
     /**
@@ -506,6 +529,7 @@
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     batch: function (dataArray, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -563,6 +587,8 @@
           putRequest.onerror = onItemError;
         }
       }, this);
+
+      return batchTransaction;
     },
 
     /**
@@ -573,13 +599,14 @@
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     putBatch: function (dataArray, onSuccess, onError) {
       var batchData = dataArray.map(function(item){
         return { type: 'put', value: item };
       });
 
-      this.batch(batchData, onSuccess, onError);
+      return this.batch(batchData, onSuccess, onError);
     },
 
     /**
@@ -591,13 +618,125 @@
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
      *  occurred during one of the operations.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     removeBatch: function (keyArray, onSuccess, onError) {
       var batchData = keyArray.map(function(key){
         return { type: 'remove', key: key };
       });
 
-      this.batch(batchData, onSuccess, onError);
+      return this.batch(batchData, onSuccess, onError);
+    },
+
+    /**
+     * Takes an array of keys and fetches matching objects
+     *
+     * @param {Array} keyArray An array of keys identifying the objects to fetch
+     * @param {Function} [onSuccess] A callback that is called if all operations
+     *  were successful.
+     * @param {Function} [onError] A callback that is called if an error
+     *  occurred during one of the operations.
+     * @param {String} [arrayType='sparse'] The type of array to pass to the
+     *  success handler. May be one of 'sparse', 'dense' or 'skip'. Defaults to
+     *  'sparse'. This parameter specifies how to handle the situation if a get
+     *  operation did not throw an error, but there was no matching object in
+     *  the database. In most cases, 'sparse' provides the most desired
+     *  behavior. See the examples for details.
+     * @returns {IDBTransaction} The transaction used for this operation.
+     * @example
+     // given that there are two objects in the database with the keypath
+     // values 1 and 2, and the call looks like this:
+     myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
+
+     // this is what the `data` array will be like:
+
+     // arrayType == 'sparse':
+     // data is a sparse array containing two entries and having a length of 3:
+       [Object, 2: Object]
+         0: Object
+         2: Object
+         length: 3
+         __proto__: Array[0]
+     // calling forEach on data will result in the callback being called two
+     // times, with the index parameter matching the index of the key in the
+     // keyArray.
+
+     // arrayType == 'dense':
+     // data is a dense array containing three entries and having a length of 3,
+     // where data[1] is of type undefined:
+       [Object, undefined, Object]
+         0: Object
+         1: undefined
+         2: Object
+         length: 3
+         __proto__: Array[0]
+     // calling forEach on data will result in the callback being called three
+     // times, with the index parameter matching the index of the key in the
+     // keyArray, but the second call will have undefined as first argument.
+
+     // arrayType == 'skip':
+     // data is a dense array containing two entries and having a length of 2:
+       [Object, Object]
+         0: Object
+         1: Object
+         length: 2
+         __proto__: Array[0]
+     // calling forEach on data will result in the callback being called two
+     // times, with the index parameter not matching the index of the key in the
+     // keyArray.
+     */
+    getBatch: function (keyArray, onSuccess, onError, arrayType) {
+      onError || (onError = defaultErrorHandler);
+      onSuccess || (onSuccess = noop);
+      arrayType || (arrayType = 'sparse');
+
+      if(Object.prototype.toString.call(keyArray) != '[object Array]'){
+        onError(new Error('keyArray argument must be of type Array.'));
+      }
+      var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_ONLY);
+      batchTransaction.oncomplete = function () {
+        var callback = hasSuccess ? onSuccess : onError;
+        callback(result);
+      };
+      batchTransaction.onabort = onError;
+      batchTransaction.onerror = onError;
+
+      var data = [];
+      var count = keyArray.length;
+      var called = false;
+      var hasSuccess = false;
+      var result = null;
+
+      var onItemSuccess = function (event) {
+        if (event.target.result || arrayType == 'dense') {
+          data.push(event.target.result);
+        } else if (arrayType == 'sparse') {
+          data.length++;
+        }
+        count--;
+        if (count === 0) {
+          called = true;
+          hasSuccess = true;
+          result = data;
+        }
+      };
+
+      keyArray.forEach(function (key) {
+
+        var onItemError = function (err) {
+          called = true;
+          result = err;
+          onError(err);
+          batchTransaction.abort();
+        };
+
+        var getRequest = batchTransaction.objectStore(this.storeName).get(key);
+        getRequest.onsuccess = onItemSuccess;
+        getRequest.onerror = onItemError;
+
+      }, this);
+
+      return batchTransaction;
     },
 
     /**
@@ -607,6 +746,7 @@
      *  was successful. Will receive an array of objects.
      * @param {Function} [onError] A callback that will be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     getAll: function (onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -618,6 +758,8 @@
       } else {
         this._getAllCursor(getAllTransaction, store, onSuccess, onError);
       }
+
+      return getAllTransaction;
     },
 
     /**
@@ -697,6 +839,7 @@
      *  operation was successful.
      * @param {Function} [onError] A callback that will be called if an
      *  error occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     clear: function (onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
@@ -719,6 +862,8 @@
         result = event.target.result;
       };
       clearRequest.onerror = onError;
+
+      return clearTransaction;
     },
 
     /**
@@ -815,6 +960,7 @@
      *  iteration has ended
      * @param {Function} [options.onError=throw] A callback to be called
      *  if an error occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     iterate: function (onItem, options) {
       options = mixin({
@@ -867,6 +1013,8 @@
           hasSuccess = true;
         }
       };
+
+      return cursorTransaction;
     },
 
     /**
@@ -884,6 +1032,7 @@
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
      * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     query: function (onSuccess, options) {
       var result = [];
@@ -891,7 +1040,7 @@
       options.onEnd = function () {
         onSuccess(result);
       };
-      this.iterate(function (item) {
+      return this.iterate(function (item) {
         result.push(item);
       }, options);
     },
@@ -908,6 +1057,7 @@
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
      * @param {Function} [options.onError=throw] A callback to be called if an error
      *  occurred during the operation.
+     * @returns {IDBTransaction} The transaction used for this operation.
      */
     count: function (onSuccess, options) {
 
@@ -939,6 +1089,8 @@
         result = evt.target.result;
       };
       countRequest.onError = onError;
+
+      return cursorTransaction;
     },
 
     /**************/
@@ -958,15 +1110,22 @@
      * @param {*} [options.upper] The upper bound
      * @param {Boolean} [options.excludeUpper] Whether to exclude the upper
      *  bound passed in options.upper from the key range
+     * @param {*} [options.only] A single key value. Use this if you need a key
+     *  range that only includes one value for a key. Providing this
+     *  property invalidates all other properties.
      * @return {Object} The IDBKeyRange representing the specified options
      */
     makeKeyRange: function(options){
       /*jshint onecase:true */
       var keyRange,
           hasLower = typeof options.lower != 'undefined',
-          hasUpper = typeof options.upper != 'undefined';
+          hasUpper = typeof options.upper != 'undefined',
+          isOnly = typeof options.only != 'undefined';
 
       switch(true){
+        case isOnly:
+          keyRange = this.keyRange.only(options.only);
+          break;
         case hasLower && hasUpper:
           keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
           break;
@@ -977,7 +1136,7 @@
           keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
           break;
         default:
-          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value.');
+          throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value, or an "only" value.');
       }
 
       return keyRange;
