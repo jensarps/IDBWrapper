@@ -1,4 +1,4 @@
-1.4.0 /
+1.4.0 / 24.09.2013
 ------------------
 
 * Add .only property to makeKeyRange() options
