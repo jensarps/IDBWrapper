@@ -260,14 +260,101 @@ operation failed and it will receive the error event object as first and only ar
 
 IDBWrapper allows to run a single method when dealing with multiple objects. All methods in this section return the `IDBTransaction` they open.
 
+1) The getBatch method.
 
-1) The batch method.
+```javascript
+getBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError, /*String?*/arrayType)
+```
+
+This method takes an array of keys and fetches matching objects. 
+
+`keyArray` must be an array of keys identifying the objects to fetch.
+
+`arrayType` defines the type of array to pass to the success handler. May be one of 'sparse', 'dense' or 'skip'. Defaults to 'sparse'. This parameter specifies how to handle the situation if a get operation did not throw an error, but there was no matching object in the database. In most cases, 'sparse' provides the most desired behavior. See the examples for details:
+
+```javascript
+// given that there are two objects in the database with the keypath
+// values 1 and 2, and the call looks like this:
+myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
+
+// this is what the `data` array will be like:
+
+// arrayType == 'sparse':
+// data is a sparse array containing two entries and having a length of 3:
+       [Object, 2: Object]
+         0: Object
+         2: Object
+         length: 3
+         __proto__: Array[0]
+// calling forEach on data will result in the callback being called two
+// times, with the index parameter matching the index of the key in the
+// keyArray.
+
+// arrayType == 'dense':
+// data is a dense array containing three entries and having a length of 3,
+// where data[1] is of type undefined:
+       [Object, undefined, Object]
+         0: Object
+         1: undefined
+         2: Object
+         length: 3
+         __proto__: Array[0]
+// calling forEach on data will result in the callback being called three
+// times, with the index parameter matching the index of the key in the
+// keyArray, but the second call will have undefined as first argument.
+
+// arrayType == 'skip':
+// data is a dense array containing two entries and having a length of 2:
+       [Object, Object]
+         0: Object
+         1: Object
+         length: 2
+         __proto__: Array[0]
+// calling forEach on data will result in the callback being called two
+// times, with the index parameter not matching the index of the key in the
+// keyArray.
+
+```    
+
+
+___
+
+
+2) The putBatch method.
+
+```javascript
+putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`putBatch` takes an array of objects and stores them in a single transaction.
+
+
+**Out-of-line Keys**
+
+The `putBatch` method does not support out-of-line keys. If you need to store multiple out-of-line objects, use the `batch` method.
+
+
+___
+
+
+3) The removeBatch method.
+
+```javascript
+removeBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError)
+```
+
+`removeBatch` takes an array of keys and removes matching objects in a single transaction.
+
+---
+
+
+4) The batch method.
 
 ```javascript
 batch: function (/*Array*/operations, /*Function?*/onSuccess, /*Function?*/onError)
 ```
 
-`batch` expects an array of operations that you want to apply in a single
+This method allows you to combine put and remove actions in a single call. `batch` expects an array of operations that you want to apply in a single
 IndexedDB transaction. `operations` is an Array of objects, each containing two
 properties, defining the type of operation. There are two operations
 supported, put and remove. A put entry looks like this:
@@ -310,34 +397,6 @@ If you use out-of-line keys, you must also provide a key to put operations:
 { type: "put", value: dataObj, key: 12345 } // also add a `key` property containing the object's identifier
 ```
 
-
-___
-
-
-2) The putBatch method.
-
-```javascript
-putBatch: function (/*Array*/dataArray, /*Function?*/onSuccess, /*Function?*/onError)
-```
-
-`putBatch` takes an array of objects and stores them in a single transaction.
-
-
-**Out-of-line Keys**
-
-The `putBatch` method does not support out-of-line keys. If you need to store multiple out-of-line objects, use the `batch` method.
-
-
-___
-
-
-3) The removeBatch method.
-
-```javascript
-removeBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError)
-```
-
-`removeBatch` takes an array of keys and removes matching objects in a single transaction.
 
 
 Index Operations
