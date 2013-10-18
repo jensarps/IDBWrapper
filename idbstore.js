@@ -1124,16 +1124,24 @@
 
       switch(true){
         case isOnly:
-          keyRange = this.keyRange.only(options.only);
+          try {
+            keyRange = this.keyRange.only(options.only);
+          } catch (e) { return undefined }
           break;
         case hasLower && hasUpper:
-          keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
+          try {
+            keyRange = this.keyRange.bound(options.lower, options.upper, options.excludeLower, options.excludeUpper);
+          } catch (e) { return undefined }
           break;
         case hasLower:
-          keyRange = this.keyRange.lowerBound(options.lower, options.excludeLower);
+          try {
+            keyRange = this.keyRange.lowerBound(options.lower, options.excludeLower);
+          } catch (e) { return undefined }
           break;
         case hasUpper:
-          keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
+          try {
+            keyRange = this.keyRange.upperBound(options.upper, options.excludeUpper);
+          } catch (e) { return undefined }
           break;
         default:
           throw new Error('Cannot create KeyRange. Provide one or both of "lower" or "upper" value, or an "only" value.');
