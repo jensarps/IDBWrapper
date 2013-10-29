@@ -72,6 +72,15 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should clear all objects', function(done){
+      store.clear(function(){
+        store.getAll(function(data){
+          expect(data.length).to.equal(0);
+        }, done);
+        done();
+      }, done);
+    });
+
 
     after(function(done){
       store.clear(function(){
