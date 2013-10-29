@@ -203,4 +203,88 @@ describe('IDBWrapper', function(){
 
   });
 
+  describe('getBatch() dataArray return type', function(){
+
+    var store;
+    var dataArray = [
+      {
+        id: 1,
+        name: 'John'
+      },
+      {
+        id: 2,
+        name: 'Joe'
+      },
+      {
+        id: 3,
+        name: 'James'
+      }
+    ];
+
+    before(function(done){
+      store = new IDBStore({
+        storeName: 'spec-store-simple'
+      }, function(){
+        store.putBatch(dataArray, function(){
+          done();
+        }, done);
+      });
+    });
+
+    it('should return a sparse array for arrayType="sparse"', function(done){
+      store.getBatch([1,10,3], function(data){
+        expect(data.length).to.equal(3);
+
+        expect(data[0].name).to.equal('John');
+        expect(data[1]).to.not.exist;
+        expect(data[2].name).to.equal('James');
+
+        var forEachCount = 0;
+        data.forEach(function(){
+          forEachCount++;
+        });
+        expect(forEachCount).to.equal(2);
+
+        done();
+      }, done, 'sparse');
+    });
+
+    it('should return a dense array for arrayType="dense"', function(done){
+      store.getBatch([1,10,3], function(data){
+        expect(data.length).to.equal(3);
+
+        expect(data[0].name).to.equal('John');
+        expect(data[1]).to.not.exist;
+        expect(data[2].name).to.equal('James');
+
+        var forEachCount = 0;
+        data.forEach(function(){
+          forEachCount++;
+        });
+        expect(forEachCount).to.equal(3);
+
+        done();
+      }, done, 'dense');
+    });
+
+    it('should return a reduced array for arrayType="skip"', function(done){
+      store.getBatch([1,10,3], function(data){
+        expect(data.length).to.equal(2);
+
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('James');
+
+        done();
+      }, done, 'skip');
+    });
+
+
+    after(function(done){
+      store.clear(function(){
+        done();
+      });
+    });
+
+  });
+
 });
