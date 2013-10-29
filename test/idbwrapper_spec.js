@@ -56,6 +56,13 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should get all stored objects', function(done){
+      store.getAll(function(data){
+        expect(data.length).to.equal(2);
+        done();
+      }, done);
+    });
+
     it('should delete a given object', function(done){
       store.remove(1, function(result){
         store.get(1, function(data){
