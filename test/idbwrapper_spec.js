@@ -142,4 +142,65 @@ describe('IDBWrapper', function(){
 
   });
 
+  describe('batch ops', function(){
+
+    var store;
+    var dataArray = [
+      {
+        id: 1,
+        name: 'John'
+      },
+      {
+        id: 2,
+        name: 'Joe'
+      },
+      {
+        id: 3,
+        name: 'James'
+      }
+    ];
+
+    before(function(done){
+      store = new IDBStore({
+        storeName: 'spec-store-simple'
+      }, done);
+    });
+
+
+    it('should store multiple objects', function(done){
+      store.putBatch(dataArray, function(result){
+        expect(result).to.be.ok;
+        done();
+      }, done);
+    });
+
+    it('should fetch multiple objects', function(done){
+      store.getBatch([1,2,3], function(data){
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('Joe');
+        expect(data[2].name).to.equal('James');
+        done();
+      }, done);
+    });
+
+    it('should delete multiple objects', function(done){
+      store.removeBatch([1,2], function(result){
+        expect(result).to.be.ok;
+        store.getAll(function(data){
+          expect(data.length).to.equal(1);
+          expect(data[0].name).to.equal('James');
+        }, done);
+        done();
+      }, done);
+    });
+
+
+    after(function(done){
+      store.clear(function(){
+        done();
+      });
+    });
+
+  });
+
 });
