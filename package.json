@@ -3,7 +3,9 @@
   "version": "1.4.0",
   "description": "A cross-browser wrapper for IndexedDB",
   "keywords": [
-    "storage", "offline", "IndexedDB"
+    "storage",
+    "offline",
+    "IndexedDB"
   ],
   "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",
   "repository": "git://github.com/jensarps/IDBWrapper.git",
@@ -20,9 +22,10 @@
     "url": "https://github.com/jensarps/IDBWrapper/issues",
     "email": "mail@jensarps.de"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "mocha": "~1.13.0",
+    "chai": "~1.8.1"
   },
   "licenses": [
     {
@@ -30,6 +33,5 @@
       "url": "http://github.com/jensarps/IDBWrapper/raw/master/LICENSE"
     }
   ],
-  "scripts": {
-  }
+  "scripts": {}
 }
