@@ -3,6 +3,7 @@
 
 * Fix issue when using out-of-line keyPath setup with IE10
 * Fix issue when using compound keys
+* Add integration tests
 
 
 
