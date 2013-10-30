@@ -935,6 +935,26 @@
         if (key == 'multiEntry' && actual[key] === undefined && expected[key] === false) {
           return true;
         }
+        // Compound keys
+        if (key == 'keyPath' && Object.prototype.toString.call(expected[key]) == '[object Array]') {
+          var exp = expected.keyPath;
+          var act = actual.keyPath;
+
+          if (!act instanceof DOMStringList) {
+            return false;
+          }
+
+          if (act.length !== exp.length) {
+            return false;
+          }
+
+          for (var i = 0, m = exp.length; i<m; i++) {
+            if (!act.contains(exp[i])) {
+              return false;
+            }
+          }
+          return true;
+        }
         return expected[key] == actual[key];
       });
       return complies;
