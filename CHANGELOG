@@ -1,3 +1,11 @@
+1.4.1 /
+------------------
+
+* Fix issue when using out-of-line keyPath setup with IE10
+* Fix issue when using compound keys
+
+
+
 1.4.0 / 24.09.2013
 ------------------
 
