@@ -96,7 +96,7 @@ describe('IDBWrapper', function(){
 
     before(function(done){
       store = new IDBStore({
-        storeName: 'spec-store--simple-out-of-line',
+        storeName: 'spec-store-simple-out-of-line',
         keyPath: null
       }, done);
     });
