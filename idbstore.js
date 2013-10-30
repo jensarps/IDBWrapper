@@ -337,7 +337,11 @@
         if(this.db.objectStoreNames.contains(this.storeName)){
           this.store = event.target.transaction.objectStore(this.storeName);
         } else {
-          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+          var optionalParameters = { autoIncrement: this.autoIncrement };
+          if (this.keyPath !== null) {
+            optionalParameters.keyPath = this.keyPath;
+          }
+          this.store = this.db.createObjectStore(this.storeName, optionalParameters);
         }
 
         this.indexes.forEach(function(indexData){
