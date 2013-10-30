@@ -295,4 +295,54 @@ describe('IDBWrapper', function(){
 
   });
 
+
+  describe('indexes', function(){
+
+    var store;
+
+    before(function(done){
+      store = new IDBStore({
+        storeName: 'spec-store-indexes',
+        indexes: [
+          { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
+          { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
+          { name: 'date', keyPath: 'joined', unique: false, multiEntry: false },
+          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false }
+        ]
+      }, done);
+    });
+
+    it('should create all indexes', function(){
+      var indexList = store.getIndexList();
+      expect(indexList).to.be.instanceOf(DOMStringList);
+      expect(indexList.length).to.equal(4);
+    });
+
+    it('should store a well-formed object', function(done){
+      var data = {
+        id: 1,
+        name: 'John',
+        lastname: 'Doe',
+        age: 42,
+        joined: new Date(),
+        address: {
+          email: 'j.doe@example.com',
+          city: 'New Boston'
+        }
+      };
+      store.put(data, function(insertId){
+        expect(insertId).to.equal(data.id);
+        done();
+      }, done);
+    });
+
+    after(function(done){
+      store.clear(function(){
+        done();
+      });
+    });
+
+  });
+
+
 });
