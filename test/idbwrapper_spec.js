@@ -52,7 +52,6 @@ describe('IDBWrapper', function(){
           expect(result.name).to.equal(data.name);
           done();
         }, done);
-        done();
       }, done);
     });
 
