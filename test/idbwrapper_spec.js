@@ -1,6 +1,6 @@
 describe('IDBWrapper', function(){
 
-  describe('basic CRUD', function(){
+  describe('basic CRUD, in-line keys', function(){
 
     var store;
 
