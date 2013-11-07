@@ -940,7 +940,7 @@
           var exp = expected.keyPath;
           var act = actual.keyPath;
 
-          if (!act instanceof DOMStringList) {
+          if (typeof act.contains != 'function') {
             return false;
           }
 

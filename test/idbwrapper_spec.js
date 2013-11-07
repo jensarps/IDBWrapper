@@ -314,7 +314,7 @@ describe('IDBWrapper', function(){
 
     it('should create all indexes', function(){
       var indexList = store.getIndexList();
-      expect(indexList).to.be.instanceOf(DOMStringList);
+      expect(indexList).to.respondTo('contains');
       expect(indexList.length).to.equal(4);
     });
 
