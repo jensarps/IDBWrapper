@@ -940,7 +940,8 @@
           var exp = expected.keyPath;
           var act = actual.keyPath;
 
-          if (typeof act.contains != 'function') {
+          // actual must be a DOMStringList or an Array
+          if ( ! (typeof act.contains == 'function' || typeof act.indexOf == 'function') ) {
             return false;
           }
 
@@ -949,7 +950,7 @@
           }
 
           for (var i = 0, m = exp.length; i<m; i++) {
-            if (!act.contains(exp[i])) {
+            if ( ! ( (act.contains && act.contains(exp[i])) || act.indexOf(exp[i] !== -1) )) {
               return false;
             }
           }
