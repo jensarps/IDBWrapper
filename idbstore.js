@@ -940,7 +940,15 @@
           var exp = expected.keyPath;
           var act = actual.keyPath;
 
-          // actual must be a DOMStringList or an Array
+          // IE10 can't handle keyPath sequences and stores them as a string.
+          // The index will be unusable there, but let's still return true if
+          // the keyPath sequence matches.
+          if (typeof act == 'string') {
+            return exp.toString() == act;
+          }
+
+          // Chrome/Opera stores keyPath squences as DOMStringList, Firefox
+          // as Array
           if ( ! (typeof act.contains == 'function' || typeof act.indexOf == 'function') ) {
             return false;
           }
