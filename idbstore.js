@@ -42,7 +42,7 @@
    *
    * @constructor
    * @name IDBStore
-   * @version 1.4.0
+   * @version 1.4.1
    *
    * @param {Object} [kwArgs] An options object used to configure the store and
    *  set callbacks
@@ -148,7 +148,7 @@
      *
      * @type String
      */
-    version: '1.4.0',
+    version: '1.4.1',
 
     /**
      * A reference to the IndexedDB object
@@ -301,6 +301,7 @@
         this.store = emptyTransaction.objectStore(this.storeName);
 
         // check indexes
+        var existingIndexes = Array.prototype.slice.call(this.getIndexList());
         this.indexes.forEach(function(indexData){
           var indexName = indexData.name;
 
@@ -320,12 +321,19 @@
               preventSuccessCallback = true;
               this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
+
+            existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
           } else {
             preventSuccessCallback = true;
             this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
           }
 
         }, this);
+
+        if (existingIndexes.length) {
+          preventSuccessCallback = true;
+          this.onError(new Error('Cannot delete index(es) "' + existingIndexes.toString() + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+        }
 
         preventSuccessCallback || this.onStoreReady();
       }.bind(this);
@@ -337,9 +345,14 @@
         if(this.db.objectStoreNames.contains(this.storeName)){
           this.store = event.target.transaction.objectStore(this.storeName);
         } else {
-          this.store = this.db.createObjectStore(this.storeName, { keyPath: this.keyPath, autoIncrement: this.autoIncrement});
+          var optionalParameters = { autoIncrement: this.autoIncrement };
+          if (this.keyPath !== null) {
+            optionalParameters.keyPath = this.keyPath;
+          }
+          this.store = this.db.createObjectStore(this.storeName, optionalParameters);
         }
 
+        var existingIndexes = Array.prototype.slice.call(this.getIndexList());
         this.indexes.forEach(function(indexData){
           var indexName = indexData.name;
 
@@ -359,11 +372,19 @@
               this.store.deleteIndex(indexName);
               this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
             }
+
+            existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
           } else {
             this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
           }
 
         }, this);
+
+        if (existingIndexes.length) {
+          existingIndexes.forEach(function(_indexName){
+            this.store.deleteIndex(_indexName);
+          }, this);
+        }
 
       }.bind(this);
     },
@@ -929,6 +950,35 @@
       var complies = ['keyPath', 'unique', 'multiEntry'].every(function (key) {
         // IE10 returns undefined for no multiEntry
         if (key == 'multiEntry' && actual[key] === undefined && expected[key] === false) {
+          return true;
+        }
+        // Compound keys
+        if (key == 'keyPath' && Object.prototype.toString.call(expected[key]) == '[object Array]') {
+          var exp = expected.keyPath;
+          var act = actual.keyPath;
+
+          // IE10 can't handle keyPath sequences and stores them as a string.
+          // The index will be unusable there, but let's still return true if
+          // the keyPath sequence matches.
+          if (typeof act == 'string') {
+            return exp.toString() == act;
+          }
+
+          // Chrome/Opera stores keyPath squences as DOMStringList, Firefox
+          // as Array
+          if ( ! (typeof act.contains == 'function' || typeof act.indexOf == 'function') ) {
+            return false;
+          }
+
+          if (act.length !== exp.length) {
+            return false;
+          }
+
+          for (var i = 0, m = exp.length; i<m; i++) {
+            if ( ! ( (act.contains && act.contains(exp[i])) || act.indexOf(exp[i] !== -1) )) {
+              return false;
+            }
+          }
           return true;
         }
         return expected[key] == actual[key];

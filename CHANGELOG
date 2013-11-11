@@ -1,4 +1,14 @@
-1.4.0 / 24.09.2013
+1.4.1 / 11-11-2013
+------------------
+
+* Support deletion of indexes through constructor arguments
+* Fix issue when using out-of-line keyPath setup with IE10
+* Fix issue when using compound indexes (keyPath sequences)
+* Add integration tests
+
+
+
+1.4.0 / 24-09-2013
 ------------------
 
 * Add .only property to makeKeyRange() options
