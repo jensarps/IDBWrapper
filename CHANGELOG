@@ -3,7 +3,7 @@
 
 * Support deletion of indexes through constructor arguments
 * Fix issue when using out-of-line keyPath setup with IE10
-* Fix issue when using compound keys
+* Fix issue when using compound indexes (keyPath sequences)
 * Add integration tests
 
 
