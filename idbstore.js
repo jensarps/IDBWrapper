@@ -301,6 +301,7 @@
         this.store = emptyTransaction.objectStore(this.storeName);
 
         // check indexes
+        var existingIndexes = Array.prototype.slice.call(this.getIndexList());
         this.indexes.forEach(function(indexData){
           var indexName = indexData.name;
 
@@ -320,12 +321,19 @@
               preventSuccessCallback = true;
               this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
+
+            existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
           } else {
             preventSuccessCallback = true;
             this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
           }
 
         }, this);
+
+        if (existingIndexes.length) {
+          preventSuccessCallback = true;
+          this.onError(new Error('Cannot delete index(es) "' + existingIndexes.toString() + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+        }
 
         preventSuccessCallback || this.onStoreReady();
       }.bind(this);
@@ -344,6 +352,7 @@
           this.store = this.db.createObjectStore(this.storeName, optionalParameters);
         }
 
+        var existingIndexes = Array.prototype.slice.call(this.getIndexList());
         this.indexes.forEach(function(indexData){
           var indexName = indexData.name;
 
@@ -363,11 +372,19 @@
               this.store.deleteIndex(indexName);
               this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
             }
+
+            existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
           } else {
             this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
           }
 
         }, this);
+
+        if (existingIndexes.length) {
+          existingIndexes.forEach(function(_indexName){
+            this.store.deleteIndex(_indexName);
+          }, this);
+        }
 
       }.bind(this);
     },
