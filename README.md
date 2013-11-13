@@ -142,12 +142,10 @@ this if you change the structure of the store at a later time.
 the database will automatically add a unique key to the keyPath index when storing objects missing
 that property. If you want to use out-of-line keys, you must set this  property to `null` (see below for details on out-of-line keys).
 
-'indexes' contains objects defining indexes (see below for details on indexes).
-
 'autoIncrement' is a boolean and toggles, well, auto-increment on or off. You
 can leave it to true, even if you do provide your own ids.
 
-'indexes' is an array of indexes. See below for further info on indexes.
+'indexes' is an array of objects defining indexes (see below for details on indexes).
 
 'onError' gets called if an error occurred while trying to open the store. It
 receives the error instance as only argument.
