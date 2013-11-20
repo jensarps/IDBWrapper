@@ -31,38 +31,55 @@
 
 <div id="container">
 
-  <div class="download">
-    <a href="https://github.com/jensarps/IDBWrapper/zipball/master">
-      <img border="0" width="90"
-           src="https://github.com/images/modules/download/zip.png"></a>
-    <a href="https://github.com/jensarps/IDBWrapper/tarball/master">
-      <img border="0" width="90"
-           src="https://github.com/images/modules/download/tar.png"></a>
-  </div>
-
   <h1><a href="https://github.com/jensarps/IDBWrapper">IDBWrapper</a></h1>
 
   <div class="description">
     A cross-browser wrapper for IndexedDB.
   </div>
 
-
   <h2>About</h2>
 
   <p>
-    This is a wrapper for indexedDB. It is meant to
+    IDBWrapper is a cross-browser wrapper for the HTML5 IndexedDB API. While this
+    API is the future of offline storage, it is not very intuitive to use.
+    IDBWrapper is there to provide easy access to IndexedDB's features.
+  </p>
+
+  <h2>Obtaining IDBWrapper</h2>
+
+  <p>
+    You can git clone the repository, or download the minified file here:
+    <a href="https://cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js" target="_blank" download>https://cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js</a>
   </p>
 
   <p>
-    a) ease the use of indexedDB and abstract away the differences between the
-    existing impls in Chrome, Firefox, IE10 and Opera 15 (yes, it works in all four),
-    and
+    A list of releases can be found <a href="https://github.com/jensarps/IDBWrapper/tags">here</a>.
   </p>
 
   <p>
-    b) show how IDB works. The code is split up into short methods, so that
-    it's easy to see what happens in what method.
+    IDBWrapper is also available on cdnjs, so you can directly point a script
+    tag there, or require() it from there. cdnjs supports http, https and spdy,
+    so you can just leave the protocol off. The URL is:
   </p>
+
+  <p><code>
+    //cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js
+  </code></p>
+
+  <p>If you use NPM as your package manager, you can get it from there, too, by
+    running:</p>
+
+  <pre>$ npm install idb-wrapper</pre>
+
+  <p>If you use bower as your package manager, run the following:</p>
+
+  <pre>$ bower install idbwrapper</pre>
+
+  <p>If you want to add IDBWrapper to a volo project, just run:</p>
+
+  <pre>$ volo add idbwrapper</pre>
+
+  <h2>Tutorials</h2>
 
   <p>There are two tutorials to get you up and running:</p>
 
@@ -79,37 +96,43 @@
 
   <pre>$ make doc</pre>
 
-  <h2>Obtaining IDBWrapper</h2>
+  <h2>Browser Support</h2>
 
-  <p>
-    You can git clone the repository, or download a zip file here:
-    <a href="https://github.com/jensarps/IDBWrapper/tags">https://github.com/jensarps/IDBWrapper/tags</a>
-  </p>
+  <p>IDBWrapper works on all browsers supperting the IndexedDB API, which
+    are:</p>
 
-  <p>
-    IDBWrapper is also available on cdnjs, so you can directly point a script
-    tag there, or require() it from there. cdnjs supports http, https and spdy,
-    so you can just leave the protocol off. The URL is:
-  </p>
+  <p><strong>Desktop</strong></p>
 
-  <p><code>
-    //cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.0/idbstore.min.js
-  </code></p>
+  <ul>
+    <li>Chrome</li>
+    <li>Firefox</li>
+    <li>Opera 15+</li>
+    <li>IE 10+</li>
+  </ul>
 
-  <p>If you use NPM as your package manager, you can get it from there, too, by
-    running:</p>
+  <p><strong>Mobile</strong></p>
 
-  <pre>$ npm install idb-wrapper</pre>
+  <ul>
+    <li>Chrome for Android</li>
+    <li>Firefox for Android</li>
+    <li>Opera for Android</li>
+    <li>IE10 for WP8</li>
+  </ul>
 
-  <p>If you use bower as your package manager, run the following:</p>
+  <p><strong>Worker</strong> IDBWrapper runs inside of a worker on following
+    browsers:</p>
 
-  <pre>$ bower install idbwrapper</pre>
+  <ul>
+    <li>Chrome</li>
+    <li>Chrome for Android</li>
+    <li>Firefox</li>
+    <li>Opera</li>
+    <li>Opera for Android</li>
+    <li>IE10</li>
+    <li>IE10 for WP8</li>
+  </ul>
 
-  <p>If you want to add IDBWrapper to a volo project, just run:</p>
-
-  <pre>$ volo add idbwrapper</pre>
-
-  <h2>Usage</h2>
+  <h2>Usage/Examples</h2>
 
   <p>For details on usage, please see the project's <a
     href="https://github.com/jensarps/IDBWrapper/blob/master/README.md">README</a>
@@ -148,26 +171,11 @@
   <h2>Contact</h2>
 
   <p>
-    Ping me on Twitter: <a href="https://twitter.com/#!/jensarps">@jensarps</a>
+    Catch me on <a href="https://www.google.com/+JensArps">Google+</a> or <a href="https://twitter.com/#!/jensarps">Twitter</a>
   </p>
-
-  <h2>Download</h2>
-
-  <p>
-    You can download this project in either
-    <a href="https://github.com/jensarps/IDBWrapper/zipball/master">zip</a> or
-    <a href="https://github.com/jensarps/IDBWrapper/tarball/master">tar</a>
-    formats.
-  </p>
-
-  <p>
-    You can also clone the project with <a href="http://git-scm.com">Git</a> by
-    running:
-  </p>
-  <pre>$ git clone git://github.com/jensarps/IDBWrapper</pre>
 
   <div class="footer">
-    get the source code on GitHub:
+    Get the source code on GitHub:
     <a href="https://github.com/jensarps/IDBWrapper">jensarps/IDBWrapper</a>
   </div>
 
