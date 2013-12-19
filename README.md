@@ -1,3 +1,6 @@
+[![NPM version](https://badge.fury.io/js/idb-wrapper.png)](http://badge.fury.io/js/idb-wrapper)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jensarps/idbwrapper/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 About
 =====
 
