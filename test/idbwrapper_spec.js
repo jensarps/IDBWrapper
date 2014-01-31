@@ -549,6 +549,59 @@ describe('IDBWrapper', function(){
 
     });
 
+    it('should fetch objects using basic index (KeyRange "all") and paging (page 1)', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(2);
+        expect(data[0].name).to.equal('Frank');
+        expect(data[1].name).to.equal('James');
+        done();
+      }, {
+        pageSize: 2,
+        pageNum: 1,
+        index: 'basic',
+        keyRange: store.makeKeyRange({
+          lower: ''
+        })
+      });
+
+    });
+
+    it('should fetch objects using basic index (KeyRange "all") and paging (page 2)', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(2);
+        expect(data[0].name).to.equal('Jenna');
+        expect(data[1].name).to.equal('Joe');
+        done();
+      }, {
+        pageSize: 2,
+        pageNum: 2,
+        index: 'basic',
+        keyRange: store.makeKeyRange({
+          lower: ''
+        })
+      });
+
+    });
+
+    it('should fetch objects using basic index (KeyRange "all") and paging (page 3)', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(2);
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('John');
+        done();
+      }, {
+        pageSize: 2,
+        pageNum: 3,
+        index: 'basic',
+        keyRange: store.makeKeyRange({
+          lower: ''
+        })
+      });
+
+    });
 
     after(function(done){
       store.clear(function(){
