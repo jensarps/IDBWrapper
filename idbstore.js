@@ -393,9 +393,14 @@
      * Deletes the database used for this store if the IDB implementations
      * provides that functionality.
      */
-    deleteDatabase: function () {
+    deleteDatabase: function (onSuccess, onError) {
       if (this.idb.deleteDatabase) {
-        this.idb.deleteDatabase(this.dbName);
+        this.db.close();
+        var openRequest = this.idb.deleteDatabase(this.dbName);
+        openRequest.onsuccess = onSuccess;
+        openRequest.onerror = onError;
+      } else {
+        onError(new Error('Browser does not support IndexedDB deleteDatabase!'));
       }
     },
 
