@@ -1,5 +1,26 @@
 describe('IDBWrapper', function(){
 
+  describe('check for existing database', function(){
+
+    it('should report the database does not exist', function(done){
+      var cancelMsg = "Database does not exist";
+      var count = 0;
+      var onError = function(err) {
+        if (count++ === 0) {
+          expect(err).to.equal(cancelMsg);
+        } else {
+          done();
+        }
+      }
+      store = new IDBStore({
+        storeName: 'spec-store-simple',
+        onError: onError,
+        cancelIfNew: true,
+        cancelMsg: cancelMsg
+      }, done);
+    });
+  });
+
   describe('basic CRUD, in-line keys', function(){
 
     var store;
