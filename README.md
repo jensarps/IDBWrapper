@@ -1,13 +1,12 @@
-About
-=====
-
-IDBWrapper is a cross-browser wrapper for the HTML5 IndexedDB API. While this
+[![NPM version](https://badge.fury.io/js/idb-wrapper.png)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jensarps/idbwrapper/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+----
+**IDBWrapper** is a cross-browser wrapper for the HTML5 IndexedDB API. While this
 API is the future of offline storage, it is not very intuitive to use.
 IDBWrapper is there to provide easy access to IndexedDB's features.
 
 ##Browser Support
 
-IDBWrapper works on all browsers supperting the IndexedDB API, which are:
+IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 
 **Desktop**
 
@@ -71,7 +70,7 @@ IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly 
 it from there. cdnjs supports http, https and spdy, so you can just leave the protocol off. The URL is:
 
 ```
-//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.3.0/idbstore.min.js
+//cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js
 ```
 
 If you use NPM as your package manager, you can get it from there, too, by
@@ -142,12 +141,10 @@ this if you change the structure of the store at a later time.
 the database will automatically add a unique key to the keyPath index when storing objects missing
 that property. If you want to use out-of-line keys, you must set this  property to `null` (see below for details on out-of-line keys).
 
-'indexes' contains objects defining indexes (see below for details on indexes).
-
 'autoIncrement' is a boolean and toggles, well, auto-increment on or off. You
 can leave it to true, even if you do provide your own ids.
 
-'indexes' is an array of indexes. See below for further info on indexes.
+'indexes' is an array of objects defining indexes (see below for details on indexes).
 
 'onError' gets called if an error occurred while trying to open the store. It
 receives the error instance as only argument.
