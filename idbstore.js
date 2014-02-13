@@ -1011,9 +1011,9 @@
      * @param {Function} [options.onError=throw] A callback to be called
      *  if an error occurred during the operation.
      * @param {Number} [options.pageSize] stop retrieving when this number of
-     *      records has been collected
+     *  records has been collected
      * @param {Number} [options.pageNum] (1-based) skip "pageSize * (pageNum - 1)"
-     * 		number of records before starting to collect records
+     *  number of records before starting to collect records
      * @returns {IDBTransaction} The transaction used for this operation.
      */
     iterate: function (onItem, options) {
