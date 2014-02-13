@@ -1065,7 +1065,7 @@
         if (cursor) {
           if (!skipDone && options.pageNum > 1 && options.pageSize > 0) {
             var toSkip = (options.pageNum - 1) * options.pageSize;
-            cursor['advance'](toSkip);
+            cursor.advance(toSkip);
             skipDone = true;
           } else {
             onItem(cursor.value, cursor, cursorTransaction);
