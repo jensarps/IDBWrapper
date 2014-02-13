@@ -495,6 +495,10 @@ In the `onEnd` property you can pass a callback that gets called after the itera
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
 
+The `pageSize` property is used for pagination and lets you define the size of a batch of results.
+
+The `pageNum` property is used for pagination and lets you specify which page you want fetch (1-based).
+
 ___
 
 
