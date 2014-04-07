@@ -187,6 +187,13 @@
     storeName: null,
 
     /**
+     * The prefix to prepend to the store name
+     *
+     * @type String
+     */
+    storePrefix: null,
+
+    /**
      * The key path
      *
      * @type String
