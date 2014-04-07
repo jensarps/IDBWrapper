@@ -396,9 +396,9 @@
     deleteDatabase: function (onSuccess, onError) {
       if (this.idb.deleteDatabase) {
         this.db.close();
-        var openRequest = this.idb.deleteDatabase(this.dbName);
-        openRequest.onsuccess = onSuccess;
-        openRequest.onerror = onError;
+        var deleteRequest = this.idb.deleteDatabase(this.dbName);
+        deleteRequest.onsuccess = onSuccess;
+        deleteRequest.onerror = onError;
       } else {
         onError(new Error('Browser does not support IndexedDB deleteDatabase!'));
       }
