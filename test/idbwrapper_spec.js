@@ -1,5 +1,23 @@
 describe('IDBWrapper', function(){
 
+  describe('delete databases', function(){
+    var store;
+
+    before(function(done){
+      store = new IDBStore({
+        storeName: 'spec-store-simple'
+      }, done);
+    });
+
+    it('should delete the newly created database', function(done){
+      store.deleteDatabase(function(result){
+        expect(result).to.be.ok;
+        done();
+      }, done);
+    });
+
+  });
+
   describe('basic CRUD, in-line keys', function(){
 
     var store;
