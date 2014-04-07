@@ -399,6 +399,11 @@
     /**
      * Deletes the database used for this store if the IDB implementations
      * provides that functionality.
+     *
+     * @param {Function} [onSuccess] A callback that is called if deletion
+     *  was successful.
+     * @param {Function} [onError] A callback that is called if deletion
+     *  failed.
      */
     deleteDatabase: function (onSuccess, onError) {
       if (this.idb.deleteDatabase) {
