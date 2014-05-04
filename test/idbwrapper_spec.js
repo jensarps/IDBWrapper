@@ -20,7 +20,7 @@ describe('IDBWrapper', function(){
 
   describe('basic CRUD, in-line keys', function(){
 
-    var store;
+    var store, lastInsertId;
 
     before(function(done){
       store = new IDBStore({
@@ -66,6 +66,7 @@ describe('IDBWrapper', function(){
       };
       store.put(data, function(insertId){
         expect(insertId).to.exist;
+        lastInsertId = insertId;
         store.get(insertId, function(result){
           expect(result.name).to.equal(data.name);
           done();
@@ -73,9 +74,20 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should assign an id which is greater than the last assigned', function(done){
+      var data = {
+        name: 'John'
+      };
+      store.put(data, function(insertId){
+        expect(insertId).to.exist;
+        expect(store.idb.cmp(insertId, lastInsertId)).to.equal(1);
+        done();
+      }, done);
+    });
+
     it('should get all stored objects', function(done){
       store.getAll(function(data){
-        expect(data.length).to.equal(2);
+        expect(data.length).to.equal(3);
         done();
       }, done);
     });
