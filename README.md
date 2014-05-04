@@ -495,9 +495,9 @@ In the `onEnd` property you can pass a callback that gets called after the itera
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
 
-The `pageSize` property is used for pagination and lets you define the size of a batch of results.
+The `limit` property defaults to `Infinity` and is used to limit the resultset to the provided number.
 
-The `pageNum` property is used for pagination and lets you specify which page you want fetch (1-based).
+The `offset` property defaults to `0` and is used to skip the provided number of results in the resultset.
 
 ___
 
@@ -527,6 +527,10 @@ The `order` property can be set to 'ASC' or 'DESC', and determines the ordering 
 The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
+
+The `limit` property defaults to `Infinity` and is used to limit the resultset to the provided number.
+
+The `offset` property defaults to `0` and is used to skip the provided number of results in the resultset.
 
 ___
 
