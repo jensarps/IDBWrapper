@@ -1087,9 +1087,9 @@
             recordCount++;
             if (options.autoContinue) {
               if (recordCount + options.offset < options.limit) {
-                  cursor['continue']();
+                cursor['continue']();
               } else {
-                  hasSuccess = true;
+                hasSuccess = true;
               }
             }
           }
