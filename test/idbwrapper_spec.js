@@ -579,56 +579,56 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using basic index (KeyRange "all") and paging (page 1)', function(done){
+    it('should limit resultset, no index', function(done){
 
       store.query(function(data){
         expect(data.length).to.equal(2);
-        expect(data[0].name).to.equal('Frank');
-        expect(data[1].name).to.equal('James');
         done();
       }, {
-        pageSize: 2,
-        pageNum: 1,
-        index: 'basic',
-        keyRange: store.makeKeyRange({
-          lower: ''
-        })
+        limit: 2
       });
 
     });
 
-    it('should fetch objects using basic index (KeyRange "all") and paging (page 2)', function(done){
+    it('should limit resultset, using basic index', function(done){
 
       store.query(function(data){
         expect(data.length).to.equal(2);
-        expect(data[0].name).to.equal('Jenna');
-        expect(data[1].name).to.equal('Joe');
+        expect(data[0].id).to.equal(4);
+        expect(data[1].id).to.equal(3);
         done();
       }, {
-        pageSize: 2,
-        pageNum: 2,
-        index: 'basic',
-        keyRange: store.makeKeyRange({
-          lower: ''
-        })
+        limit: 2,
+        index: 'basic'
       });
 
     });
 
-    it('should fetch objects using basic index (KeyRange "all") and paging (page 3)', function(done){
+    it('should start with an offset, using basic index', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(4);
+        expect(data[0].id).to.equal(5);
+        expect(data[1].id).to.equal(2);
+        done();
+      }, {
+        offset: 2,
+        index: 'basic'
+      });
+
+    });
+
+    it('should start with an offset and limit resultset, using basic index', function(done){
 
       store.query(function(data){
         expect(data.length).to.equal(2);
-        expect(data[0].name).to.equal('John');
-        expect(data[1].name).to.equal('John');
+        expect(data[0].id).to.equal(1);
+        expect(data[1].id).to.equal(6);
         done();
       }, {
-        pageSize: 2,
-        pageNum: 3,
-        index: 'basic',
-        keyRange: store.makeKeyRange({
-          lower: ''
-        })
+        offset: 4,
+        limit: 2,
+        index: 'basic'
       });
 
     });

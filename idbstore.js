@@ -1027,10 +1027,10 @@
      *  iteration has ended
      * @param {Function} [options.onError=throw] A callback to be called
      *  if an error occurred during the operation.
-     * @param {Number} [options.pageSize] stop retrieving when this number of
-     *  records has been collected
-     * @param {Number} [options.pageNum] (1-based) skip "pageSize * (pageNum - 1)"
-     *  number of records before starting to collect records
+     * @param {Number} [options.limit=Infinity] Limit the number of returned
+     *  results to this number
+     * @param {Number} [options.offset=0] Skip the provided number of results
+     *  in the resultset
      * @returns {IDBTransaction} The transaction used for this operation.
      */
     iterate: function (onItem, options) {
@@ -1043,8 +1043,8 @@
         writeAccess: false,
         onEnd: null,
         onError: defaultErrorHandler,
-        pageSize: 0,
-        pageNum: 0
+        limit: Infinity,
+        offset: 0
       }, options || {});
 
       var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
@@ -1059,7 +1059,6 @@
         cursorTarget = cursorTarget.index(options.index);
       }
       var recordCount = 0;
-      var skipDone = false;
 
       cursorTransaction.oncomplete = function () {
         if (!hasSuccess) {
@@ -1080,21 +1079,17 @@
       cursorRequest.onsuccess = function (event) {
         var cursor = event.target.result;
         if (cursor) {
-          if (!skipDone && options.pageNum > 1 && options.pageSize > 0) {
-            var toSkip = (options.pageNum - 1) * options.pageSize;
-            cursor.advance(toSkip);
-            skipDone = true;
+          if (options.offset) {
+            cursor.advance(options.offset);
+            options.offset = 0;
           } else {
             onItem(cursor.value, cursor, cursorTransaction);
             recordCount++;
             if (options.autoContinue) {
-              if (options.pageSize > 0) {
-                if (recordCount < options.pageSize)
+              if (recordCount + options.offset < options.limit) {
                   cursor['continue']();
-                else
-                  hasSuccess = true;
               } else {
-                cursor['continue']();
+                  hasSuccess = true;
               }
             }
           }
@@ -1112,15 +1107,21 @@
      *
      * @param {Function} onSuccess A callback to be called when the operation
      *  was successful.
-     * @param {Object} [options] An object defining specific query options
+     * @param {Object} [options] An object defining specific options
      * @param {Object} [options.index=null] An IDBIndex to operate on
      * @param {String} [options.order=ASC] The order in which to provide the
      *  results, can be 'DESC' or 'ASC'
+     * @param {Boolean} [options.autoContinue=true] Whether to automatically
+     *  iterate the cursor to the next result
      * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
      *  duplicate matches
      * @param {Object} [options.keyRange=null] An IDBKeyRange to use
-     * @param {Function} [options.onError=throw] A callback to be called if an error
-     *  occurred during the operation.
+     * @param {Function} [options.onError=throw] A callback to be called
+     *  if an error occurred during the operation.
+     * @param {Number} [options.limit=Infinity] Limit the number of returned
+     *  results to this number
+     * @param {Number} [options.offset=0] Skip the provided number of results
+     *  in the resultset
      * @returns {IDBTransaction} The transaction used for this operation.
      */
     query: function (onSuccess, options) {
