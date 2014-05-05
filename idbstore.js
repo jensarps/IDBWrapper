@@ -23,6 +23,7 @@
   var defaultErrorHandler = function (error) {
     throw error;
   };
+  var defaultSuccessHandler = function () {};
 
   var defaults = {
     storeName: 'Store',
@@ -459,7 +460,7 @@
         value = key;
       }
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
 
       var hasSuccess = false,
           result = null,
@@ -501,7 +502,7 @@
      */
     get: function (key, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
 
       var hasSuccess = false,
           result = null;
@@ -535,7 +536,7 @@
      */
     remove: function (key, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
 
       var hasSuccess = false,
           result = null;
@@ -571,7 +572,7 @@
      */
     batch: function (dataArray, onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
 
       if(Object.prototype.toString.call(dataArray) != '[object Array]'){
         onError(new Error('dataArray argument must be of type Array.'));
@@ -725,7 +726,7 @@
      */
     getBatch: function (keyArray, onSuccess, onError, arrayType) {
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
       arrayType || (arrayType = 'sparse');
 
       if(Object.prototype.toString.call(keyArray) != '[object Array]'){
@@ -788,7 +789,7 @@
      */
     getAll: function (onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
       var getAllTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       var store = getAllTransaction.objectStore(this.storeName);
       if (store.getAll) {
@@ -881,7 +882,7 @@
      */
     clear: function (onSuccess, onError) {
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
 
       var hasSuccess = false,
           result = null;
@@ -1236,9 +1237,6 @@
   };
 
   /** helpers **/
-
-  var noop = function () {
-  };
 
   // TODO: Check Object.create support to get rid of this
   var empty = {};
