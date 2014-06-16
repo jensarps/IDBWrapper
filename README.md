@@ -1,4 +1,4 @@
-[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jensarps/idbwrapper/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
 ----
 **IDBWrapper** is a cross-browser wrapper for the HTML5 IndexedDB API. While this
 API is the future of offline storage, it is not very intuitive to use.
