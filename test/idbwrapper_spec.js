@@ -241,7 +241,7 @@ describe('IDBWrapper', function(){
 
   });
 
-  describe('batch ops - upsertBatch', function(){
+  describe('batch ops - upsertBatch', function () {
 
     var store;
     var dataArray = [
@@ -256,16 +256,27 @@ describe('IDBWrapper', function(){
       }
     ];
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple'
       }, done);
     });
 
+    it('should store multiple objects and add keys to these objects', function (done) {
+      var options = {keyField: 'foo'};
+      store.upsertBatch(dataArray, options, function (data) {
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('Joe');
+        expect(data[2].name).to.equal('James');
+        expect(data[0].foo).to.exist;
+        expect(data[1].foo).to.exist;
+        expect(data[2].foo).to.exist;
+        done();
+      }, done);
+    });
 
-    it('should store multiple objects and add keys to these objects', function(done){
-      var options = { keyField: 'id' };
-      store.upsertBatch(dataArray, options, function(data){
+    it('should default to keyPath when assigning insertId', function (done) {
+      store.upsertBatch(dataArray, function (data) {
         expect(data[0].name).to.equal('John');
         expect(data[1].name).to.equal('Joe');
         expect(data[2].name).to.equal('James');
@@ -276,8 +287,8 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });

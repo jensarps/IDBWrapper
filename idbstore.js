@@ -657,8 +657,9 @@
      * should be set to the newly created key.
      *
      * @param {Array} dataArray An array of objects to store
-     * @param {String} [options.keyField] Specifies a field in the record to update
-     *  with the auto-incrementing key
+     * @param {Object} [options] An object containing optional options
+     * @param {String} [options.keyField=this.keyPath] Specifies a field in the record to update
+     *  with the auto-incrementing key. Defaults to the store's keyPath.
      * @param {Function} [onSuccess] A callback that is called if all operations
      *  were successful.
      * @param {Function} [onError] A callback that is called if an error
@@ -667,8 +668,16 @@
      *
      */
     upsertBatch: function (dataArray, options, onSuccess, onError) {
+      // handle `dataArray, onSuccess, onError` signature
+      if (typeof options == 'function') {
+        onSuccess = options;
+        onError = onSuccess;
+        options = {};
+      }
+
       onError || (onError = defaultErrorHandler);
-      onSuccess || (onSuccess = noop);
+      onSuccess || (onSuccess = defaultSuccessHandler);
+      options || (options = {});
 
       if (Object.prototype.toString.call(dataArray) != '[object Array]') {
         onError(new Error('dataArray argument must be of type Array.'));
@@ -684,7 +693,7 @@
       batchTransaction.onabort = onError;
       batchTransaction.onerror = onError;
 
-      var keyField = options['keyField'];
+      var keyField = options.keyField || this.keyPath;
       var count = dataArray.length;
       var called = false;
       var hasSuccess = false;
@@ -692,8 +701,7 @@
 
       var onItemSuccess = function (event) {
         var record = dataArray[index++];
-        if (typeof keyField !== 'undefined')
-          record[keyField] = event.target.result;
+        record[keyField] = event.target.result;
 
         count--;
         if (count === 0 && !called) {
