@@ -241,6 +241,49 @@ describe('IDBWrapper', function(){
 
   });
 
+  describe('batch ops - upsertBatch', function(){
+
+    var store;
+    var dataArray = [
+      {
+        name: 'John'
+      },
+      {
+        name: 'Joe'
+      },
+      {
+        name: 'James'
+      }
+    ];
+
+    before(function(done){
+      store = new IDBStore({
+        storeName: 'spec-store-simple'
+      }, done);
+    });
+
+
+    it('should store multiple objects and add keys to these objects', function(done){
+      var options = { keyField: 'id' };
+      store.upsertBatch(dataArray, options, function(data){
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('Joe');
+        expect(data[2].name).to.equal('James');
+        expect(data[0].id).to.exist;
+        expect(data[1].id).to.exist;
+        expect(data[2].id).to.exist;
+        done();
+      }, done);
+    });
+
+    after(function(done){
+      store.clear(function(){
+        done();
+      });
+    });
+
+  });
+
   describe('getBatch() dataArray return type', function(){
 
     var store;
