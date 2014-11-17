@@ -33,7 +33,9 @@
     onStoreReady: function () {
     },
     onError: defaultErrorHandler,
-    indexes: []
+    indexes: [],
+    cancelIfNew: false,
+    cancelMsg: ""
   };
 
   /**
@@ -240,6 +242,22 @@
     _insertIdCount: 0,
 
     /**
+     * If database does not exist yet, abort transaction if cancelIfNew is true
+     *
+     * @type Number
+     * @private
+     */
+    cancelIfNew: false,
+
+    /**
+     * If cancelIfNew is true and database does not exist, call onError with this msg
+     *
+     * @type Number
+     * @private
+     */
+    cancelMsg: "",
+
+      /**
      * Opens an IndexedDB; called by the constructor.
      *
      * Will check if versions match and compare provided index configuration
@@ -300,35 +318,38 @@
         var emptyTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
         this.store = emptyTransaction.objectStore(this.storeName);
 
-        // check indexes
-        var existingIndexes = Array.prototype.slice.call(this.getIndexList());
-        this.indexes.forEach(function(indexData){
-          var indexName = indexData.name;
+        // check indexes only if not checking for existing database
+        var existingIndexes = [];
+        if (!this.cancelIfNew) {
+          existingIndexes = Array.prototype.slice.call(this.getIndexList());
+          this.indexes.forEach(function(indexData){
+            var indexName = indexData.name;
 
-          if(!indexName){
-            preventSuccessCallback = true;
-            this.onError(new Error('Cannot create index: No index name given.'));
-            return;
-          }
-
-          this.normalizeIndexData(indexData);
-
-          if(this.hasIndex(indexName)){
-            // check if it complies
-            var actualIndex = this.store.index(indexName);
-            var complies = this.indexComplies(actualIndex, indexData);
-            if(!complies){
+            if(!indexName){
               preventSuccessCallback = true;
-              this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+              this.onError(new Error('Cannot create index: No index name given.'));
+              return;
             }
 
-            existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
-          } else {
-            preventSuccessCallback = true;
-            this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
-          }
+            this.normalizeIndexData(indexData);
 
-        }, this);
+            if(this.hasIndex(indexName)){
+              // check if it complies
+              var actualIndex = this.store.index(indexName);
+              var complies = this.indexComplies(actualIndex, indexData);
+              if(!complies){
+                preventSuccessCallback = true;
+                this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+              }
+
+              existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
+            } else {
+              preventSuccessCallback = true;
+              this.onError(new Error('Cannot create new index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
+            }
+
+          }, this);
+        }
 
         if (existingIndexes.length) {
           preventSuccessCallback = true;
@@ -339,6 +360,14 @@
       }.bind(this);
 
       openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
+
+        // when this method is called, requested database version does not exist
+        // yet - abort if so requested and call error handler with configured msg
+        if (this.cancelIfNew) {
+          event.target.transaction.abort();
+          this.onError(this.cancelMsg);
+          return;
+        }
 
         this.db = event.target.result;
 
