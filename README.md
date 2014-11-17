@@ -1,4 +1,4 @@
-[![NPM version](https://badge.fury.io/js/idb-wrapper.png)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jensarps/idbwrapper/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
 ----
 **IDBWrapper** is a cross-browser wrapper for the HTML5 IndexedDB API. While this
 API is the future of offline storage, it is not very intuitive to use.
@@ -66,7 +66,7 @@ Obtaining IDBWrapper
 
 You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/tags
 
-IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly point a script tag there, or require() 
+IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly point a script tag there, or require()
 it from there. cdnjs supports http, https and spdy, so you can just leave the protocol off. The URL is:
 
 ```
@@ -263,7 +263,7 @@ IDBWrapper allows to run a single method when dealing with multiple objects. All
 getBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError, /*String?*/arrayType)
 ```
 
-This method takes an array of keys and fetches matching objects. 
+This method takes an array of keys and fetches matching objects.
 
 `keyArray` must be an array of keys identifying the objects to fetch.
 
@@ -272,7 +272,7 @@ This method takes an array of keys and fetches matching objects.
 ```javascript
 // given that there are two objects in the database with the keypath
 // values 1 and 2, and the call looks like this:
-myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
+myStore.getBatch([1, 5, 2], function (data) { … }, onError, arrayType);
 
 // this is what the `data` array will be like:
 
@@ -311,7 +311,7 @@ myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
 // times, with the index parameter not matching the index of the key in the
 // keyArray.
 
-```    
+```
 
 
 ___
@@ -387,7 +387,7 @@ of the given operations would have succeeded.
 
 **Out-of-line Keys**
 
-If you use out-of-line keys, you must also provide a key to put operations: 
+If you use out-of-line keys, you must also provide a key to put operations:
 
 
 ```javascript
