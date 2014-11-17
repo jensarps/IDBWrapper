@@ -1,4 +1,13 @@
-1.4.1 / 11-11-2013
+1.5.0 /
+------------------
+* Add pagination to `query()`
+* Add `upsertBatch()`
+* Add callbacks to `deleteDatabse()`
+* Stability improvements
+
+
+
+1.4.1 / 2013-11-11
 ------------------
 
 * Support deletion of indexes through constructor arguments
@@ -8,7 +17,7 @@
 
 
 
-1.4.0 / 24-09-2013
+1.4.0 / 2013-09-24
 ------------------
 
 * Add .only property to makeKeyRange() options
