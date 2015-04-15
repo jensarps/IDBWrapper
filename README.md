@@ -32,6 +32,8 @@ IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 * IE10
 * IE10 for WP8
 
+If using in an older browser supporting WebSql along with [IndexedDBShim](https://github.com/axemclion/IndexedDBShim), IndexedDBShim needs to run first.
+
 ##Tutorials
 
 There are two tutorials to get you up and running:
