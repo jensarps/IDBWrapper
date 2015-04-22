@@ -1,8 +1,26 @@
 describe('IDBWrapper', function(){
 
+  describe('delete databases', function(){
+    var store;
+
+    before(function(done){
+      store = new IDBStore({
+        storeName: 'spec-store-simple'
+      }, done);
+    });
+
+    it('should delete the newly created database', function(done){
+      store.deleteDatabase(function(result){
+        expect(result).to.be.ok;
+        done();
+      }, done);
+    });
+
+  });
+
   describe('basic CRUD, in-line keys', function(){
 
-    var store;
+    var store, lastInsertId;
 
     before(function(done){
       store = new IDBStore({
@@ -48,6 +66,7 @@ describe('IDBWrapper', function(){
       };
       store.put(data, function(insertId){
         expect(insertId).to.exist;
+        lastInsertId = insertId;
         store.get(insertId, function(result){
           expect(result.name).to.equal(data.name);
           done();
@@ -55,9 +74,20 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should assign an id which is greater than the last assigned', function(done){
+      var data = {
+        name: 'John'
+      };
+      store.put(data, function(insertId){
+        expect(insertId).to.exist;
+        expect(store.idb.cmp(insertId, lastInsertId)).to.equal(1);
+        done();
+      }, done);
+    });
+
     it('should get all stored objects', function(done){
       store.getAll(function(data){
-        expect(data.length).to.equal(2);
+        expect(data.length).to.equal(3);
         done();
       }, done);
     });
@@ -205,6 +235,60 @@ describe('IDBWrapper', function(){
 
     after(function(done){
       store.clear(function(){
+        done();
+      });
+    });
+
+  });
+
+  describe('batch ops - upsertBatch', function () {
+
+    var store;
+    var dataArray = [
+      {
+        name: 'John'
+      },
+      {
+        name: 'Joe'
+      },
+      {
+        name: 'James'
+      }
+    ];
+
+    before(function (done) {
+      store = new IDBStore({
+        storeName: 'spec-store-simple'
+      }, done);
+    });
+
+    it('should store multiple objects and add keys to these objects', function (done) {
+      var options = {keyField: 'foo'};
+      store.upsertBatch(dataArray, options, function (data) {
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('Joe');
+        expect(data[2].name).to.equal('James');
+        expect(data[0].foo).to.exist;
+        expect(data[1].foo).to.exist;
+        expect(data[2].foo).to.exist;
+        done();
+      }, done);
+    });
+
+    it('should default to keyPath when assigning insertId', function (done) {
+      store.upsertBatch(dataArray, function (data) {
+        expect(data[0].name).to.equal('John');
+        expect(data[1].name).to.equal('Joe');
+        expect(data[2].name).to.equal('James');
+        expect(data[0].id).to.exist;
+        expect(data[1].id).to.exist;
+        expect(data[2].id).to.exist;
+        done();
+      }, done);
+    });
+
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
@@ -549,6 +633,59 @@ describe('IDBWrapper', function(){
 
     });
 
+    it('should limit resultset, no index', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(2);
+        done();
+      }, {
+        limit: 2
+      });
+
+    });
+
+    it('should limit resultset, using basic index', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(2);
+        expect(data[0].id).to.equal(4);
+        expect(data[1].id).to.equal(3);
+        done();
+      }, {
+        limit: 2,
+        index: 'basic'
+      });
+
+    });
+
+    it('should start with an offset, using basic index', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(4);
+        expect(data[0].id).to.equal(5);
+        expect(data[1].id).to.equal(2);
+        done();
+      }, {
+        offset: 2,
+        index: 'basic'
+      });
+
+    });
+
+    it('should start with an offset and limit resultset, using basic index', function(done){
+
+      store.query(function(data){
+        expect(data.length).to.equal(2);
+        expect(data[0].id).to.equal(1);
+        expect(data[1].id).to.equal(6);
+        done();
+      }, {
+        offset: 4,
+        limit: 2,
+        index: 'basic'
+      });
+
+    });
 
     after(function(done){
       store.clear(function(){
