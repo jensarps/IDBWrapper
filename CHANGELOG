@@ -1,4 +1,4 @@
-1.5.0 /
+1.5.0 / 2015-04-22
 ------------------
 * Add pagination to `query()`
 * Add `upsertBatch()`
