@@ -2,7 +2,7 @@
 ------------------
 * Add pagination to `query()`
 * Add `upsertBatch()`
-* Add callbacks to `deleteDatabse()`
+* Add callbacks to `deleteDatabase()`
 * Stability improvements
 
 
