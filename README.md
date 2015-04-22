@@ -1,13 +1,12 @@
-About
-=====
-
-IDBWrapper is a cross-browser wrapper for the HTML5 IndexedDB API. While this
+[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
+----
+**IDBWrapper** is a cross-browser wrapper for the HTML5 IndexedDB API. While this
 API is the future of offline storage, it is not very intuitive to use.
 IDBWrapper is there to provide easy access to IndexedDB's features.
 
 ##Browser Support
 
-IDBWrapper works on all browsers supperting the IndexedDB API, which are:
+IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 
 **Desktop**
 
@@ -22,6 +21,7 @@ IDBWrapper works on all browsers supperting the IndexedDB API, which are:
 * Firefox for Android
 * Opera for Android
 * IE10 for WP8
+* iOS 8+
 
 **Worker** IDBWrapper runs inside of a worker on following browsers:
 
@@ -32,6 +32,8 @@ IDBWrapper works on all browsers supperting the IndexedDB API, which are:
 * Opera for Android
 * IE10
 * IE10 for WP8
+
+If using in an older browser supporting WebSql along with [IndexedDBShim](https://github.com/axemclion/IndexedDBShim), IndexedDBShim needs to run first.
 
 ##Tutorials
 
@@ -67,7 +69,7 @@ Obtaining IDBWrapper
 
 You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/tags
 
-IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly point a script tag there, or require() 
+IDBWrapper is also available on [cdnjs](http://cdnjs.com/), so you can directly point a script tag there, or require()
 it from there. cdnjs supports http, https and spdy, so you can just leave the protocol off. The URL is:
 
 ```
@@ -264,7 +266,7 @@ IDBWrapper allows to run a single method when dealing with multiple objects. All
 getBatch: function (/*Array*/keyArray, /*Function?*/onSuccess, /*Function?*/onError, /*String?*/arrayType)
 ```
 
-This method takes an array of keys and fetches matching objects. 
+This method takes an array of keys and fetches matching objects.
 
 `keyArray` must be an array of keys identifying the objects to fetch.
 
@@ -273,7 +275,7 @@ This method takes an array of keys and fetches matching objects.
 ```javascript
 // given that there are two objects in the database with the keypath
 // values 1 and 2, and the call looks like this:
-myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
+myStore.getBatch([1, 5, 2], function (data) { … }, onError, arrayType);
 
 // this is what the `data` array will be like:
 
@@ -312,7 +314,7 @@ myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
 // times, with the index parameter not matching the index of the key in the
 // keyArray.
 
-```    
+```
 
 
 ___
@@ -388,7 +390,7 @@ of the given operations would have succeeded.
 
 **Out-of-line Keys**
 
-If you use out-of-line keys, you must also provide a key to put operations: 
+If you use out-of-line keys, you must also provide a key to put operations:
 
 
 ```javascript
@@ -496,6 +498,10 @@ In the `onEnd` property you can pass a callback that gets called after the itera
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
 
+The `limit` property defaults to `Infinity` and is used to limit the resultset to the provided number.
+
+The `offset` property defaults to `0` and is used to skip the provided number of results in the resultset.
+
 ___
 
 
@@ -524,6 +530,10 @@ The `order` property can be set to 'ASC' or 'DESC', and determines the ordering 
 The `filterDuplicates` property is an interesting one: If you set this to true (it defaults to false), and have several objects that have the same value in their key, the store will only fetch the first of those. It is not about objects being the same, it's about their key being the same. For example, in the customers database are a couple of guys having 'Smith' as last name. Setting filterDuplicates to true in the above example will make `iterate()` call the onItem callback only for the first of those.
 
 In the `onError` property you can pass a custom error handler. In case of an error, it will be called and receives the Error object as only argument.
+
+The `limit` property defaults to `Infinity` and is used to limit the resultset to the provided number.
+
+The `offset` property defaults to `0` and is used to skip the provided number of results in the resultset.
 
 ___
 
