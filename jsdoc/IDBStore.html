@@ -1,2239 +1,3456 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>JSDoc: Class: IDBStore</title>
-	
-	<script src="http://shjs.sourceforge.net/sh_main.min.js"> </script>
-    <script src="http://shjs.sourceforge.net/lang/sh_javascript.min.js"> </script>
-    
-    <link type="text/css" rel="stylesheet" href="styles/node-dark.css">
+    <meta charset="utf-8">
+    <title>JSDoc: Class: IDBStore</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
 
 <body>
 
 <div id="main">
-    
+
     <h1 class="page-title">Class: IDBStore</h1>
+
     
+
+
+
+
+<section>
+
+<header>
     
-    
-    <section>
-     
-    <header>
-        <h2>IDBStore</h2>
+        <h2>
+        IDBStore
+        </h2>
         
-    </header>  
     
-    <article>
-        <div class="container-overview">
-        <dt>
-    <h4 class="name" id="IDBStore"><span class="type-signature"></span>new IDBStore<span class="signature">(<span class="optional">kwArgs</span>, <span class="optional">onStoreReady</span>)</span><span class="type-signature"></span></h4>
+</header>
+
+<article>
+    <div class="container-overview">
     
+        
+<dt>
+    
+        
+        <h2>Constructor</h2>
+        
+        
+        <h4 class="name" id="IDBStore"><span class="type-signature"></span>new IDBStore<span class="signature">(kwArgs<span class="signature-attributes">opt</span>, onStoreReady<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         The IDBStore constructor
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>kwArgs</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">An options object used to configure the store and
- set callbacks<h6>Properties</h6>
+ set callbacks
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>storeName</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                'Store'
+                
+                    'Store'
+                
                 </td>
             
-            
+
             <td class="description last">The name of the store</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>storePrefix</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                'IDBWrapper-'
+                
+                    'IDBWrapper-'
+                
                 </td>
             
-            
+
             <td class="description last">A prefix that is
  internally used to construct the name of the database, which will be
  kwArgs.storePrefix + kwArgs.storeName</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>dbVersion</code></td>
             
-            
+
             <td class="type">
-            Number
-            </td>
             
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                1
+                
+                    1
+                
                 </td>
             
-            
+
             <td class="description last">The version of the store</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>keyPath</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                'id'
+                
+                    'id'
+                
                 </td>
             
-            
+
             <td class="description last">The key path to use. If you want to
  setup IDBWrapper to work with out-of-line keys, you need to set this to
  `null`</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>autoIncrement</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                true
+                
+                    true
+                
                 </td>
             
-            
+
             <td class="description last">If set to true, IDBStore will
  automatically make sure a unique keyPath value is present on each object
  that is stored.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onStoreReady</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
                 
                 </td>
             
-            
+
             <td class="description last">A callback to be called when the
  store is ready to be used.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                throw
+                
+                    throw
+                
                 </td>
             
-            
+
             <td class="description last">A callback to be called when an
  error occurred during instantiation of the store.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>indexes</code></td>
             
-            
+
             <td class="type">
-            Array
-            </td>
             
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                []
+                
+                    []
+                
                 </td>
             
-            
+
             <td class="description last">An array of indexData objects
  defining the indexes to use with the store. For every index to be used
  one indexData object needs to be passed in the array.
- An indexData object is defined as follows:<h6>Properties</h6>
+ An indexData object is defined as follows:
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>indexData</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">An object defining the index to
- use<h6>Properties</h6>
+ use
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>name</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The name of the index</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>keyPath</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The key path of the index</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>unique</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Whether the index is unique</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>multiEntry</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Whether the index is multi entry</td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
+
+    
+    </tbody>
+</table>
+            </td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
+
+    
+    </tbody>
+</table>
+            </td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
+
+    
+    </tbody>
+</table>
+            </td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onStoreReady</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback to be called when the store
 is ready to be used.</td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
     
-    <dl class="details">
+
     
-        
-	
-	<dt class="tag-version">Version:</dt>
-	<dd class="tag-version"><ul class="dummy"><li>1.4.1</li></ul></dd>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 39</li></ul></dd>
-	
-	
-	
-	
-	
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.4.1</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
-    
-    
-    
-    
-    
-    
-    
-    <h5>Examples</h5>
-    <pre class="sh_javascript"><code>      // create a store for customers with an additional index over the
-      // `lastname` property.
-      var myCustomerStore = new IDBStore({
-        dbVersion: 1,
-        storeName: 'customer-index',
-        keyPath: 'customerid',
-        autoIncrement: true,
-        onStoreReady: populateTable,
-        indexes: [
-          { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
-        ]
-      });</code></pre>
 
-    <pre class="sh_javascript"><code>      // create a generic store
-      var myCustomerStore = new IDBStore({
-        storeName: 'my-data-store',
-        onStoreReady: function(){
-          // start working with the store.
-        }
-      });</code></pre>
+    
 
+    
 
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Examples</h5>
+        
+    <pre class="prettyprint"><code>// create a store for customers with an additional index over the
+// `lastname` property.
+var myCustomerStore = new IDBStore({
+  dbVersion: 1,
+  storeName: 'customer-index',
+  keyPath: 'customerid',
+  autoIncrement: true,
+  onStoreReady: populateTable,
+  indexes: [
+    { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
+  ]
+});</code></pre>
+
+    <pre class="prettyprint"><code>// create a generic store
+var myCustomerStore = new IDBStore({
+  storeName: 'my-data-store',
+  onStoreReady: function(){
+    // start working with the store.
+  }
+});</code></pre>
+
+    
 </dd>
 
-        </div>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-            
-            <h3 class="subsection-title">Members</h3>
-            
-            <dl>
-<dt>
-    <h4 class="name" id="autoIncrement"><span class="type-signature">&lt;static> </span>autoIncrement<span class="type-signature"> :Boolean</span></h4>
     
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="autoIncrement"><span class="type-signature">(static) </span>autoIncrement<span class="type-signature"> :Boolean</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         Whether IDBStore uses autoIncrement
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 201</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Boolean</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line209">line 209</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="constructor"><span class="type-signature">&lt;static> </span>constructor<span class="type-signature"> :IDBStore</span></h4>
-    
+    <h4 class="name" id="constructor"><span class="type-signature">(static) </span>constructor<span class="type-signature"> :<a href="IDBStore.html">IDBStore</a></span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         A pointer to the IDBStore ctor
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 144</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="IDBStore.html">IDBStore</a></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line145">line 145</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="db"><span class="type-signature">&lt;static> </span>db<span class="type-signature"> :Object</span></h4>
-    
+    <h4 class="name" id="db"><span class="type-signature">(static) </span>db<span class="type-signature"> :Object</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         A reference to the IndexedDB object
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 158</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="dbName"><span class="type-signature">&lt;static> </span>dbName<span class="type-signature"> :String</span></h4>
-    
+    <h4 class="name" id="dbName"><span class="type-signature">(static) </span>dbName<span class="type-signature"> :String</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The full name of the IndexedDB used by IDBStore, composed of
 this.storePrefix + this.storeName
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 166</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="dbVersion"><span class="type-signature">&lt;static> </span>dbVersion<span class="type-signature"> :Number</span></h4>
-    
+    <h4 class="name" id="dbVersion"><span class="type-signature">(static) </span>dbVersion<span class="type-signature"> :Number</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The version of the IndexedDB used by IDBStore
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 173</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="features"><span class="type-signature">&lt;static> </span>features<span class="type-signature"> :Object</span></h4>
-    
+    <h4 class="name" id="features"><span class="type-signature">(static) </span>features<span class="type-signature"> :Object</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         A hashmap of features of the used IDB implementation
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 217</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line225">line 225</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="indexes"><span class="type-signature">&lt;static> </span>indexes<span class="type-signature"> :Array</span></h4>
-    
+    <h4 class="name" id="indexes"><span class="type-signature">(static) </span>indexes<span class="type-signature"> :Array</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The indexes used by IDBStore
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 208</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Array</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line216">line 216</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="keyPath"><span class="type-signature">&lt;static> </span>keyPath<span class="type-signature"> :String</span></h4>
-    
+    <h4 class="name" id="keyPath"><span class="type-signature">(static) </span>keyPath<span class="type-signature"> :String</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The key path
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 194</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line202">line 202</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="onError"><span class="type-signature">&lt;static> </span>onError<span class="type-signature"> :Function</span></h4>
-    
+    <h4 class="name" id="onError"><span class="type-signature">(static) </span>onError<span class="type-signature"> :function</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The callback to be called if an error occurred during instantiation
 of the store
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 232</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">function</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line240">line 240</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="onStoreReady"><span class="type-signature">&lt;static> </span>onStoreReady<span class="type-signature"> :Function</span></h4>
-    
+    <h4 class="name" id="onStoreReady"><span class="type-signature">(static) </span>onStoreReady<span class="type-signature"> :function</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The callback to be called when the store is ready to be used
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 224</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">function</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line232">line 232</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="store"><span class="type-signature">&lt;static> </span>store<span class="type-signature"> :Object</span></h4>
-    
+    <h4 class="name" id="store"><span class="type-signature">(static) </span>store<span class="type-signature"> :Object</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         A reference to the objectStore used by IDBStore
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 180</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="storeName"><span class="type-signature">&lt;static> </span>storeName<span class="type-signature"> :String</span></h4>
-    
+    <h4 class="name" id="storeName"><span class="type-signature">(static) </span>storeName<span class="type-signature"> :String</span></h4>
+
     
 </dt>
 <dd>
     
-    <p class="description">
+    <div class="description">
         The store name
-    </p>
+    </div>
     
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 187</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line188">line 188</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
 
+        
+            
 <dt>
-    <h4 class="name" id="version"><span class="type-signature">&lt;static> </span>version<span class="type-signature"> :String</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <p class="description">
-        The version of IDBStore
-    </p>
-    
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 151</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
+    <h4 class="name" id="storePrefix"><span class="type-signature">(static) </span>storePrefix<span class="type-signature"> :String</span></h4>
 
     
+</dt>
+<dd>
+    
+    <div class="description">
+        The prefix to prepend to the store name
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line195">line 195</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
     
 </dd>
-</dl>
-            
-        
-        
+
         
             
-            <h3 class="subsection-title">Methods</h3>
-            
-            <dl><dt>
-    <h4 class="name" id="batch"><span class="type-signature">&lt;static> </span>batch<span class="signature">(dataArray, <span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
-    
+<dt>
+    <h4 class="name" id="version"><span class="type-signature">(static) </span>version<span class="type-signature"> :String</span></h4>
+
     
 </dt>
 <dd>
     
+    <div class="description">
+        The version of IDBStore
+    </div>
     
-    <p class="description">
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line152">line 152</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="batch"><span class="type-signature">(static) </span>batch<span class="signature">(dataArray, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
         Runs a batch of put and/or remove operations on the store.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>dataArray</code></td>
             
-            
+
             <td class="type">
-            Array
-            </td>
             
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">An array of objects containing the operation to run
  and the data object (for put operations).</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
+            
+                
+<span class="param-type">function</span>
+
+
+            
             </td>
-            
-            
-                <td class="attributes">
-                &lt;optional><br>
-                </td>
-            
-            
-            
-            
-            <td class="description last">A callback that is called if all operations
- were successful.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>onError</code></td>
-            
-            
-            <td class="type">
-            Function
-            </td>
-            
-            
-                <td class="attributes">
-                &lt;optional><br>
-                </td>
-            
-            
-            
-            
-            <td class="description last">A callback that is called if an error
- occurred during one of the operations.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 555</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-<div class="param-desc">
-    The transaction used for this operation.
-</div>
-
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
-</dl>
-
-    
-    
-
-</dd>
-<dt>
-    <h4 class="name" id="clear"><span class="type-signature">&lt;static> </span>clear<span class="signature">(<span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <p class="description">
-        Clears the store, i.e. deletes all entries in the store.
-    </p>
-    
-    
-    
-    
-    <h5>Parameters:</h5>
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>onSuccess</code></td>
-            
-            
-            <td class="type">
-            Function
-            </td>
-            
-            
-                <td class="attributes">
-                &lt;optional><br>
-                </td>
-            
-            
-            
-            
-            <td class="description last">A callback that will be called if the
- operation was successful.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>onError</code></td>
-            
-            
-            <td class="type">
-            Function
-            </td>
-            
-            
-                <td class="attributes">
-                &lt;optional><br>
-                </td>
-            
-            
-            
-            
-            <td class="description last">A callback that will be called if an
- error occurred during the operation.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 865</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-<div class="param-desc">
-    The transaction used for this operation.
-</div>
-
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
-</dl>
-
-    
-    
-
-</dd>
-<dt>
-    <h4 class="name" id="count"><span class="type-signature">&lt;static> </span>count<span class="signature">(onSuccess, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <p class="description">
-        Runs a query against the store, but only returns the number of matches
-instead of the matches itself.
-    </p>
-    
-    
-    
-    
-    <h5>Parameters:</h5>
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>onSuccess</code></td>
-            
-            
-            <td class="type">
-            Function
-            </td>
-            
             
                 <td class="attributes">
                 
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
+
+            <td class="description last">A callback that is called if all operations
+ were successful.</td>
+        </tr>
+
+    
+
+        <tr>
             
+                <td class="name"><code>onError</code></td>
             
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that is called if an error
+ occurred during one of the operations.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line573">line 573</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The transaction used for this operation.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="clear"><span class="type-signature">(static) </span>clear<span class="signature">(onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Clears the store, i.e. deletes all entries in the store.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that will be called if the
+ operation was successful.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that will be called if an
+ error occurred during the operation.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line970">line 970</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The transaction used for this operation.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="count"><span class="type-signature">(static) </span>count<span class="signature">(onSuccess, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Runs a query against the store, but only returns the number of matches
+instead of the matches itself.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
             <td class="description last">A callback to be called if the opration
  was successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
-            <td class="description last">An object defining specific options<h6>Properties</h6>
+
+            <td class="description last">An object defining specific options
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>index</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">An IDBIndex to operate on</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>keyRange</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">An IDBKeyRange to use</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                throw
+                
+                    throw
+                
                 </td>
             
-            
+
             <td class="description last">A callback to be called if an error
  occurred during the operation.</td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 1112</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
+            </td>
+        </tr>
+
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1240">line 1240</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
+    
 </dd>
+
+        
+            
 <dt>
-    <h4 class="name" id="deleteDatabase"><span class="type-signature">&lt;static> </span>deleteDatabase<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <p class="description">
-        Deletes the database used for this store if the IDB implementations
-provides that functionality.
-    </p>
-    
-    
-    
-    
-    
-    
-    <dl class="details">
     
         
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 396</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
+        
+        <h4 class="name" id="deleteDatabase"><span class="type-signature">(static) </span>deleteDatabase<span class="signature">(onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
-    
-    
-    
-    
-    
-    
-    
-    
-
-</dd>
-<dt>
-    <h4 class="name" id="get"><span class="type-signature">&lt;static> </span>get<span class="signature">(key, <span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
-    
+        
     
 </dt>
 <dd>
+
     
+    <div class="description">
+        Deletes the database used for this store if the IDB implementations
+provides that functionality.
+    </div>
     
-    <p class="description">
-        Retrieves an object from the store. If no entry exists with the given id,
-the success handler will be called with null as first and only argument.
-    </p>
+
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that is called if deletion
+ was successful.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that is called if deletion
+ failed.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line409">line 409</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="get"><span class="type-signature">(static) </span>get<span class="signature">(key, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Retrieves an object from the store. If no entry exists with the given id,
+the success handler will be called with null as first and only argument.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>key</code></td>
             
-            
+
             <td class="type">
-            *
-            </td>
             
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The id of the object to fetch.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if fetching
  was successful. Will receive the object as only argument.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that will be called if an error
  occurred during the operation.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 485</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line503">line 503</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="getAll"><span class="type-signature">&lt;static> </span>getAll<span class="signature">(<span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="getAll"><span class="type-signature">(static) </span>getAll<span class="signature">(onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Fetches all entries in the store.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if the operation
  was successful. Will receive an array of objects.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that will be called if an error
  occurred during the operation.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 772</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line877">line 877</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="getBatch"><span class="type-signature">&lt;static> </span>getBatch<span class="signature">(keyArray, <span class="optional">onSuccess</span>, <span class="optional">onError</span>, <span class="optional">arrayType</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="getBatch"><span class="type-signature">(static) </span>getBatch<span class="signature">(keyArray, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>, arrayType<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Takes an array of keys and fetches matching objects
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>keyArray</code></td>
             
-            
+
             <td class="type">
-            Array
-            </td>
             
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
                 
                 </td>
             
-            
+
             <td class="description last">An array of keys identifying the objects to fetch</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
                 
                 </td>
             
-            
+
             <td class="description last">A callback that is called if all operations
  were successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
                 
                 </td>
             
-            
+
             <td class="description last">A callback that is called if an error
  occurred during one of the operations.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>arrayType</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                'sparse'
+                
+                    'sparse'
+                
                 </td>
             
-            
+
             <td class="description last">The type of array to pass to the
  success handler. May be one of 'sparse', 'dense' or 'skip'. Defaults to
  'sparse'. This parameter specifies how to handle the situation if a get
@@ -2241,2323 +3458,3709 @@ the success handler will be called with null as first and only argument.
  the database. In most cases, 'sparse' provides the most desired
  behavior. See the examples for details.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 709</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line814">line 814</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
+        
+
     
-    <h5>Example</h5>
-    <pre class="sh_javascript"><code>     // given that there are two objects in the database with the keypath
-     // values 1 and 2, and the call looks like this:
-     myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// given that there are two objects in the database with the keypath
+// values 1 and 2, and the call looks like this:
+myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
 
-     // this is what the `data` array will be like:
+// this is what the `data` array will be like:
 
-     // arrayType == 'sparse':
-     // data is a sparse array containing two entries and having a length of 3:
-       [Object, 2: Object]
-         0: Object
-         2: Object
-         length: 3
-         __proto__: Array[0]
-     // calling forEach on data will result in the callback being called two
-     // times, with the index parameter matching the index of the key in the
-     // keyArray.
+// arrayType == 'sparse':
+// data is a sparse array containing two entries and having a length of 3:
+  [Object, 2: Object]
+    0: Object
+    2: Object
+    length: 3
+    __proto__: Array[0]
+// calling forEach on data will result in the callback being called two
+// times, with the index parameter matching the index of the key in the
+// keyArray.
 
-     // arrayType == 'dense':
-     // data is a dense array containing three entries and having a length of 3,
-     // where data[1] is of type undefined:
-       [Object, undefined, Object]
-         0: Object
-         1: undefined
-         2: Object
-         length: 3
-         __proto__: Array[0]
-     // calling forEach on data will result in the callback being called three
-     // times, with the index parameter matching the index of the key in the
-     // keyArray, but the second call will have undefined as first argument.
+// arrayType == 'dense':
+// data is a dense array containing three entries and having a length of 3,
+// where data[1] is of type undefined:
+  [Object, undefined, Object]
+    0: Object
+    1: undefined
+    2: Object
+    length: 3
+    __proto__: Array[0]
+// calling forEach on data will result in the callback being called three
+// times, with the index parameter matching the index of the key in the
+// keyArray, but the second call will have undefined as first argument.
 
-     // arrayType == 'skip':
-     // data is a dense array containing two entries and having a length of 2:
-       [Object, Object]
-         0: Object
-         1: Object
-         length: 2
-         __proto__: Array[0]
-     // calling forEach on data will result in the callback being called two
-     // times, with the index parameter not matching the index of the key in the
-     // keyArray.</code></pre>
+// arrayType == 'skip':
+// data is a dense array containing two entries and having a length of 2:
+  [Object, Object]
+    0: Object
+    1: Object
+    length: 2
+    __proto__: Array[0]
+// calling forEach on data will result in the callback being called two
+// times, with the index parameter not matching the index of the key in the
+// keyArray.</code></pre>
 
-
+    
 </dd>
+
+        
+            
 <dt>
-    <h4 class="name" id="getIndexList"><span class="type-signature">&lt;static> </span>getIndexList<span class="signature">()</span><span class="type-signature"> &rarr; {DOMStringList}</span></h4>
     
+        
+        
+        <h4 class="name" id="getIndexList"><span class="type-signature">(static) </span>getIndexList<span class="signature">()</span><span class="type-signature"> &rarr; {DOMStringList}</span></h4>
+
+        
     
 </dt>
 <dd>
-    
-    
-    <p class="description">
-        Returns a DOMStringList of index names of the store.
-    </p>
-    
-    
-    
-    
-    
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 912</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    <div class="description">
+        Returns a DOMStringList of index names of the store.
+    </div>
     
+
     
+
     
+
     
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1017">line 1017</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The list of index names
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">DOMStringList</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMStringList</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="hasIndex"><span class="type-signature">&lt;static> </span>hasIndex<span class="signature">(indexName)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="hasIndex"><span class="type-signature">(static) </span>hasIndex<span class="signature">(indexName)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Checks if an index with the given name exists in the store.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>indexName</code></td>
             
-            
+
             <td class="type">
-            String
+            
+                
+<span class="param-type">String</span>
+
+
+            
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The name of the index to look for</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 922</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1027">line 1027</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     Whether the store contains an index with the given name
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">Boolean</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="indexComplies"><span class="type-signature">&lt;static> </span>indexComplies<span class="signature">(actual, expected)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="indexComplies"><span class="type-signature">(static) </span>indexComplies<span class="signature">(actual, expected)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Checks if an actual index complies with an expected index.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>actual</code></td>
             
-            
+
             <td class="type">
-            Object
+            
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">The actual index found in the store</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>expected</code></td>
             
-            
+
             <td class="type">
-            Object
+            
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
+
             
+
             
-            
-            
-            
+
             <td class="description last">An Object describing an expected index</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 949</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1054">line 1054</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     Whether both index definitions are identical
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">Boolean</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="iterate"><span class="type-signature">&lt;static> </span>iterate<span class="signature">(onItem, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="iterate"><span class="type-signature">(static) </span>iterate<span class="signature">(onItem, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Iterates over the store using the given options and calling onItem
 for each entry matching the options.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>onItem</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback to be called for each match</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
-            <td class="description last">An object defining specific options<h6>Properties</h6>
+
+            <td class="description last">An object defining specific options
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>index</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">An IDBIndex to operate on</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>order</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                ASC
+                
+                    ASC
+                
                 </td>
             
-            
+
             <td class="description last">The order in which to provide the
  results, can be 'DESC' or 'ASC'</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>autoContinue</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                true
+                
+                    true
+                
                 </td>
             
-            
+
             <td class="description last">Whether to automatically
  iterate the cursor to the next result</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>filterDuplicates</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                false
+                
+                    false
+                
                 </td>
             
-            
+
             <td class="description last">Whether to exclude
  duplicate matches</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>keyRange</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">An IDBKeyRange to use</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>writeAccess</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                false
+                
+                    false
+                
                 </td>
             
-            
+
             <td class="description last">Whether grant write access
  to the store in the onItem callback</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onEnd</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">A callback to be called after
  iteration has ended</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                throw
+                
+                    throw
+                
                 </td>
             
-            
+
             <td class="description last">A callback to be called
  if an error occurred during the operation.</td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 1015</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+
+            <td class="description last">Limit the number of returned
+ results to this number</td>
+        </tr>
+
     
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last">Skip the provided number of results
+ in the resultset</td>
+        </tr>
+
     
+    </tbody>
+</table>
+            </td>
+        </tr>
+
     
+    </tbody>
+</table>
     
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1124">line 1124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="makeKeyRange"><span class="type-signature">&lt;static> </span>makeKeyRange<span class="signature">(options)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="makeKeyRange"><span class="type-signature">(static) </span>makeKeyRange<span class="signature">(options)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Creates a key range using specified options. This key range can be
 handed over to the count() and iterate() methods.
 
 Note: You must provide at least one or both of "lower" or "upper" value.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-            
+
             <td class="type">
-            Object
+            
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
+
             
+
             
-            
-            
-            
-            <td class="description last">The options for the key range to create<h6>Properties</h6>
+
+            <td class="description last">The options for the key range to create
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>lower</code></td>
             
-            
+
             <td class="type">
-            *
-            </td>
             
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The lower bound</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>excludeLower</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Whether to exclude the lower
  bound passed in options.lower from the key range</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>upper</code></td>
             
-            
+
             <td class="type">
-            *
-            </td>
             
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The upper bound</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>excludeUpper</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Whether to exclude the upper
  bound passed in options.upper from the key range</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>only</code></td>
             
-            
+
             <td class="type">
-            *
-            </td>
             
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A single key value. Use this if you need a key
  range that only includes one value for a key. Providing this
  property invalidates all other properties.</td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 1168</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
+            </td>
+        </tr>
+
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1296">line 1296</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The IDBKeyRange representing the specified options
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">Object</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="normalizeIndexData"><span class="type-signature">&lt;static> </span>normalizeIndexData<span class="signature">(indexData)</span><span class="type-signature"></span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="normalizeIndexData"><span class="type-signature">(static) </span>normalizeIndexData<span class="signature">(indexData)</span><span class="type-signature"></span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Normalizes an object containing index data and assures that all
 properties are set.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>indexData</code></td>
             
-            
+
             <td class="type">
-            Object
+            
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
+
             
+
             
-            
-            
-            
-            <td class="description last">The index data object to normalize<h6>Properties</h6>
+
+            <td class="description last">The index data object to normalize
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>name</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The name of the index</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>keyPath</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The key path of the index</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>unique</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Whether the index is unique</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>multiEntry</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">Whether the index is multi entry</td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
+
+    
+    </tbody>
+</table>
+            </td>
         </tr>
-	
-	
-	</tbody>
+
+    
+    </tbody>
 </table>
     
-    <dl class="details">
+
     
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 936</li></ul></dd>
-	
-	
-	
-	
-	
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1041">line 1041</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
-    
-    
-    
-    
-    
-    
-    
+
     
 
-</dd>
-<dt>
-    <h4 class="name" id="put"><span class="type-signature">&lt;static> </span>put<span class="signature">(<span class="optional">key</span>, value, <span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="put"><span class="type-signature">(static) </span>put<span class="signature">(key<span class="signature-attributes">opt</span>, value, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Puts an object into the store. If an entry with the given id exists,
 it will be overwritten. This method has a different signature for inline
 keys and out-of-line keys; please see the examples below.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>key</code></td>
             
-            
+
             <td class="type">
-            *
-            </td>
             
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The key to store. This is only needed if IDBWrapper
  is set to use out-of-line keys. For inline keys - the default scenario -
  this can be omitted.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>value</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The data object to store.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if insertion
  was successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if insertion
  failed.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 438</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line456">line 456</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    <h5>Examples</h5>
-    <pre class="sh_javascript"><code>        // Storing an object, using inline keys (the default scenario):
-        var myCustomer = {
-          customerid: 2346223,
-          lastname: 'Doe',
-          firstname: 'John'
-        };
-        myCustomerStore.put(myCustomer, mySuccessHandler, myErrorHandler);
-        // Note that passing success- and error-handlers is optional.</code></pre>
+        
 
-    <pre class="sh_javascript"><code>        // Storing an object, using out-of-line keys:
+    
+        <h5>Examples</h5>
+        
+    <pre class="prettyprint"><code>// Storing an object, using inline keys (the default scenario):
+var myCustomer = {
+  customerid: 2346223,
+  lastname: 'Doe',
+  firstname: 'John'
+};
+myCustomerStore.put(myCustomer, mySuccessHandler, myErrorHandler);
+// Note that passing success- and error-handlers is optional.</code></pre>
+
+    <pre class="prettyprint"><code>// Storing an object, using out-of-line keys:
        var myCustomer = {
-         lastname: 'Doe',
-         firstname: 'John'
+ lastname: 'Doe',
+ firstname: 'John'
        };
        myCustomerStore.put(2346223, myCustomer, mySuccessHandler, myErrorHandler);
       // Note that passing success- and error-handlers is optional.</code></pre>
 
-
-</dd>
-<dt>
-    <h4 class="name" id="putBatch"><span class="type-signature">&lt;static> </span>putBatch<span class="signature">(dataArray, <span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="putBatch"><span class="type-signature">(static) </span>putBatch<span class="signature">(dataArray, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Takes an array of objects and stores them in a single transaction.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>dataArray</code></td>
             
-            
+
             <td class="type">
-            Array
-            </td>
             
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">An array of objects to store</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if all operations
  were successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if an error
  occurred during one of the operations.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 625</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line643">line 643</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="query"><span class="type-signature">&lt;static> </span>query<span class="signature">(onSuccess, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="query"><span class="type-signature">(static) </span>query<span class="signature">(onSuccess, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Runs a query against the store and passes an array containing matched
 objects to the success handler.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback to be called when the operation
  was successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>options</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
-            <td class="description last">An object defining specific query options<h6>Properties</h6>
+
+            <td class="description last">An object defining specific options
+                <h6>Properties</h6>
+                
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		<th>Default</th>
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>index</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">An IDBIndex to operate on</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>order</code></td>
             
-            
+
             <td class="type">
-            String
-            </td>
             
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                ASC
+                
+                    ASC
+                
                 </td>
             
-            
+
             <td class="description last">The order in which to provide the
  results, can be 'DESC' or 'ASC'</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>filterDuplicates</code></td>
             
-            
+
             <td class="type">
-            Boolean
-            </td>
             
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                false
+                
+                    false
+                
                 </td>
             
-            
+
             <td class="description last">Whether to exclude
  duplicate matches</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>keyRange</code></td>
             
-            
+
             <td class="type">
-            Object
-            </td>
             
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                null
+                
+                    null
+                
                 </td>
             
-            
+
             <td class="description last">An IDBKeyRange to use</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
-            
+
             
                 <td class="default">
-                throw
+                
+                    throw
+                
                 </td>
             
-            
-            <td class="description last">A callback to be called if an error
- occurred during the operation.</td>
+
+            <td class="description last">A callback to be called
+ if an error occurred during the operation.</td>
         </tr>
-	
-	
-	</tbody>
-</table></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 1087</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+
+            <td class="description last">Limit the number of returned
+ results to this number</td>
+        </tr>
+
     
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last">Skip the provided number of results
+ in the resultset</td>
+        </tr>
+
     
+    </tbody>
+</table>
+            </td>
+        </tr>
+
     
+    </tbody>
+</table>
     
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1213">line 1213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="remove"><span class="type-signature">&lt;static> </span>remove<span class="signature">(key, <span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="remove"><span class="type-signature">(static) </span>remove<span class="signature">(key, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Removes an object from the store.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>key</code></td>
             
-            
+
             <td class="type">
-            *
-            </td>
             
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">The id of the object to remove.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if the removal
  was successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that will be called if an error
  occurred during the operation.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 519</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line537">line 537</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
-
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
-</dd>
-<dt>
-    <h4 class="name" id="removeBatch"><span class="type-signature">&lt;static> </span>removeBatch<span class="signature">(keyArray, <span class="optional">onSuccess</span>, <span class="optional">onError</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
     
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="removeBatch"><span class="type-signature">(static) </span>removeBatch<span class="signature">(keyArray, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
     
 </dt>
 <dd>
+
     
-    
-    <p class="description">
+    <div class="description">
         Takes an array of keys and removes matching objects in a single
 transaction.
-    </p>
+    </div>
     
+
     
+
     
+
     
-    <h5>Parameters:</h5>
+
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
         <tr>
             
                 <td class="name"><code>keyArray</code></td>
             
-            
+
             <td class="type">
-            Array
-            </td>
             
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
                 
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">An array of keys to remove</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onSuccess</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if all operations
  were successful.</td>
         </tr>
-	
-	
-	
+
+    
+
         <tr>
             
                 <td class="name"><code>onError</code></td>
             
-            
+
             <td class="type">
-            Function
-            </td>
             
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
             
                 <td class="attributes">
-                &lt;optional><br>
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
                 </td>
             
+
             
-            
-            
+
             <td class="description last">A callback that is called if an error
  occurred during one of the operations.</td>
         </tr>
-	
-	
-	</tbody>
-</table>
-    
-    <dl class="details">
-    
-        
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<dt class="tag-source">Source:</dt>
-	<dd class="tag-source"><ul class="dummy"><li>IDBWrapper/idbstore.js, line 644</li></ul></dd>
-	
-	
-	
-	
-	
-</dl>
 
     
+    </tbody>
+</table>
     
+
     
+
+
+<dl class="details">
+
     
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line749">line 749</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
     <h5>Returns:</h5>
     
+            
 <div class="param-desc">
     The transaction used for this operation.
 </div>
 
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+        
+        <h4 class="name" id="upsertBatch"><span class="type-signature">(static) </span>upsertBatch<span class="signature">(dataArray, options<span class="signature-attributes">opt</span>, onSuccess<span class="signature-attributes">opt</span>, onError<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {IDBTransaction}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Like putBatch, takes an array of objects and stores them in a single
+transaction, but allows processing of the result values.  Returns the
+processed records containing the key for newly created records to the
+onSuccess calllback instead of only returning true or false for success.
+In addition, added the option for the caller to specify a key field that
+should be set to the newly created key.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dataArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An array of objects to store</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">An object containing optional options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keyField</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    this.keyPath
+                
+                </td>
+            
+
+            <td class="description last">Specifies a field in the record to update
+ with the auto-incrementing key. Defaults to the store's keyPath.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that is called if all operations
+ were successful.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A callback that is called if an error
+ occurred during one of the operations.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line670">line 670</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The transaction used for this operation.
+</div>
+
+
 
 <dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-		<span class="param-type">IDBTransaction</span> 
-		
-	</dd>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">IDBTransaction</span>
+
+
+    </dd>
 </dl>
 
-    
-    
+        
 
+    
 </dd>
-</dl>
-            
-        
-        
-        
-        
-        
-    </article>
+
+        </dl>
     
-    </section>  
+
     
+
+    
+</article>
+
+</section>
+
+
+
+
 </div>
 
 <nav>
-    <h3>Classes</h3><ul><li><a href="IDBStore.html">IDBStore</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="IDBStore.html">IDBStore</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/micmath/jsdoc">JSDoc 3</a> on Mon Nov 11 2013 18:15:18 GMT+0100 (MEZ)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Wed Apr 22 2015 15:02:50 GMT+0200 (MESZ)
 </footer>
 
-<script> sh_highlightDocument(); </script>
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-10931011-2']);
-  _gaq.push(['_trackPageview']);
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  (function () {
-    var ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-  })();
+  ga('create', 'UA-10931011-2', 'auto');
+  ga('send', 'pageview');
+
 </script>
+
 </body>
 </html>
