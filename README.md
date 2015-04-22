@@ -21,6 +21,7 @@ IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 * Firefox for Android
 * Opera for Android
 * IE10 for WP8
+* iOS 8+
 
 **Worker** IDBWrapper runs inside of a worker on following browsers:
 
