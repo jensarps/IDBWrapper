@@ -221,6 +221,15 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should short circuit getBatch when an empty array of keys is passed with calling success with an empty array of results', function(done) {
+      store.getBatch([], function(data){
+        expect(data).to.deep.equal([]);
+        done();
+      }, function(error){
+        done(new Error('Error event encountered when an empty key array is passed to getBatch. The error message is null and not useful.', error));
+      });
+    });
+
     it('should delete multiple objects', function(done){
       store.removeBatch([1,2], function(result){
         expect(result).to.be.ok;
