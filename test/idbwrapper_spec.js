@@ -212,6 +212,14 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should short circuit putBatch when an empty array of items are passed and should call success', function(done) {
+      store.putBatch([], function(){
+        done();
+      }, function(error){
+        done(new Error('Error event encountered when an empty data array is passed to putBatch.', error));
+      });
+    });
+
     it('should fetch multiple objects', function(done){
       store.getBatch([1,2,3], function(data){
         expect(data[0].name).to.equal('John');
@@ -239,6 +247,14 @@ describe('IDBWrapper', function(){
         }, done);
         done();
       }, done);
+    });
+
+    it('should short circuit removeBatch when an empty array of items is passed and should call success', function(done) {
+      store.removeBatch([], function(){
+        done();
+      }, function(error){
+        done(new Error('Error event encountered when an empty data array is passed to removeBatch.', error));
+      });
     });
 
 
