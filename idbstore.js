@@ -115,7 +115,7 @@
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     var env = typeof window == 'object' ? window : self;
-    this.idb = env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB || env.shimIndexedDB;
+    this.idb = env.shimIndexedDB || env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
     this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
 
     this.features = {
@@ -576,6 +576,8 @@
 
       if(Object.prototype.toString.call(dataArray) != '[object Array]'){
         onError(new Error('dataArray argument must be of type Array.'));
+      } else if (dataArray.length === 0) {
+        return onSuccess(true);
       }
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
       batchTransaction.oncomplete = function () {
@@ -816,8 +818,10 @@
       onSuccess || (onSuccess = defaultSuccessHandler);
       arrayType || (arrayType = 'sparse');
 
-      if(Object.prototype.toString.call(keyArray) != '[object Array]'){
+      if (Object.prototype.toString.call(keyArray) != '[object Array]'){
         onError(new Error('keyArray argument must be of type Array.'));
+      } else if (keyArray.length === 0) {
+        return onSuccess([]);
       }
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_ONLY);
       batchTransaction.oncomplete = function () {
