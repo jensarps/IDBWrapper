@@ -118,10 +118,6 @@
     this.idb = env.shimIndexedDB || env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
     this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
 
-    this.features = {
-      hasAutoIncrement: !env.mozIndexedDB
-    };
-
     this.consts = {
       'READ_ONLY':         'readonly',
       'READ_WRITE':        'readwrite',
@@ -214,15 +210,6 @@
      * @type Array
      */
     indexes: null,
-
-    /**
-     * A hashmap of features of the used IDB implementation
-     *
-     * @type Object
-     * @proprty {Boolean} autoIncrement If the implementation supports
-     *  native auto increment
-     */
-    features: null,
 
     /**
      * The callback to be called when the store is ready to be used
@@ -1004,7 +991,7 @@
      * @private
      */
     _addIdPropertyIfNeeded: function (dataObj) {
-      if (!this.features.hasAutoIncrement && typeof dataObj[this.keyPath] == 'undefined') {
+      if (typeof dataObj[this.keyPath] == 'undefined') {
         dataObj[this.keyPath] = this._insertIdCount++ + Date.now();
       }
     },
