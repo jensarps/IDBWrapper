@@ -410,22 +410,30 @@ describe('IDBWrapper', function(){
     var store;
 
     before(function(done){
-      store = new IDBStore({
-        storeName: 'spec-store-indexes',
-        indexes: [
-          { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
-          { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
-          { name: 'date', keyPath: 'joined', unique: false, multiEntry: false },
+
+      var indexes = [
+        { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
+        { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
+        { name: 'date', keyPath: 'joined', unique: false, multiEntry: false }
+      ];
+
+      if (!excludeIE) {
+        indexes.push.apply(indexes, [
           { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false },
           { name: 'multi', keyPath: 'pets', unique: false, multiEntry: true }
-        ]
+        ]);
+      }
+
+      store = new IDBStore({
+        storeName: 'spec-store-indexes',
+        indexes: indexes
       }, done);
     });
 
     it('should create all indexes', function(){
       var indexList = store.getIndexList();
       expect(indexList).to.respondTo('contains');
-      expect(indexList.length).to.equal(5);
+      expect(indexList.length).to.equal(excludeIE ? 3 : 5);
     });
 
     it('should store a well-formed object', function(done){
@@ -460,15 +468,23 @@ describe('IDBWrapper', function(){
     var store;
 
     before(function(done){
-      store = new IDBStore({
-        storeName: 'spec-store-indexes',
-        indexes: [
-          { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
-          { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
-          { name: 'date', keyPath: 'joined', unique: false, multiEntry: false },
+
+      var indexes = [
+        { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
+        { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
+        { name: 'date', keyPath: 'joined', unique: false, multiEntry: false }
+      ];
+
+      if (!excludeIE) {
+        indexes.push.apply(indexes, [
           { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false },
           { name: 'multi', keyPath: 'pets', unique: false, multiEntry: true }
-        ]
+        ]);
+      }
+
+      store = new IDBStore({
+        storeName: 'spec-store-indexes',
+        indexes: indexes
       }, function(){
 
         var dataArray = [
@@ -654,9 +670,13 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using compound index (KeyRange.only)', function(done){
+    it('should fetch objects using compound index (KeyRange.only)', function (done) {
 
-      store.query(function(data){
+      if (excludeIE) {
+        return done(new Error('Test skipped.'));
+      }
+
+      store.query(function (data) {
         expect(data.length).to.equal(1);
         done();
       }, {
@@ -668,9 +688,13 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using multiEntry index (KeyRange.only)', function(done){
+    it('should fetch objects using multiEntry index (KeyRange.only)', function (done) {
 
-      store.query(function(data){
+      if (excludeIE) {
+        return done(new Error('Test skipped.'));
+      }
+
+      store.query(function (data) {
         expect(data.length).to.equal(4);
         done();
       }, {
