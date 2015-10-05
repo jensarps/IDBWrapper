@@ -14,6 +14,7 @@ IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 * Firefox
 * Opera 15+
 * IE 10+
+* Safari 8+
 
 **Mobile**
 
@@ -25,15 +26,17 @@ IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 
 **Worker** IDBWrapper runs inside of a worker on following browsers:
 
-* Chrome
-* Chrome for Android
-* Firefox
-* Opera
-* Opera for Android
-* IE10
-* IE10 for WP8
+* Chrome (also on Android)
+* Firefox (also on Android)
+* Opera (also on Android)
+* IE10+ (also on WP8+)
 
 If using in an older browser supporting WebSql along with [IndexedDBShim](https://github.com/axemclion/IndexedDBShim), IndexedDBShim needs to run first.
+
+Note on limited/buggy IndexedDB support:
+* IE has limited support, which can be fixed by including [idb-iegap](https://github.com/dfahlander/idb-iegap)
+* Safari has buggy support, which can be fixed by using the above mentioned shim
+
 
 ##Tutorials
 
