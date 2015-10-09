@@ -1,5 +1,13 @@
-1.5.0 /
+1.6.0 / 2015-10-05
 ------------------
+* Remove support for old Firefox browsers without autoIncrement
+* prefer `shimIndexedDB` to allow using the shim instead of native IDB on buggy Safaris
+* For the full changelog, please see here: https://github.com/jensarps/IDBWrapper/compare/v1.5...v1.6.0
+
+
+1.5.0 / 2015-04-22
+------------------
+
 * Add pagination to `query()`
 * Add `upsertBatch()`
 * Add callbacks to `deleteDatabase()`

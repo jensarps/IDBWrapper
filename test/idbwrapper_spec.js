@@ -212,6 +212,14 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
+    it('should short circuit putBatch when an empty array of items are passed and should call success', function(done) {
+      store.putBatch([], function(){
+        done();
+      }, function(error){
+        done(new Error('Error event encountered when an empty data array is passed to putBatch.', error));
+      });
+    });
+
     it('should fetch multiple objects', function(done){
       store.getBatch([1,2,3], function(data){
         expect(data[0].name).to.equal('John');
@@ -219,6 +227,15 @@ describe('IDBWrapper', function(){
         expect(data[2].name).to.equal('James');
         done();
       }, done);
+    });
+
+    it('should short circuit getBatch when an empty array of keys is passed with calling success with an empty array of results', function(done) {
+      store.getBatch([], function(data){
+        expect(data).to.deep.equal([]);
+        done();
+      }, function(error){
+        done(new Error('Error event encountered when an empty key array is passed to getBatch. The error message is null and not useful.', error));
+      });
     });
 
     it('should delete multiple objects', function(done){
@@ -230,6 +247,14 @@ describe('IDBWrapper', function(){
         }, done);
         done();
       }, done);
+    });
+
+    it('should short circuit removeBatch when an empty array of items is passed and should call success', function(done) {
+      store.removeBatch([], function(){
+        done();
+      }, function(error){
+        done(new Error('Error event encountered when an empty data array is passed to removeBatch.', error));
+      });
     });
 
 
@@ -385,21 +410,30 @@ describe('IDBWrapper', function(){
     var store;
 
     before(function(done){
+
+      var indexes = [
+        { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
+        { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
+        { name: 'date', keyPath: 'joined', unique: false, multiEntry: false }
+      ];
+
+      if (!excludeIE) {
+        indexes.push.apply(indexes, [
+          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false },
+          { name: 'multi', keyPath: 'pets', unique: false, multiEntry: true }
+        ]);
+      }
+
       store = new IDBStore({
         storeName: 'spec-store-indexes',
-        indexes: [
-          { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
-          { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
-          { name: 'date', keyPath: 'joined', unique: false, multiEntry: false },
-          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false }
-        ]
+        indexes: indexes
       }, done);
     });
 
     it('should create all indexes', function(){
       var indexList = store.getIndexList();
       expect(indexList).to.respondTo('contains');
-      expect(indexList.length).to.equal(4);
+      expect(indexList.length).to.equal(excludeIE ? 3 : 5);
     });
 
     it('should store a well-formed object', function(done){
@@ -412,7 +446,8 @@ describe('IDBWrapper', function(){
         address: {
           email: 'j.doe@example.com',
           city: 'New Boston'
-        }
+        },
+        pets: ['cat', 'dog']
       };
       store.put(data, function(insertId){
         expect(insertId).to.equal(data.id);
@@ -433,14 +468,23 @@ describe('IDBWrapper', function(){
     var store;
 
     before(function(done){
+
+      var indexes = [
+        { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
+        { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
+        { name: 'date', keyPath: 'joined', unique: false, multiEntry: false }
+      ];
+
+      if (!excludeIE) {
+        indexes.push.apply(indexes, [
+          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false },
+          { name: 'multi', keyPath: 'pets', unique: false, multiEntry: true }
+        ]);
+      }
+
       store = new IDBStore({
         storeName: 'spec-store-indexes',
-        indexes: [
-          { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
-          { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
-          { name: 'date', keyPath: 'joined', unique: false, multiEntry: false },
-          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false }
-        ]
+        indexes: indexes
       }, function(){
 
         var dataArray = [
@@ -453,7 +497,8 @@ describe('IDBWrapper', function(){
             address: {
               email: 'j.doe@example.com',
               city: 'New Boston'
-            }
+            },
+            pets: ['cat', 'dog']
           },
           {
             id: 2,
@@ -464,7 +509,8 @@ describe('IDBWrapper', function(){
             address: {
               email: 'joe.doe@example.com',
               city: 'New Boston'
-            }
+            },
+            pets: ['dog']
           },
           {
             id: 3,
@@ -475,7 +521,8 @@ describe('IDBWrapper', function(){
             address: {
               email: 'j.smith@example.com',
               city: 'New York'
-            }
+            },
+            pets: ['dog', 'mouse', 'parrot']
           },
           {
             id: 4,
@@ -486,7 +533,8 @@ describe('IDBWrapper', function(){
             address: {
               email: 'f.miller@example.com',
               city: 'New York'
-            }
+            },
+            pets: ['cat', 'parrot']
           },
           {
             id: 5,
@@ -497,7 +545,9 @@ describe('IDBWrapper', function(){
             address: {
               email: 'j.doe@example.com',
               city: 'New Boston'
-            }
+
+            },
+            pets: []
           },
           {
             id: 6,
@@ -508,7 +558,8 @@ describe('IDBWrapper', function(){
             address: {
               email: 'j.smith@example.com',
               city: 'New Boston'
-            }
+            },
+            pets: ['dog', 'parrot']
           }
         ];
 
@@ -619,15 +670,37 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using compound index (KeyRange.only)', function(done){
+    it('should fetch objects using compound index (KeyRange.only)', function (done) {
 
-      store.query(function(data){
+      if (excludeIE) {
+        return done(new Error('Test skipped.'));
+      }
+
+      store.query(function (data) {
         expect(data.length).to.equal(1);
         done();
       }, {
         index: 'compound',
         keyRange: store.makeKeyRange({
           only: ['John', 42]
+        })
+      });
+
+    });
+
+    it('should fetch objects using multiEntry index (KeyRange.only)', function (done) {
+
+      if (excludeIE) {
+        return done(new Error('Test skipped.'));
+      }
+
+      store.query(function (data) {
+        expect(data.length).to.equal(4);
+        done();
+      }, {
+        index: 'multi',
+        keyRange: store.makeKeyRange({
+          only: 'dog'
         })
       });
 
