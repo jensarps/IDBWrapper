@@ -34,6 +34,7 @@ IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 If using in an older browser supporting WebSql along with [IndexedDBShim](https://github.com/axemclion/IndexedDBShim), IndexedDBShim needs to run first.
 
 Note on limited/buggy IndexedDB support:
+
 * IE has limited support, which can be fixed by including [idb-iegap](https://github.com/dfahlander/idb-iegap)
 * Safari has buggy support, which can be fixed by using the above mentioned shim
 
