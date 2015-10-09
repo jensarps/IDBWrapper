@@ -1316,8 +1316,6 @@
   };
 
   /** helpers **/
-
-  // TODO: Check Object.create support to get rid of this
   var empty = {};
   var mixin = function (target, source) {
     var name, s;
