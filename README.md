@@ -68,6 +68,14 @@ IDBWrapper directory and run the following command:
 $ make doc
 ```
 
+Wiki
+====
+
+For Usage instructions, details about mothods for reading and writing 
+data, setting up indexes and runnoing queries, please refer to the 
+[Wiki](https://github.com/jensarps/IDBWrapper/wiki).
+
+
 Obtaining IDBWrapper
 ====================
 
