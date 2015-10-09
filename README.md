@@ -100,3 +100,7 @@ If you want to add IDBWrapper to a volo project, just run:
 ```bash
 $ volo add idbwrapper
 ```
+
+#License
+
+[MIT style (X11)](https://github.com/jensarps/IDBWrapper/blob/master/LICENSE)
