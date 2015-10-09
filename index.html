@@ -2,28 +2,12 @@
 <html>
 <head>
   <meta charset='utf-8'>
-
   <title>IDBWrapper</title>
   <link rel="stylesheet" href="/css/style.css"/>
-  <script type="text/javascript">
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-10931011-2']);
-    _gaq.push(['_trackPageview']);
-
-    (function () {
-      var ga = document.createElement('script');
-      ga.type = 'text/javascript';
-      ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(ga, s);
-    })();
-
-  </script>
 </head>
 
 <body>
+
 <a href="https://github.com/jensarps/IDBWrapper"><img
   style="position: absolute; top: 0; right: 0; border: 0;"
   src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
@@ -33,152 +17,151 @@
 
   <h1><a href="https://github.com/jensarps/IDBWrapper">IDBWrapper</a></h1>
 
-  <div class="description">
-    A cross-browser wrapper for IndexedDB.
-  </div>
 
-  <h2>About</h2>
+  <h2><a
+    href="http://badge.fury.io/js/idb-wrapper"><img
+    src="https://badge.fury.io/js/idb-wrapper.svg" alt="NPM version"></a> <a
+    href="https://gemnasium.com/jensarps/IDBWrapper"><img
+    src="https://gemnasium.com/jensarps/IDBWrapper.png"
+    alt="Dependency Status"></a></h2>
 
-  <p>
-    IDBWrapper is a cross-browser wrapper for the HTML5 IndexedDB API. While this
+  <p><strong>IDBWrapper</strong> is a cross-browser wrapper for the HTML5
+    IndexedDB API. While this
     API is the future of offline storage, it is not very intuitive to use.
-    IDBWrapper is there to provide easy access to IndexedDB's features.
-  </p>
+    IDBWrapper is there to provide easy access to IndexedDB’s features.</p>
 
-  <h2>Obtaining IDBWrapper</h2>
+  <h2><a id="Browser_Support_6"></a>Browser Support</h2>
 
-  <p>
-    You can git clone the repository, or download the minified file here:
-    <a href="https://cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js" target="_blank" download>https://cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js</a>
-  </p>
-
-  <p>
-    A list of releases can be found <a href="https://github.com/jensarps/IDBWrapper/tags">here</a>.
-  </p>
-
-  <p>
-    IDBWrapper is also available on cdnjs, so you can directly point a script
-    tag there, or require() it from there. cdnjs supports http, https and spdy,
-    so you can just leave the protocol off. The URL is:
-  </p>
-
-  <p><code>
-    //cdnjs.cloudflare.com/ajax/libs/idbwrapper/1.4.1/idbstore.min.js
-  </code></p>
-
-  <p>If you use NPM as your package manager, you can get it from there, too, by
-    running:</p>
-
-  <pre>$ npm install idb-wrapper</pre>
-
-  <p>If you use bower as your package manager, run the following:</p>
-
-  <pre>$ bower install idbwrapper</pre>
-
-  <p>If you want to add IDBWrapper to a volo project, just run:</p>
-
-  <pre>$ volo add idbwrapper</pre>
-
-  <h2>Tutorials</h2>
-
-  <p>There are two tutorials to get you up and running:</p>
-
-  <p>Part 1: Setup and CRUD operations <a href="http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/">http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/</a></p>
-
-  <p>Part 2: Running Queries against the store <a href="http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/">http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/</a></p>
-
-  <h2>API Reference</h2>
-
-  <p>There's an API reference <a href="jsdoc/IDBStore.html">right here</a>.</p>
-
-  <p>You can create a local version of the reference using a terminal. Go into
-    the IDBWrapper directory and run the following command:</p>
-
-  <pre>$ make doc</pre>
-
-  <h2>Browser Support</h2>
-
-  <p>IDBWrapper works on all browsers supperting the IndexedDB API, which
+  <p>IDBWrapper works on all browsers supporting the IndexedDB API, which
     are:</p>
 
   <p><strong>Desktop</strong></p>
-
   <ul>
     <li>Chrome</li>
     <li>Firefox</li>
     <li>Opera 15+</li>
     <li>IE 10+</li>
+    <li>Safari 8+</li>
   </ul>
-
   <p><strong>Mobile</strong></p>
-
   <ul>
     <li>Chrome for Android</li>
     <li>Firefox for Android</li>
     <li>Opera for Android</li>
     <li>IE10 for WP8</li>
+    <li>iOS 8+</li>
   </ul>
-
   <p><strong>Worker</strong> IDBWrapper runs inside of a worker on following
     browsers:</p>
-
   <ul>
-    <li>Chrome</li>
-    <li>Chrome for Android</li>
-    <li>Firefox</li>
-    <li>Opera</li>
-    <li>Opera for Android</li>
-    <li>IE10</li>
-    <li>IE10 for WP8</li>
+    <li>Chrome (also on Android)</li>
+    <li>Firefox (also on Android)</li>
+    <li>Opera (also on Android)</li>
+    <li>IE10+ (also on WP8+)</li>
   </ul>
+  <p>If using in an older browser supporting WebSql along with <a
+    href="https://github.com/axemclion/IndexedDBShim">IndexedDBShim</a>,
+    IndexedDBShim needs to run first.</p>
 
-  <h2>Usage/Examples</h2>
-
-  <p>For details on usage, please see the project's <a
-    href="https://github.com/jensarps/IDBWrapper/blob/master/README.md">README</a>
-    and check out the examples:</p>
+  <p>Note on limited/buggy IndexedDB support:</p>
   <ul>
-    <li><a href="example/quicktest/">Quicktest</a> – Just a quick test to see if
-      IDB opens and fool around in the console.
-    </li>
-    <li><a href="example/basic/">Basic CRUD</a> – A basic CRUD example using an
-      IDB store as fixed table.
-    </li>
-    <li><a href="example/objectstore/">ObjectStore</a> – An example to show the
-      difference between a table and an object store.
-    </li>
-    <li><a href="example/index/">Index</a> - An example to show how to work with
-      indexes.
-    </li>
-    <li><a href="example/worker/">Worker</a> - An example to show how to work with
-      IDBWrapper running inside of a worker.
+    <li>IE has limited support, which can be fixed by including <a
+      href="https://github.com/dfahlander/idb-iegap">idb-iegap</a></li>
+    <li>Safari has buggy support, which can be fixed by using the above
+      mentioned
+      shim
     </li>
   </ul>
+  <h1><a id="Using_IDBWrapper_41"></a>Using IDBWrapper</h1>
 
-  <h2>Dependencies</h2>
+  <h2><a id="Tutorials_44"></a>Tutorials</h2>
 
-  <p>None.</p>
+  <p>There are two tutorials to get you up and running:</p>
 
-  <h2>License</h2>
+  <p>Part 1: Setup and CRUD operations
+    <a href="http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/">http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/</a>
+  </p>
+
+  <p>Part 2: Running Queries against the store
+    <a href="http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/">http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/</a>
+  </p>
+
+  <h2><a id="Examples_55"></a>Examples</h2>
+
+  <p>There are some examples to run right in your browser over here: <a
+    href="http://jensarps.github.com/IDBWrapper/example/">http://jensarps.github.com/IDBWrapper/example/</a>
+  </p>
+
+  <p>The source for these examples are in the <code>example</code> folder of
+    this
+    repository.</p>
+
+  <h2><a id="Wiki_62"></a>Wiki</h2>
+
+  <p>For usage instructions, details about mothods for reading and writing
+    data, setting up indexes and runnoing queries, please refer to the
+    <a href="https://github.com/jensarps/IDBWrapper/wiki">Wiki</a>.</p>
+
+  <h2><a id="API_Reference_69"></a>API Reference</h2>
+
+  <p>There’s an API reference over here: <a
+    href="http://jensarps.github.com/IDBWrapper/jsdoc/IDBStore.html">http://jensarps.github.com/IDBWrapper/jsdoc/IDBStore.html</a>
+  </p>
+
+  <h1><a id="Obtaining_IDBWrapper_74"></a>Obtaining IDBWrapper</h1>
+
+  <h2><a id="git_77"></a>git</h2>
+
+  <p>You can git clone the repository, or download a zip file here: <a
+    href="https://github.com/jensarps/IDBWrapper/tags">https://github.com/jensarps/IDBWrapper/tags</a>
+  </p>
+
+  <h2><a id="cdnjs_82"></a>cdnjs</h2>
+
+  <p>IDBWrapper is also available on <a href="http://cdnjs.com/">cdnjs</a>. You
+    can directly
+    point a script tag there, or require() it from there. cdnjs supports http,
+    https and spdy, so you can just leave the protocol off. The URLs for the
+    different versions of IDBWrapper can be found here:
+    <a href="https://cdnjs.com/libraries/idbwrapper">https://cdnjs.com/libraries/idbwrapper</a>
+  </p>
+
+  <h2><a id="Package_Managers_91"></a>Package Managers</h2>
+
+  <p>If you use NPM as your package manager, you can get it from there, too, by
+    running:</p>
+ <pre><code class="language-bash">$ npm install idb-wrapper
+ </code></pre>
+  <p>If you use bower as your package manager, run the following:</p>
+ <pre><code class="language-bash">$ bower install idbwrapper
+ </code></pre>
+  <p>If you want to add IDBWrapper to a volo project, just run:</p>
+ <pre><code class="language-bash">$ volo add idbwrapper
+ </code></pre>
+  <h1><a id="License_113"></a>License</h1>
 
   <p><a href="https://github.com/jensarps/IDBWrapper/blob/master/LICENSE">MIT
     style (X11)</a></p>
 
-  <h2>Author</h2>
-
-  <p><a href="https://github.com/jensarps">Jens Arps</a></p>
-
-  <h2>Contact</h2>
-
-  <p>
-    Catch me on <a href="https://www.google.com/+JensArps">Google+</a> or <a href="https://twitter.com/#!/jensarps">Twitter</a>
-  </p>
 
   <div class="footer">
-    Get the source code on GitHub:
-    <a href="https://github.com/jensarps/IDBWrapper">jensarps/IDBWrapper</a>
+    Jens Arps –
+    <a href="https://www.google.com/+JensArps">Google+</a> – <a
+    href="http://jensarps.de/">jensarps.de</a>
   </div>
 
 </div>
+
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-10931011-2', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
 </body>
 </html>
