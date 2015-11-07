@@ -35,7 +35,13 @@
     onStoreReady: function () {
     },
     onError: defaultErrorHandler,
-    indexes: []
+    indexes: [],
+    implementationPreference: [
+      'indexedDB',
+      'webkitIndexedDB',
+      'mozIndexedDB',
+      'shimIndexedDB'
+    ]
   };
 
   /**
@@ -73,6 +79,7 @@
    * @param {String} [kwArgs.indexes.indexData.keyPath] The key path of the index
    * @param {Boolean} [kwArgs.indexes.indexData.unique] Whether the index is unique
    * @param {Boolean} [kwArgs.indexes.indexData.multiEntry] Whether the index is multi entry
+   * @param {Array} [kwArgs.implementationPreference] An array of strings naming implementations to be used, in order or preference
    * @param {Function} [onStoreReady] A callback to be called when the store
    * is ready to be used.
    * @example
@@ -116,7 +123,11 @@
     onStoreReady && (this.onStoreReady = onStoreReady);
 
     var env = typeof window == 'object' ? window : self;
-    this.idb = env.shimIndexedDB || env.indexedDB || env.webkitIndexedDB || env.mozIndexedDB;
+    var availableImplementations = this.implementationPreference.filter(function (implName) {
+      return implName in env;
+    });
+    this.implementation = availableImplementations[0];
+    this.idb = env[this.implementation];
     this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
 
     this.consts = {
@@ -211,6 +222,20 @@
      * @type Array
      */
     indexes: null,
+
+    /**
+     * The implemantations to try to use, in order of preference
+     *
+     * @type Array
+     */
+    implementationPreference: null,
+
+    /**
+     * The actual implementation being used
+     *
+     * @type String
+     */
+    implementation: '',
 
     /**
      * The callback to be called when the store is ready to be used
