@@ -685,6 +685,45 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>implementationPreference</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ['indexedDB','webkitIndexedDB','mozIndexedDB','shimIndexedDB']
+                
+                </td>
+            
+
+            <td class="description last">An array of strings naming implementations to be used, in order or preference</td>
+        </tr>
+
+    
     </tbody>
 </table>
             </td>
@@ -736,7 +775,7 @@ is ready to be used.</td>
 
     
     <dt class="tag-version">Version:</dt>
-    <dd class="tag-version"><ul class="dummy"><li>1.6.0</li></ul></dd>
+    <dd class="tag-version"><ul class="dummy"><li>1.6.1</li></ul></dd>
     
 
     
@@ -762,7 +801,7 @@ is ready to be used.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line41">line 41</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -885,80 +924,7 @@ var myCustomerStore = new IDBStore({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line206">line 206</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="constructor"><span class="type-signature">(static) </span>constructor<span class="type-signature"> :<a href="IDBStore.html">IDBStore</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        A pointer to the IDBStore ctor
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="IDBStore.html">IDBStore</a></span>
-
-
-            </li>
-        </ul>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line142">line 142</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -1031,7 +997,7 @@ var myCustomerStore = new IDBStore({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line156">line 156</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -1105,7 +1071,7 @@ this.storePrefix + this.storeName
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line164">line 164</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -1178,7 +1144,153 @@ this.storePrefix + this.storeName
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line171">line 171</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line183">line 183</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="implementation"><span class="type-signature">(static) </span>implementation<span class="type-signature"> :String</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The actual implementation being used
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line239">line 239</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="implementationPreference"><span class="type-signature">(static) </span>implementationPreference<span class="type-signature"> :Array</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The implemantations to try to use, in order of preference
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Array</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line232">line 232</a>
     </li></ul></dd>
     
 
@@ -1251,7 +1363,7 @@ this.storePrefix + this.storeName
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line213">line 213</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line225">line 225</a>
     </li></ul></dd>
     
 
@@ -1324,7 +1436,7 @@ this.storePrefix + this.storeName
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line199">line 199</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -1398,7 +1510,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line228">line 228</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line254">line 254</a>
     </li></ul></dd>
     
 
@@ -1471,7 +1583,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line220">line 220</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -1544,7 +1656,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line178">line 178</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line190">line 190</a>
     </li></ul></dd>
     
 
@@ -1617,7 +1729,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line185">line 185</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -1690,7 +1802,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line192">line 192</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -1763,7 +1875,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line149">line 149</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -1970,7 +2082,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line561">line 561</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line587">line 587</a>
     </li></ul></dd>
     
 
@@ -2171,7 +2283,7 @@ of the store
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line962">line 962</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line988">line 988</a>
     </li></ul></dd>
     
 
@@ -2517,7 +2629,7 @@ instead of the matches itself.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1232">line 1232</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1258">line 1258</a>
     </li></ul></dd>
     
 
@@ -2719,7 +2831,7 @@ provides that functionality.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line397">line 397</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line423">line 423</a>
     </li></ul></dd>
     
 
@@ -2930,7 +3042,7 @@ the success handler will be called with null as first and only argument.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line491">line 491</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line517">line 517</a>
     </li></ul></dd>
     
 
@@ -3131,7 +3243,7 @@ the success handler will be called with null as first and only argument.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line869">line 869</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line895">line 895</a>
     </li></ul></dd>
     
 
@@ -3421,7 +3533,7 @@ the success handler will be called with null as first and only argument.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line804">line 804</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line830">line 830</a>
     </li></ul></dd>
     
 
@@ -3571,7 +3683,7 @@ myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1009">line 1009</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1035">line 1035</a>
     </li></ul></dd>
     
 
@@ -3725,7 +3837,7 @@ myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1019">line 1019</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1045">line 1045</a>
     </li></ul></dd>
     
 
@@ -3902,7 +4014,7 @@ myStore.getBatch([1, 5, 2], onError, function (data) { … }, arrayType);
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1046">line 1046</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1072">line 1072</a>
     </li></ul></dd>
     
 
@@ -4527,7 +4639,7 @@ for each entry matching the options.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1116">line 1116</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1142">line 1142</a>
     </li></ul></dd>
     
 
@@ -4880,7 +4992,7 @@ Note: You must provide at least one or both of "lower" or "upper" value.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1288">line 1288</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1314">line 1314</a>
     </li></ul></dd>
     
 
@@ -5192,7 +5304,7 @@ properties are set.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1033">line 1033</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1059">line 1059</a>
     </li></ul></dd>
     
 
@@ -5439,7 +5551,7 @@ keys and out-of-line keys; please see the examples below.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line444">line 444</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line470">line 470</a>
     </li></ul></dd>
     
 
@@ -5691,7 +5803,7 @@ myCustomerStore.put(myCustomer, mySuccessHandler, myErrorHandler);
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line633">line 633</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line659">line 659</a>
     </li></ul></dd>
     
 
@@ -6197,7 +6309,7 @@ objects to the success handler.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1205">line 1205</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line1231">line 1231</a>
     </li></ul></dd>
     
 
@@ -6429,7 +6541,7 @@ objects to the success handler.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line525">line 525</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line551">line 551</a>
     </li></ul></dd>
     
 
@@ -6662,7 +6774,7 @@ transaction.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line739">line 739</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line765">line 765</a>
     </li></ul></dd>
     
 
@@ -7001,7 +7113,7 @@ should be set to the newly created key.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line660">line 660</a>
+        <a href="idbstore.js.html">idbstore.js</a>, <a href="idbstore.js.html#line686">line 686</a>
     </li></ul></dd>
     
 
@@ -7072,7 +7184,7 @@ should be set to the newly created key.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Fri Oct 09 2015 15:21:40 GMT+0200 (MESZ)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Sat Nov 07 2015 19:23:56 GMT+0100 (MEZ)
 </footer>
 
 <script> prettyPrint(); </script>
