@@ -148,21 +148,22 @@
     /**
      * A pointer to the IDBStore ctor
      *
-     * @type IDBStore
+     * @private
+     * @type {Function}
      */
     constructor: IDBStore,
 
     /**
      * The version of IDBStore
      *
-     * @type String
+     * @type {String}
      */
     version: '1.6.0',
 
     /**
      * A reference to the IndexedDB object
      *
-     * @type Object
+     * @type {Object}
      */
     db: null,
 
@@ -170,77 +171,77 @@
      * The full name of the IndexedDB used by IDBStore, composed of
      * this.storePrefix + this.storeName
      *
-     * @type String
+     * @type {String}
      */
     dbName: null,
 
     /**
      * The version of the IndexedDB used by IDBStore
      *
-     * @type Number
+     * @type {Number}
      */
     dbVersion: null,
 
     /**
      * A reference to the objectStore used by IDBStore
      *
-     * @type Object
+     * @type {Object}
      */
     store: null,
 
     /**
      * The store name
      *
-     * @type String
+     * @type {String}
      */
     storeName: null,
 
     /**
      * The prefix to prepend to the store name
      *
-     * @type String
+     * @type {String}
      */
     storePrefix: null,
 
     /**
      * The key path
      *
-     * @type String
+     * @type {String}
      */
     keyPath: null,
 
     /**
      * Whether IDBStore uses autoIncrement
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     autoIncrement: null,
 
     /**
      * The indexes used by IDBStore
      *
-     * @type Array
+     * @type {Array}
      */
     indexes: null,
 
     /**
      * The implemantations to try to use, in order of preference
      *
-     * @type Array
+     * @type {Array}
      */
     implementationPreference: null,
 
     /**
      * The actual implementation being used
      *
-     * @type String
+     * @type {String}
      */
     implementation: '',
 
     /**
      * The callback to be called when the store is ready to be used
      *
-     * @type Function
+     * @type {Function}
      */
     onStoreReady: null,
 
@@ -248,14 +249,14 @@
      * The callback to be called if an error occurred during instantiation
      * of the store
      *
-     * @type Function
+     * @type {Function}
      */
     onError: null,
 
     /**
      * The internal insertID counter
      *
-     * @type Number
+     * @type {Number}
      * @private
      */
     _insertIdCount: 0,
