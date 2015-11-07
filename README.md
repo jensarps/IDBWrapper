@@ -59,7 +59,7 @@ The source for these examples are in the `example` folder of this repository.
 ##Wiki
 
 For usage instructions, details about mothods for reading and writing 
-data, setting up indexes and runnoing queries, please refer to the 
+data, setting up indexes and running queries, please refer to the 
 [Wiki](https://github.com/jensarps/IDBWrapper/wiki).
 
 ##API Reference
