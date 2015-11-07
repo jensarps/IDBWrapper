@@ -1,6 +1,6 @@
 {
   "name": "idb-wrapper",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A cross-browser wrapper for IndexedDB",
   "keywords": [
     "storage",
