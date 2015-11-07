@@ -289,7 +289,7 @@
         if(!this.db.objectStoreNames.contains(this.storeName)){
           // We should never ever get here.
           // Lets notify the user anyway.
-          this.onError(new Error('Something is wrong with the IndexedDB implementation in this browser. Please upgrade your browser.'));
+          this.onError(new Error('Object store couldn\'t be created.'));
           return;
         }
 
