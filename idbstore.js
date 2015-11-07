@@ -79,7 +79,7 @@
    * @param {String} [kwArgs.indexes.indexData.keyPath] The key path of the index
    * @param {Boolean} [kwArgs.indexes.indexData.unique] Whether the index is unique
    * @param {Boolean} [kwArgs.indexes.indexData.multiEntry] Whether the index is multi entry
-   * @param {Array} [kwArgs.implementationPreference] An array of strings naming implementations to be used, in order or preference
+   * @param {Array} [kwArgs.implementationPreference=['indexedDB','webkitIndexedDB','mozIndexedDB','shimIndexedDB']] An array of strings naming implementations to be used, in order or preference
    * @param {Function} [onStoreReady] A callback to be called when the store
    * is ready to be used.
    * @example
