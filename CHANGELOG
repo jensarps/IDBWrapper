@@ -1,3 +1,9 @@
+1.6.1 / 2015-11-07
+------------------
+* Make implementation preference configurable, don't prefer shim by default
+* For the full changelog, please see here: https://github.com/jensarps/IDBWrapper/compare/v1.6.0...v1.6.1
+
+
 1.6.0 / 2015-10-05
 ------------------
 * Remove support for old Firefox browsers without autoIncrement
