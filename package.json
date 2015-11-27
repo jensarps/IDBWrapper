@@ -20,8 +20,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mocha": "~2.3.3",
-    "chai": "~3.3.0"
+    "chai": "~3.3.0",
+    "grunt": "^0.4.5",
+    "mocha": "~2.3.3"
   },
   "licenses": [
     {
