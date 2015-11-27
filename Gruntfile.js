@@ -11,7 +11,7 @@ module.exports = function (grunt) {
     pkg: pkg,
 
     jshint: {
-      all: ['Gruntfile.js', 'idbstore.js'],
+      all: ['Gruntfile.js', pkg.main],
       options: {
         jshintrc: '.jshintrc'
       }
