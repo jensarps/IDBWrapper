@@ -143,13 +143,15 @@
     this.openDB();
   };
 
-  IDBStore.prototype = /** @lends IDBStore */ {
+  /** @lends IDBStore.prototype */
+  var proto = {
 
     /**
      * A pointer to the IDBStore ctor
      *
      * @private
      * @type {Function}
+     * @constructs
      */
     constructor: IDBStore,
 
@@ -1354,7 +1356,8 @@
     return target;
   };
 
-  IDBStore.version = IDBStore.prototype.version;
+  IDBStore.prototype = proto;
+  IDBStore.version = proto.version;
 
   return IDBStore;
 
