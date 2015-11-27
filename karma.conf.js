@@ -4,10 +4,10 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['mocha', 'chai'],
     reporters: ['dots', 'progress'],
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'Firefox'],
 
     customLaunchers: {
-      'Chrome_incognito': {
+      ChromeIncognito: {
         base: 'Chrome',
         flags: ['--incognito']
       }
