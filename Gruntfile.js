@@ -23,8 +23,8 @@ module.exports = function (grunt) {
         options: {
           destination: 'doc/' + pkg.version,
           private: false,
-          debug: true,
-          verbose: true
+          template: './node_modules/jsdoc-oblivion/template',
+          configure : 'conf.json'
         }
       }
     }
