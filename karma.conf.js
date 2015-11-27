@@ -2,9 +2,14 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
+
     frameworks: ['mocha', 'chai'],
+
     reporters: ['dots', 'progress'],
+
     browsers: ['Chrome', 'Firefox'],
+
+    singleRun: true,
 
     customLaunchers: {
       ChromeIncognito: {

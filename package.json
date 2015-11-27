@@ -25,6 +25,7 @@
     "grunt-closurecompiler": "^0.9.9",
     "grunt-contrib-jshint": "^0.11.3",
     "grunt-jsdoc": "^1.0.0",
+    "grunt-karma": "^0.12.1",
     "jsdoc-oblivion": "0.0.4",
     "karma": "^0.13.15",
     "karma-chai": "^0.1.0",

@@ -37,6 +37,12 @@ module.exports = function (grunt) {
           'compilation_level': 'SIMPLE_OPTIMIZATIONS'
         }
       }
+    },
+
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      }
     }
 
   });
@@ -44,7 +50,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-closurecompiler');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('build', ['jshint', 'closurecompiler']);
+  grunt.registerTask('build', ['jshint', 'karma', 'closurecompiler']);
 
 };
