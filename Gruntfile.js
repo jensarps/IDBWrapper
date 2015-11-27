@@ -5,7 +5,6 @@ module.exports = function (grunt) {
 
   var pkg = grunt.file.readJSON('package.json');
 
-  // Project configuration.
   grunt.initConfig({
 
     pkg: pkg,
@@ -24,7 +23,18 @@ module.exports = function (grunt) {
           destination: 'doc/' + pkg.version,
           private: false,
           template: './node_modules/jsdoc-oblivion/template',
-          configure : 'conf.json'
+          configure: 'conf.json'
+        }
+      }
+    },
+
+    closurecompiler: {
+      minify: {
+        files: {
+          'idbstore.min.js': [pkg.main]
+        },
+        options: {
+          'compilation_level': 'SIMPLE_OPTIMIZATIONS'
         }
       }
     }
@@ -33,5 +43,6 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-closurecompiler');
 
 };
