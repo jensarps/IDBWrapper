@@ -45,4 +45,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-closurecompiler');
 
+  grunt.registerTask('build', ['jshint', 'closurecompiler']);
+
 };
