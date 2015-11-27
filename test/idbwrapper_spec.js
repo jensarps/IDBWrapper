@@ -1,5 +1,16 @@
 describe('IDBWrapper', function(){
 
+  if (typeof window.excludeIE == 'undefined') {
+    try {
+      IDBKeyRange.only([1]);
+      window.excludeIE = false;
+    } catch (e) {
+      window.excludeIE = true;
+    }
+  }
+
+  console.log('Running ' + (excludeIE ? 'reduced' : 'full') + ' suite.');
+
   describe('delete databases', function(){
     var store;
 
