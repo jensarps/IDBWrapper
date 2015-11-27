@@ -15,10 +15,23 @@ module.exports = function (grunt) {
       options: {
         jshintrc: '.jshintrc'
       }
+    },
+
+    jsdoc: {
+      dist: {
+        src: [pkg.main],
+        options: {
+          destination: 'doc/' + pkg.version,
+          private: false,
+          debug: true,
+          verbose: true
+        }
+      }
     }
 
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-jsdoc');
 
 };
