@@ -15,6 +15,10 @@ module.exports = function (config) {
       ChromeIncognito: {
         base: 'Chrome',
         flags: ['--incognito']
+      },
+      FirefoxPrivate: {
+        base: 'Firefox',
+        flags: ['-private']
       }
     },
 
