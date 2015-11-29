@@ -17,7 +17,9 @@ describe('IDBWrapper', function(){
     before(function(done){
       store = new IDBStore({
         storeName: 'spec-store-simple'
-      }, done);
+      }, function () {
+        done();
+      });
     });
 
     it('should delete the newly created database', function(done){
