@@ -40,11 +40,18 @@ module.exports = function (grunt) {
     },
 
     karma: {
-      unit: {
+      postbuild: {
         configFile: 'karma.conf.js'
+      },
+      dev: {
+        configFile: 'karma.conf.js',
+        files: [
+          'idbstore.js',
+          'test/**/*spec.js'
+        ],
+        singleRun: false
       }
     }
-
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -52,6 +59,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-closurecompiler');
   grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('build', ['jshint', 'karma', 'closurecompiler']);
+  grunt.registerTask('test', 'karma:dev');
+  grunt.registerTask('build', ['jshint', 'test', 'closurecompiler']);
 
 };
