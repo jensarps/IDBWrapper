@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<title>Detecting buggy IndexedDB implementations</title>
+
+<script type="text/html" src="detectIDB.js"></script>
+<script type="text/javascript">
+  detectIDB(function (result) {
+    switch (result) {
+      case detectIDB.COMPATIBLE:
+        console.log('IndexedDB fully compatible!');
+        break;
+      case detectIDB.IE:
+        console.log('This is an IE, some features are missing.');
+        break;
+      case detectIDB.SAFARI:
+        console.log('This is a Safari, there are bugs in this implementation.');
+        break;
+    }
+  });
+</script>
