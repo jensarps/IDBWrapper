@@ -6,13 +6,13 @@
   detectIDB(function (result) {
     switch (result) {
       case detectIDB.COMPATIBLE:
-        console.log('IndexedDB fully compatible!');
+        alert('IndexedDB fully compatible!');
         break;
       case detectIDB.IE:
-        console.log('This is an IE, some features are missing.');
+        alert('This is an IE, some features are missing.');
         break;
       case detectIDB.SAFARI:
-        console.log('This is a Safari, there are bugs in this implementation.');
+        alert('This is a Safari, there are bugs in this implementation.');
         break;
     }
   });
