@@ -1,3 +1,10 @@
+1.6.2 /
+------------------
+* Switch from Makefile to Grunt for running tasks
+* Provide version-specific documentation
+* For the full changelog, please see here: https://github.com/jensarps/IDBWrapper/compare/v1.6.1...v1.6.2
+
+
 1.6.1 / 2015-11-07
 ------------------
 * Make implementation preference configurable, don't prefer shim by default
