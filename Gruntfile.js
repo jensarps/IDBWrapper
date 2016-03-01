@@ -54,7 +54,6 @@ module.exports = function (grunt) {
           'idbstore.js',
           'test/**/*spec.js'
         ],
-        singleRun: false
       }
     }
   });
