@@ -7,7 +7,7 @@ module.exports = function (config) {
 
     reporters: ['dots', 'progress'],
 
-    browsers: ['ChromeIncognito', 'Firefox', 'Safari'],
+    browsers: ['ChromeIncognito', 'Firefox'],
 
     singleRun: true,
 
