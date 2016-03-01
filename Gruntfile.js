@@ -50,10 +50,12 @@ module.exports = function (grunt) {
       },
       dev: {
         configFile: 'karma.conf.js',
-        files: [
-          'idbstore.js',
-          'test/**/*spec.js'
-        ],
+        files: {
+          src: [
+            'idbstore.js',
+            'test/**/*spec.js'
+          ]
+        }
       }
     }
   });
