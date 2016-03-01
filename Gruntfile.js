@@ -5,6 +5,11 @@ module.exports = function (grunt) {
 
   var pkg = grunt.file.readJSON('package.json');
 
+  var additionalCSS = [
+    '.navbar { display: none; }',
+    '#toc { top: 0; }'
+  ];
+
   grunt.initConfig({
 
     pkg: pkg,
@@ -61,5 +66,15 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', 'karma:dev');
   grunt.registerTask('build', ['jshint', 'test', 'closurecompiler']);
+  grunt.registerTask('docs', ['jsdoc:dist', 'modifyDocs']);
+
+  grunt.registerTask('modifyDocs', function () {
+    var docPath = 'doc/' + pkg.version,
+      styleSheet = docPath + '/styles/site.oblivion.css',
+      css = grunt.file.read(styleSheet);
+
+    css += additionalCSS.join('\n') + '\n';
+    grunt.file.write(styleSheet, css);
+  });
 
 };
