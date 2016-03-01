@@ -66,7 +66,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('test', 'karma:dev');
-  grunt.registerTask('build', ['jshint', 'test', 'closurecompiler']);
   grunt.registerTask('docs', ['jsdoc:dist', 'modifyDocs']);
 
   grunt.registerTask('modifyDocs', function () {
@@ -78,4 +77,11 @@ module.exports = function (grunt) {
     grunt.file.write(styleSheet, css);
   });
 
+  grunt.registerTask('build', [
+    'jshint',
+    'karma:dev',
+    'closurecompiler',
+    'karma:postbuild',
+    'docs'
+  ]);
 };
