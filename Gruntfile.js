@@ -1,7 +1,9 @@
-/*global module:false*/
+/*global module,require */
 module.exports = function (grunt) {
 
   'use strict';
+
+  var fs = require('fs');
 
   var pkg = grunt.file.readJSON('package.json');
 
@@ -66,8 +68,14 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('test', 'karma:dev');
-  grunt.registerTask('docs', ['jsdoc:dist', 'modifyDocs', 'copyLatestDocs']);
+  /* doc related code */
+
+  var indexTemplate = '<!DOCTYPE html>' +
+    '<html>' +
+      '<title>Available IDBWrapper Documentation</title>' +
+      '<p>Available IDBWrapper documentation:</p>' +
+      '<ul>{{list}}</ul>' +
+    '</html>';
 
   grunt.registerTask('modifyDocs', function () {
     var docPath = 'doc/' + pkg.version,
@@ -88,11 +96,37 @@ module.exports = function (grunt) {
     grunt.task.run('copy:docs');
   });
 
+  grunt.registerTask('writeDocIndex', function () {
+    var list = fs.readdirSync('doc').filter(function (entry) {
+      return grunt.file.isDir('doc/' + entry);
+    }).map(function (entry) {
+      return '<li><a href="' + entry + '/IDBStore.html">' + entry + '</a></li>';
+    }).join('');
+
+    var index = indexTemplate.replace('{{list}}', list);
+    grunt.file.write('doc/index.html', index);
+  });
+
+
+  //################//
+  //   Main Tasks   //
+  //################//
+
+  grunt.registerTask('test', [
+    'karma:dev'
+  ]);
+
+  grunt.registerTask('docs', [
+    'jsdoc:dist',
+    'modifyDocs',
+    'copyLatestDocs',
+    'writeDocIndex'
+  ]);
+
   grunt.registerTask('build', [
     'jshint',
     'karma:dev',
     'closurecompiler',
-    'karma:postbuild',
-    'docs'
+    'karma:postbuild'
   ]);
 };
