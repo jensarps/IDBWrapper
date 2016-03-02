@@ -1,7 +1,9 @@
-/*global module:false*/
+/*global module,require */
 module.exports = function (grunt) {
 
   'use strict';
+
+  var fs = require('fs');
 
   var pkg = grunt.file.readJSON('package.json');
 
@@ -66,6 +68,15 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
+  /* doc related code */
+
+  var indexTemplate = '<!DOCTYPE html>' +
+    '<html>' +
+      '<title>Available IDBWrapper Documentation</title>' +
+      '<p>Available IDBWrapper documentation:</p>' +
+      '<ul>{{list}}</ul>' +
+    '</html>';
+
   grunt.registerTask('modifyDocs', function () {
     var docPath = 'doc/' + pkg.version,
       styleSheet = docPath + '/styles/site.oblivion.css',
@@ -85,6 +96,17 @@ module.exports = function (grunt) {
     grunt.task.run('copy:docs');
   });
 
+  grunt.registerTask('writeDocIndex', function () {
+    var list = fs.readdirSync('doc').filter(function (entry) {
+      return grunt.file.isDir('doc/' + entry);
+    }).map(function (entry) {
+      return '<li><a href="' + entry + '/IDBStore.html">' + entry + '</a></li>';
+    }).join('');
+
+    var index = indexTemplate.replace('{{list}}', list);
+    grunt.file.write('doc/index.html', index);
+  });
+
 
   //################//
   //   Main Tasks   //
@@ -97,7 +119,8 @@ module.exports = function (grunt) {
   grunt.registerTask('docs', [
     'jsdoc:dist',
     'modifyDocs',
-    'copyLatestDocs'
+    'copyLatestDocs',
+    'writeDocIndex'
   ]);
 
   grunt.registerTask('build', [
