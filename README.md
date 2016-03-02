@@ -73,6 +73,8 @@ API Reference
 
 There's an API reference over here: http://jensarps.github.io/IDBWrapper/doc/latest/IDBStore.html
 
+For references of older versions, please refer to this index: http://jensarps.github.io/IDBWrapper/doc/
+
 Obtaining IDBWrapper
 ===
 
