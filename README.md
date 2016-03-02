@@ -53,7 +53,7 @@ http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
 ##Examples
 
-There are some examples to run right in your browser over here: http://jensarps.github.com/IDBWrapper/example/
+There are some examples to run right in your browser over here: http://jensarps.github.io/IDBWrapper/example/
 
 The source for these examples are in the `example` folder of this repository.
 
@@ -65,7 +65,7 @@ data, setting up indexes and running queries, please refer to the
 
 ##API Reference
 
-There's an API reference over here: http://jensarps.github.com/IDBWrapper/jsdoc/IDBStore.html
+There's an API reference over here: http://jensarps.github.io/IDBWrapper/doc/latest/IDBStore.html
 
 #Obtaining IDBWrapper
 
