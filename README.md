@@ -37,6 +37,7 @@ Note on limited/buggy IndexedDB support:
 
 * IE has limited support, which can be fixed by including [idb-iegap](https://github.com/dfahlander/idb-iegap)
 * Safari has buggy support, which can be fixed by using the above mentioned shim
+* Details on how to change the implementation being used can be found in the [wiki](https://github.com/jensarps/IDBWrapper/wiki/Usage#defining-implementation-preference-aka-make-idbwrapper-use-the-shim)
 
 #Using IDBWrapper
 
@@ -59,7 +60,7 @@ The source for these examples are in the `example` folder of this repository.
 ##Wiki
 
 For usage instructions, details about mothods for reading and writing 
-data, setting up indexes and runnoing queries, please refer to the 
+data, setting up indexes and running queries, please refer to the 
 [Wiki](https://github.com/jensarps/IDBWrapper/wiki).
 
 ##API Reference
