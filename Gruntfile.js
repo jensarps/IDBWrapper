@@ -59,6 +59,18 @@ module.exports = function (grunt) {
           ]
         }
       }
+    },
+
+    md2html: {
+      index: {
+        options: {
+          layout: 'index.layout.html'
+        },
+        files: [{
+          src: ['README.md'],
+          dest: 'index.html'
+        }]
+      }
     }
   });
 
@@ -67,6 +79,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-closurecompiler');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-md2html');
 
   /* doc related code */
 
@@ -120,7 +133,8 @@ module.exports = function (grunt) {
     'jsdoc:dist',
     'modifyDocs',
     'copyLatestDocs',
-    'writeDocIndex'
+    'writeDocIndex',
+    'md2html:index'
   ]);
 
   grunt.registerTask('build', [
