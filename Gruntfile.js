@@ -64,9 +64,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('grunt-closurecompiler');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('test', 'karma:dev');
-  grunt.registerTask('docs', ['jsdoc:dist', 'modifyDocs']);
+  grunt.registerTask('docs', ['jsdoc:dist', 'modifyDocs', 'copyLatestDocs']);
 
   grunt.registerTask('modifyDocs', function () {
     var docPath = 'doc/' + pkg.version,
@@ -75,6 +76,16 @@ module.exports = function (grunt) {
 
     css += additionalCSS.join('\n') + '\n';
     grunt.file.write(styleSheet, css);
+  });
+
+  grunt.registerTask('copyLatestDocs', function () {
+    grunt.config.set('copy.docs', {
+      cwd: 'doc/' + pkg.version,
+      src: '**/*',
+      dest: 'doc/latest/',
+      expand: true
+    });
+    grunt.task.run('copy:docs');
   });
 
   grunt.registerTask('build', [
