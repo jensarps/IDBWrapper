@@ -9,7 +9,7 @@
   ],
   "author": "jensarps <mail@jensarps.de> (http://jensarps.de/)",
   "repository": "git://github.com/jensarps/IDBWrapper.git",
-  "main": "idbstore",
+  "main": "idbstore.js",
   "homepage": "https://github.com/jensarps/IDBWrapper",
   "contributors": [
     "Github Contributors (https://github.com/jensarps/IDBWrapper/graphs/contributors)"
@@ -20,8 +20,20 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mocha": "~2.3.3",
-    "chai": "~3.3.0"
+    "chai": "^3.5",
+    "grunt": "^0.4.5",
+    "grunt-closurecompiler": "^0.9.9",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-jsdoc": "^1.0.0",
+    "grunt-karma": "^0.12.1",
+    "jsdoc-oblivion": "0.0.4",
+    "karma": "^0.13.15",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-firefox-launcher": "^0.1.7",
+    "karma-mocha": "^0.2.1",
+    "mocha": "^2.3.3"
   },
   "licenses": [
     {

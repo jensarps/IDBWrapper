@@ -1,12 +1,25 @@
 describe('IDBWrapper', function(){
 
+  if (typeof window.excludeIE == 'undefined') {
+    try {
+      IDBKeyRange.only([1]);
+      window.excludeIE = false;
+    } catch (e) {
+      window.excludeIE = true;
+    }
+  }
+
+  console.log('Running ' + (excludeIE ? 'reduced' : 'full') + ' suite.');
+
   describe('delete databases', function(){
     var store;
 
     before(function(done){
       store = new IDBStore({
         storeName: 'spec-store-simple'
-      }, done);
+      }, function () {
+        done();
+      });
     });
 
     it('should delete the newly created database', function(done){

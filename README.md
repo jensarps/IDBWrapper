@@ -4,7 +4,8 @@
 API is the future of offline storage, it is not very intuitive to use.
 IDBWrapper is there to provide easy access to IndexedDB's features.
 
-##Browser Support
+Browser Support
+---
 
 IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 
@@ -39,9 +40,11 @@ Note on limited/buggy IndexedDB support:
 * Safari has buggy support, which can be fixed by using the above mentioned shim
 * Details on how to change the implementation being used can be found in the [wiki](https://github.com/jensarps/IDBWrapper/wiki/Usage#defining-implementation-preference-aka-make-idbwrapper-use-the-shim)
 
-#Using IDBWrapper
+Using IDBWrapper
+===
 
-##Tutorials
+Tutorials
+---
 
 There are two tutorials to get you up and running:
 
@@ -51,37 +54,41 @@ http://jensarps.de/2011/11/25/working-with-idbwrapper-part-1/
 Part 2: Running Queries against the store
 http://jensarps.de/2012/11/13/working-with-idbwrapper-part-2/
 
-##Examples
+Examples
+---
 
-There are some examples to run right in your browser over here: http://jensarps.github.com/IDBWrapper/example/
+There are some examples to run right in your browser over here: http://jensarps.github.io/IDBWrapper/example/
 
 The source for these examples are in the `example` folder of this repository.
 
-##Wiki
+Wiki
+---
 
 For usage instructions, details about mothods for reading and writing 
 data, setting up indexes and running queries, please refer to the 
 [Wiki](https://github.com/jensarps/IDBWrapper/wiki).
 
-##API Reference
+API Reference
+---
 
-There's an API reference over here: http://jensarps.github.com/IDBWrapper/jsdoc/IDBStore.html
+There's an API reference over here: http://jensarps.github.io/IDBWrapper/doc/latest/IDBStore.html
 
-#Obtaining IDBWrapper
+For references of older versions, please refer to this index: http://jensarps.github.io/IDBWrapper/doc/
 
-##git
+Obtaining IDBWrapper
+===
 
-You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/tags
-
-##cdnjs
+cdnjs
+---
 
 IDBWrapper is also available on [cdnjs](http://cdnjs.com/). You can directly 
-point a script tag there, or require() it from there. cdnjs supports http, 
+point a script tag there, or `require()` it from there. cdnjs supports http,
 https and spdy, so you can just leave the protocol off. The URLs for the 
 different versions of IDBWrapper can be found here: 
 [https://cdnjs.com/libraries/idbwrapper](https://cdnjs.com/libraries/idbwrapper)
 
-##Package Managers
+Package Managers
+---
 
 If you use NPM as your package manager, you can get it from there, too, by
 running:
@@ -102,6 +109,12 @@ If you want to add IDBWrapper to a volo project, just run:
 $ volo add idbwrapper
 ```
 
-#License
+git
+---
+
+You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/releases
+
+License
+===
 
 [MIT style (X11)](https://github.com/jensarps/IDBWrapper/blob/master/LICENSE)

@@ -10,6 +10,9 @@
  */
 
 (function (name, definition, global) {
+
+  'use strict';
+
   if (typeof define === 'function') {
     define(definition);
   } else if (typeof module !== 'undefined' && module.exports) {
@@ -143,13 +146,15 @@
     this.openDB();
   };
 
-  IDBStore.prototype = /** @lends IDBStore */ {
+  /** @lends IDBStore.prototype */
+  var proto = {
 
     /**
      * A pointer to the IDBStore ctor
      *
      * @private
      * @type {Function}
+     * @constructs
      */
     constructor: IDBStore,
 
@@ -593,6 +598,11 @@
       } else if (dataArray.length === 0) {
         return onSuccess(true);
       }
+
+      var count = dataArray.length;
+      var called = false;
+      var hasSuccess = false;
+
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
       batchTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
@@ -600,10 +610,7 @@
       };
       batchTransaction.onabort = onError;
       batchTransaction.onerror = onError;
-      
-      var count = dataArray.length;
-      var called = false;
-      var hasSuccess = false;
+
 
       var onItemSuccess = function () {
         count--;
@@ -698,6 +705,13 @@
       if (Object.prototype.toString.call(dataArray) != '[object Array]') {
         onError(new Error('dataArray argument must be of type Array.'));
       }
+
+      var keyField = options.keyField || this.keyPath;
+      var count = dataArray.length;
+      var called = false;
+      var hasSuccess = false;
+      var index = 0; // assume success callbacks are executed in order
+
       var batchTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       batchTransaction.oncomplete = function () {
         if (hasSuccess) {
@@ -708,12 +722,6 @@
       };
       batchTransaction.onabort = onError;
       batchTransaction.onerror = onError;
-
-      var keyField = options.keyField || this.keyPath;
-      var count = dataArray.length;
-      var called = false;
-      var hasSuccess = false;
-      var index = 0; // assume success callbacks are executed in order
 
       var onItemSuccess = function (event) {
         var record = dataArray[index++];
@@ -837,6 +845,13 @@
       } else if (keyArray.length === 0) {
         return onSuccess([]);
       }
+
+      var data = [];
+      var count = keyArray.length;
+      var called = false;
+      var hasSuccess = false;
+      var result = null;
+
       var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_ONLY);
       batchTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
@@ -844,12 +859,6 @@
       };
       batchTransaction.onabort = onError;
       batchTransaction.onerror = onError;
-
-      var data = [];
-      var count = keyArray.length;
-      var called = false;
-      var hasSuccess = false;
-      var result = null;
 
       var onItemSuccess = function (event) {
         if (event.target.result || arrayType == 'dense') {
@@ -1343,7 +1352,7 @@
 
   /** helpers **/
   var empty = {};
-  var mixin = function (target, source) {
+  function mixin (target, source) {
     var name, s;
     for (name in source) {
       s = source[name];
@@ -1352,9 +1361,10 @@
       }
     }
     return target;
-  };
+  }
 
-  IDBStore.version = IDBStore.prototype.version;
+  IDBStore.prototype = proto;
+  IDBStore.version = proto.version;
 
   return IDBStore;
 

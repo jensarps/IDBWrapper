@@ -1,5 +1,6 @@
 .idea
 .git*
 node_modules
-test/polyfills
-lib/
+test
+doc
+example
