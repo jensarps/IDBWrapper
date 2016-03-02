@@ -66,9 +66,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('test', 'karma:dev');
-  grunt.registerTask('docs', ['jsdoc:dist', 'modifyDocs', 'copyLatestDocs']);
-
   grunt.registerTask('modifyDocs', function () {
     var docPath = 'doc/' + pkg.version,
       styleSheet = docPath + '/styles/site.oblivion.css',
@@ -88,11 +85,22 @@ module.exports = function (grunt) {
     grunt.task.run('copy:docs');
   });
 
+  /* Main Tasks */
+
+  grunt.registerTask('test', [
+    'karma:dev'
+  ]);
+
+  grunt.registerTask('docs', [
+    'jsdoc:dist',
+    'modifyDocs',
+    'copyLatestDocs'
+  ]);
+
   grunt.registerTask('build', [
     'jshint',
     'karma:dev',
     'closurecompiler',
-    'karma:postbuild',
-    'docs'
+    'karma:postbuild'
   ]);
 };
