@@ -85,7 +85,10 @@ module.exports = function (grunt) {
     grunt.task.run('copy:docs');
   });
 
-  /* Main Tasks */
+
+  //################//
+  //   Main Tasks   //
+  //################//
 
   grunt.registerTask('test', [
     'karma:dev'
