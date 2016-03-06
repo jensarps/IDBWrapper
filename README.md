@@ -1,5 +1,7 @@
-[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper) [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
-----
+[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper)
+[![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
+
+
 **IDBWrapper** is a cross-browser wrapper for the HTML5 IndexedDB API. While this
 API is the future of offline storage, it is not very intuitive to use.
 IDBWrapper is there to provide easy access to IndexedDB's features.
@@ -11,26 +13,17 @@ IDBWrapper works on all browsers supporting the IndexedDB API, which are:
 
 **Desktop**
 
-* Chrome
-* Firefox
-* Opera 15+
-* IE 10+
-* Safari 8+
+Chrome, Firefox, Opera 15+, IE 10+, Safari 8+
 
 **Mobile**
 
-* Chrome for Android
-* Firefox for Android
-* Opera for Android
-* IE10 for WP8
-* iOS 8+
+Chrome for Android, Firefox for Android, Opera for Android, IE10 for WP8, iOS 8+
 
-**Worker** IDBWrapper runs inside of a worker on following browsers:
+**Worker** 
 
-* Chrome (also on Android)
-* Firefox (also on Android)
-* Opera (also on Android)
-* IE10+ (also on WP8+)
+IDBWrapper runs inside of a worker on following browsers:
+
+Chrome (also on Android), Firefox (also on Android), Opera (also on Android), IE10+ (also on WP8+)
 
 If using in an older browser supporting WebSql along with [IndexedDBShim](https://github.com/axemclion/IndexedDBShim), IndexedDBShim needs to run first.
 
@@ -39,6 +32,7 @@ Note on limited/buggy IndexedDB support:
 * IE has limited support, which can be fixed by including [idb-iegap](https://github.com/dfahlander/idb-iegap)
 * Safari has buggy support, which can be fixed by using the above mentioned shim
 * Details on how to change the implementation being used can be found in the [wiki](https://github.com/jensarps/IDBWrapper/wiki/Usage#defining-implementation-preference-aka-make-idbwrapper-use-the-shim)
+* Here's a guide to [feature detecting limited/buggy IndexedDB support](http://jensarps.de/2015/12/16/how-to-detect-buggy-indexeddb-implementations/)
 
 Using IDBWrapper
 ===
