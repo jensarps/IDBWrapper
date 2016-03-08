@@ -484,8 +484,15 @@
       var hasSuccess = false,
           result = null,
           putRequest;
+      
+      // db.transaction can throw if the db wasn't properly initialize or if there is a WriteError
+      try {
+        var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
+      }
+      catch (e){
+        return void onError(e)
+      }
 
-      var putTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       putTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
         callback(result);
