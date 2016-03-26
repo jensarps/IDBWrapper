@@ -1198,8 +1198,10 @@
             cursor.advance(options.offset);
             options.offset = 0;
           } else {
-            onItem(cursor.value, cursor, cursorTransaction);
-            recordCount++;
+            var onItemReturn = onItem(cursor.value, cursor, cursorTransaction);
+			if (onItemReturn === undefined || onItemReturn) {
+				recordCount++;
+			}
             if (options.autoContinue) {
               if (recordCount + options.offset < options.limit) {
                 cursor['continue']();
