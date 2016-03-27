@@ -10,13 +10,15 @@ describe('IDBWrapper', function(){
   }
 
   console.log('Running ' + (excludeIE ? 'reduced' : 'full') + ' suite.');
-
+  
   describe('delete databases', function(){
     var store;
 
     before(function(done){
       store = new IDBStore({
-        storeName: 'spec-store-simple'
+        stores: [{
+			name: 'spec-store-simple'
+		}]
       }, function () {
         done();
       });
@@ -37,7 +39,9 @@ describe('IDBWrapper', function(){
 
     before(function(done){
       store = new IDBStore({
-        storeName: 'spec-store-simple'
+        stores: [{
+			name: 'spec-store-simple'
+		}]
       }, done);
     });
 
@@ -47,14 +51,14 @@ describe('IDBWrapper', function(){
         id: 1,
         name: 'John'
       };
-      store.put(data, function(insertId){
+      store['spec-store-simple'].put(data, function(insertId){
         expect(insertId).to.equal(data.id);
         done();
       }, done);
     });
 
     it('should fetch a stored object', function(done){
-      store.get(1, function(data){
+      store['spec-store-simple'].get(1, function(data){
         expect(data.name).to.equal('John');
         done();
       }, done);
@@ -65,8 +69,8 @@ describe('IDBWrapper', function(){
         id: 1,
         name: 'James'
       };
-      store.put(data, function(insertId){
-        store.get(1, function(data){
+      store['spec-store-simple'].put(data, function(insertId){
+        store['spec-store-simple'].get(1, function(data){
           expect(data.name).to.equal('James');
           done();
         }, done);
@@ -77,10 +81,12 @@ describe('IDBWrapper', function(){
       var data = {
         name: 'Joe'
       };
-      store.put(data, function(insertId){
+	  window.console.log('ai ' + store['spec-store-simple'].autoIncrement);
+	  window.console.log('kp ' + store['spec-store-simple'].keyPath);
+      store['spec-store-simple'].put(data, function(insertId){
         expect(insertId).to.exist;
         lastInsertId = insertId;
-        store.get(insertId, function(result){
+        store['spec-store-simple'].get(insertId, function(result){
           expect(result.name).to.equal(data.name);
           done();
         }, done);
@@ -91,7 +97,7 @@ describe('IDBWrapper', function(){
       var data = {
         name: 'John'
       };
-      store.put(data, function(insertId){
+      store['spec-store-simple'].put(data, function(insertId){
         expect(insertId).to.exist;
         expect(store.idb.cmp(insertId, lastInsertId)).to.equal(1);
         done();
@@ -99,15 +105,15 @@ describe('IDBWrapper', function(){
     });
 
     it('should get all stored objects', function(done){
-      store.getAll(function(data){
+      store['spec-store-simple'].getAll(function(data){
         expect(data.length).to.equal(3);
         done();
       }, done);
     });
 
     it('should delete a given object', function(done){
-      store.remove(1, function(result){
-        store.get(1, function(data){
+      store['spec-store-simple'].remove(1, function(result){
+        store['spec-store-simple'].get(1, function(data){
           expect(data).to.not.exist;
           done();
         }, done);
@@ -115,8 +121,8 @@ describe('IDBWrapper', function(){
     });
 
     it('should clear all objects', function(done){
-      store.clear(function(){
-        store.getAll(function(data){
+      store['spec-store-simple'].clear(function(){
+        store['spec-store-simple'].getAll(function(data){
           expect(data.length).to.equal(0);
         }, done);
         done();
@@ -125,7 +131,7 @@ describe('IDBWrapper', function(){
 
 
     after(function(done){
-      store.clear(function(){
+      store.deleteDatabase(function(){
         done();
       });
     });
@@ -138,8 +144,10 @@ describe('IDBWrapper', function(){
 
     before(function(done){
       store = new IDBStore({
-        storeName: 'spec-store-simple-out-of-line',
-        keyPath: null
+        stores: [{
+		  name: 'spec-store-simple-out-of-line',
+		  keyPath: null
+		}]
       }, done);
     });
 
@@ -149,14 +157,14 @@ describe('IDBWrapper', function(){
         name: 'John'
       };
       var id = 1;
-      store.put(id, data, function(insertId){
+      store['spec-store-simple-out-of-line'].put(id, data, function(insertId){
         expect(insertId).to.equal(id);
         done();
       }, done);
     });
 
     it('should fetch a stored object', function(done){
-      store.get(1, function(data){
+      store['spec-store-simple-out-of-line'].get(1, function(data){
         expect(data.name).to.equal('John');
         done();
       }, done);
@@ -167,8 +175,8 @@ describe('IDBWrapper', function(){
         name: 'James'
       };
       var id = 1;
-      store.put(id, data, function(insertId){
-        store.get(id, function(data){
+      store['spec-store-simple-out-of-line'].put(id, data, function(insertId){
+        store['spec-store-simple-out-of-line'].get(id, function(data){
           expect(data.name).to.equal('James');
           done();
         }, done);
@@ -176,8 +184,8 @@ describe('IDBWrapper', function(){
     });
 
     it('should delete a given object', function(done){
-      store.remove(1, function(result){
-        store.get(1, function(data){
+      store['spec-store-simple-out-of-line'].remove(1, function(result){
+        store['spec-store-simple-out-of-line'].get(1, function(data){
           expect(data).to.not.exist;
           done();
         }, done);
@@ -186,7 +194,7 @@ describe('IDBWrapper', function(){
 
 
     after(function(done){
-      store.clear(function(){
+      store.deleteDatabase(function(){
         done();
       });
     });
@@ -213,20 +221,22 @@ describe('IDBWrapper', function(){
 
     before(function(done){
       store = new IDBStore({
-        storeName: 'spec-store-simple'
+        stores: [{
+		  name: 'spec-store-simple'
+		}]
       }, done);
     });
 
 
     it('should store multiple objects', function(done){
-      store.putBatch(dataArray, function(result){
+      store['spec-store-simple'].putBatch(dataArray, function(result){
         expect(result).to.be.ok;
         done();
       }, done);
     });
 
     it('should short circuit putBatch when an empty array of items are passed and should call success', function(done) {
-      store.putBatch([], function(){
+      store['spec-store-simple'].putBatch([], function(){
         done();
       }, function(error){
         done(new Error('Error event encountered when an empty data array is passed to putBatch.', error));
@@ -234,7 +244,7 @@ describe('IDBWrapper', function(){
     });
 
     it('should fetch multiple objects', function(done){
-      store.getBatch([1,2,3], function(data){
+      store['spec-store-simple'].getBatch([1,2,3], function(data){
         expect(data[0].name).to.equal('John');
         expect(data[1].name).to.equal('Joe');
         expect(data[2].name).to.equal('James');
@@ -243,7 +253,7 @@ describe('IDBWrapper', function(){
     });
 
     it('should short circuit getBatch when an empty array of keys is passed with calling success with an empty array of results', function(done) {
-      store.getBatch([], function(data){
+      store['spec-store-simple'].getBatch([], function(data){
         expect(data).to.deep.equal([]);
         done();
       }, function(error){
@@ -252,9 +262,9 @@ describe('IDBWrapper', function(){
     });
 
     it('should delete multiple objects', function(done){
-      store.removeBatch([1,2], function(result){
+      store['spec-store-simple'].removeBatch([1,2], function(result){
         expect(result).to.be.ok;
-        store.getAll(function(data){
+        store['spec-store-simple'].getAll(function(data){
           expect(data.length).to.equal(1);
           expect(data[0].name).to.equal('James');
         }, done);
@@ -263,7 +273,7 @@ describe('IDBWrapper', function(){
     });
 
     it('should short circuit removeBatch when an empty array of items is passed and should call success', function(done) {
-      store.removeBatch([], function(){
+      store['spec-store-simple'].removeBatch([], function(){
         done();
       }, function(error){
         done(new Error('Error event encountered when an empty data array is passed to removeBatch.', error));
@@ -272,7 +282,7 @@ describe('IDBWrapper', function(){
 
 
     after(function(done){
-      store.clear(function(){
+      store.deleteDatabase(function(){
         done();
       });
     });
@@ -296,13 +306,15 @@ describe('IDBWrapper', function(){
 
     before(function (done) {
       store = new IDBStore({
-        storeName: 'spec-store-simple'
+        stores: [{
+		  name: 'spec-store-simple'
+		}]
       }, done);
     });
 
     it('should store multiple objects and add keys to these objects', function (done) {
       var options = {keyField: 'foo'};
-      store.upsertBatch(dataArray, options, function (data) {
+      store['spec-store-simple'].upsertBatch(dataArray, options, function (data) {
         expect(data[0].name).to.equal('John');
         expect(data[1].name).to.equal('Joe');
         expect(data[2].name).to.equal('James');
@@ -314,7 +326,7 @@ describe('IDBWrapper', function(){
     });
 
     it('should default to keyPath when assigning insertId', function (done) {
-      store.upsertBatch(dataArray, function (data) {
+      store['spec-store-simple'].upsertBatch(dataArray, function (data) {
         expect(data[0].name).to.equal('John');
         expect(data[1].name).to.equal('Joe');
         expect(data[2].name).to.equal('James');
@@ -326,7 +338,7 @@ describe('IDBWrapper', function(){
     });
 
     after(function (done) {
-      store.clear(function () {
+      store.deleteDatabase(function () {
         done();
       });
     });
@@ -353,16 +365,18 @@ describe('IDBWrapper', function(){
 
     before(function(done){
       store = new IDBStore({
-        storeName: 'spec-store-simple'
+        stores: [{
+		  name: 'spec-store-simple'
+		}]
       }, function(){
-        store.putBatch(dataArray, function(){
+        store['spec-store-simple'].putBatch(dataArray, function(){
           done();
         }, done);
       });
     });
 
     it('should return a sparse array for arrayType="sparse"', function(done){
-      store.getBatch([1,10,3], function(data){
+      store['spec-store-simple'].getBatch([1,10,3], function(data){
         expect(data.length).to.equal(3);
 
         expect(data[0].name).to.equal('John');
@@ -380,7 +394,7 @@ describe('IDBWrapper', function(){
     });
 
     it('should return a dense array for arrayType="dense"', function(done){
-      store.getBatch([1,10,3], function(data){
+      store['spec-store-simple'].getBatch([1,10,3], function(data){
         expect(data.length).to.equal(3);
 
         expect(data[0].name).to.equal('John');
@@ -398,7 +412,7 @@ describe('IDBWrapper', function(){
     });
 
     it('should return a reduced array for arrayType="skip"', function(done){
-      store.getBatch([1,10,3], function(data){
+      store['spec-store-simple'].getBatch([1,10,3], function(data){
         expect(data.length).to.equal(2);
 
         expect(data[0].name).to.equal('John');
@@ -410,7 +424,7 @@ describe('IDBWrapper', function(){
 
 
     after(function(done){
-      store.clear(function(){
+      store.deleteDatabase(function(){
         done();
       });
     });
@@ -438,13 +452,15 @@ describe('IDBWrapper', function(){
       }
 
       store = new IDBStore({
-        storeName: 'spec-store-indexes',
-        indexes: indexes
+        stores: [{
+		  name: 'spec-store-indexes',
+		  indexes: indexes
+		}]
       }, done);
     });
 
     it('should create all indexes', function(){
-      var indexList = store.getIndexList();
+      var indexList = store['spec-store-indexes'].getIndexList();
       expect(indexList).to.respondTo('contains');
       expect(indexList.length).to.equal(excludeIE ? 3 : 5);
     });
@@ -462,14 +478,14 @@ describe('IDBWrapper', function(){
         },
         pets: ['cat', 'dog']
       };
-      store.put(data, function(insertId){
+      store['spec-store-indexes'].put(data, function(insertId){
         expect(insertId).to.equal(data.id);
         done();
       }, done);
     });
 
     after(function(done){
-      store.clear(function(){
+      store.deleteDatabase(function(){
         done();
       });
     });
@@ -496,8 +512,10 @@ describe('IDBWrapper', function(){
       }
 
       store = new IDBStore({
-        storeName: 'spec-store-indexes',
-        indexes: indexes
+        stores: [{
+		  name: 'spec-store-indexes',
+		  indexes: indexes
+		}]
       }, function(){
 
         var dataArray = [
@@ -576,7 +594,7 @@ describe('IDBWrapper', function(){
           }
         ];
 
-        store.putBatch(dataArray, function(){
+        store['spec-store-indexes'].putBatch(dataArray, function(){
           done();
         });
 
@@ -585,12 +603,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using basic index (Keyrange.only)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(2);
         done();
       }, {
         index: 'basic',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           only: 'John'
         })
       });
@@ -599,12 +617,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using basic index (Keyrange.lower)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(3);
         done();
       }, {
         index: 'basic',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           lower: 'Jo'
         })
       });
@@ -613,12 +631,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using deep index (KeyRange.only)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(2);
         done();
       }, {
         index: 'deep',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           only: 'j.doe@example.com'
         })
       });
@@ -627,12 +645,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using deep index (KeyRange.upper + exclude)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(1);
         done();
       }, {
         index: 'deep',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           upper: 'j',
           excludeUppr: true
         })
@@ -642,12 +660,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using date index (KeyRange.lower)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(5);
         done();
       }, {
         index: 'date',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           lower: Date.parse('Jan 1, 2000')
         })
       });
@@ -656,12 +674,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using date index (KeyRange.upper)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(4);
         done();
       }, {
         index: 'date',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           upper: Date.parse('Jan 1, 2005')
         })
       });
@@ -670,12 +688,12 @@ describe('IDBWrapper', function(){
 
     it('should fetch objects using date index (KeyRange.upper + lower)', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(3);
         done();
       }, {
         index: 'date',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           lower: Date.parse('Jan 1, 2000'),
           upper: Date.parse('Jan 1, 2005')
         })
@@ -689,12 +707,12 @@ describe('IDBWrapper', function(){
         return done(new Error('Test skipped.'));
       }
 
-      store.query(function (data) {
+      store['spec-store-indexes'].query(function (data) {
         expect(data.length).to.equal(1);
         done();
       }, {
         index: 'compound',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           only: ['John', 42]
         })
       });
@@ -707,12 +725,12 @@ describe('IDBWrapper', function(){
         return done(new Error('Test skipped.'));
       }
 
-      store.query(function (data) {
+      store['spec-store-indexes'].query(function (data) {
         expect(data.length).to.equal(4);
         done();
       }, {
         index: 'multi',
-        keyRange: store.makeKeyRange({
+        keyRange: store['spec-store-indexes'].makeKeyRange({
           only: 'dog'
         })
       });
@@ -721,7 +739,7 @@ describe('IDBWrapper', function(){
 
     it('should limit resultset, no index', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(2);
         done();
       }, {
@@ -732,7 +750,7 @@ describe('IDBWrapper', function(){
 
     it('should limit resultset, using basic index', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(2);
         expect(data[0].id).to.equal(4);
         expect(data[1].id).to.equal(3);
@@ -746,7 +764,7 @@ describe('IDBWrapper', function(){
 
     it('should start with an offset, using basic index', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(4);
         expect(data[0].id).to.equal(5);
         expect(data[1].id).to.equal(2);
@@ -760,7 +778,7 @@ describe('IDBWrapper', function(){
 
     it('should start with an offset and limit resultset, using basic index', function(done){
 
-      store.query(function(data){
+      store['spec-store-indexes'].query(function(data){
         expect(data.length).to.equal(2);
         expect(data[0].id).to.equal(1);
         expect(data[1].id).to.equal(6);
@@ -774,7 +792,7 @@ describe('IDBWrapper', function(){
     });
 
     after(function(done){
-      store.clear(function(){
+      store.deleteDatabase(function(){
         done();
       });
     });
