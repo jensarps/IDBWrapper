@@ -2,7 +2,7 @@
 
 /**
  * @license IDBWrapper - A cross-browser wrapper for IndexedDB
- * Version 1.6.2
+ * Version 1.7.0
  * Copyright (c) 2011 - 2016 Jens Arps
  * http://jensarps.de/
  *
@@ -54,7 +54,7 @@
      *
      * @constructor
      * @name IDBStore
-     * @version 1.6.2
+     * @version 1.7.0
      *
      * @param {Object} [kwArgs] An options object used to configure the store and
      *  set callbacks
@@ -164,7 +164,7 @@
          *
          * @type {String}
          */
-        version: '1.6.2',
+        version: '1.7.0',
 
         /**
          * A reference to the IndexedDB object
