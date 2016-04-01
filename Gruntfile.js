@@ -48,16 +48,16 @@ module.exports = function (grunt) {
 
     karma: {
       postbuild: {
-        configFile: 'karma.conf.js'
-      },
-      dev: {
         configFile: 'karma.conf.js',
         files: {
           src: [
-            'idbstore.js',
+            'idbstore.min.js',
             'test/**/*spec.js'
           ]
         }
+      },
+      dev: {
+        configFile: 'karma.conf.js'
       }
     },
 

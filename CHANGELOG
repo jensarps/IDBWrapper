@@ -1,3 +1,10 @@
+1.7.0 /
+------------------
+* Add `filter` option to `query()`
+* Add `allowItemRejection` option to `iterate()`
+* For the full changelog, please see here: https://github.com/jensarps/IDBWrapper/compare/v1.6.2...v1.7.0
+
+
 1.6.2 / 2016-03-02
 ------------------
 * Switch from Makefile to Grunt for running tasks
