@@ -816,51 +816,51 @@ describe('IDBWrapper', function(){
       });
     });
 
-    it('should return only Joe and Chloe', function(done){
-	  var results = [];
-	  var onItem = function(item) {
-	    if (item.name.toLowerCase().indexOf('oe') >= 0) {
-		  results.push(item);
-		  return true;
-		}
-		return false;
-	  };
-	  var options = {
-	    allowItemRejection: true,
-		writeAccess: false,
-		onEnd: function() {
-		  expect(results.length).to.equal(2);
-		  expect(results[0].id).to.equal(2);
-		  expect(results[1].id).to.equal(4);
-	      done();
-		}
-	  };
+    it('should return only Joe and Chloe', function (done) {
+      var results = [];
+      var onItem = function (item) {
+        if (item.name.toLowerCase().indexOf('oe') >= 0) {
+          results.push(item);
+          return true;
+        }
+        return false;
+      };
+      var options = {
+        allowItemRejection: true,
+        writeAccess: false,
+        onEnd: function () {
+          expect(results.length).to.equal(2);
+          expect(results[0].id).to.equal(2);
+          expect(results[1].id).to.equal(4);
+          done();
+        }
+      };
       store.iterate(onItem, options);
     });
-	
-    it('should return only John and Joe', function(done){
-	  var results = [];
-	  var onItem = function(item) {
-	    if (item.name.toLowerCase().startsWith('jo') >= 0) {
-		  results.push(item);
-		  return true;
-		}
-		return false;
-	  };
-	  var options = {
-	    allowItemRejection: true,
-		writeAccess: false,
-		limit: 2,
-		onEnd: function() {
-		  expect(results.length).to.equal(2);
-		  expect(results[0].id).to.equal(1);
-		  expect(results[1].id).to.equal(2);
-	      done();
-		}
-	  };
+
+    it('should return only John and Joe', function (done) {
+      var results = [];
+      var onItem = function (item) {
+        if (item.name.toLowerCase().startsWith('jo') >= 0) {
+          results.push(item);
+          return true;
+        }
+        return false;
+      };
+      var options = {
+        allowItemRejection: true,
+        writeAccess: false,
+        limit: 2,
+        onEnd: function () {
+          expect(results.length).to.equal(2);
+          expect(results[0].id).to.equal(1);
+          expect(results[1].id).to.equal(2);
+          done();
+        }
+      };
       store.iterate(onItem, options);
     });
-	
+
   });
 
 });
