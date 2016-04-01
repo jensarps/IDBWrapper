@@ -1250,15 +1250,17 @@
          * @returns {IDBTransaction} The transaction used for this operation.
          */
         query: function (onSuccess, options) {
-            var result = [];
+            var result = [],
+                processedItems = 0;
             options = options || {};
             options.autoContinue = true;
             options.writeAccess = false;
             options.allowItemRejection = !!options.filter;
             options.onEnd = function () {
-                onSuccess(result);
+                onSuccess(result, processedItems);
             };
             return this.iterate(function (item) {
+                processedItems++;
                 var accept = options.filter ? options.filter(item) : true;
                 if (accept !== false) {
                     result.push(item);
