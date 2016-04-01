@@ -1146,6 +1146,8 @@
      *  results to this number
      * @param {Number} [options.offset=0] Skip the provided number of results
      *  in the resultset
+     * @param {Boolean} [options.allowItemRejection=false] Allows the onItem 
+	 * function to return a Boolean to accept or reject the current item
      * @returns {IDBTransaction} The transaction used for this operation.
      */
     iterate: function (onItem, options) {
@@ -1159,7 +1161,8 @@
         onEnd: null,
         onError: defaultErrorHandler,
         limit: Infinity,
-        offset: 0
+        offset: 0,
+		allowItemRejection: false
       }, options || {});
 
       var directionType = options.order.toLowerCase() == 'desc' ? 'PREV' : 'NEXT';
@@ -1198,8 +1201,10 @@
             cursor.advance(options.offset);
             options.offset = 0;
           } else {
-            onItem(cursor.value, cursor, cursorTransaction);
-            recordCount++;
+            var onItemReturn = onItem(cursor.value, cursor, cursorTransaction);
+			if (!options.allowItemRejection || onItemReturn) {
+				recordCount++;
+			}
             if (options.autoContinue) {
               if (recordCount + options.offset < options.limit) {
                 cursor['continue']();
