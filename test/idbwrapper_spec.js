@@ -861,7 +861,7 @@ describe('IDBWrapper', function () {
     it('should return only John and Joe', function (done) {
       var results = [];
       var onItem = function (item) {
-        if (item.name.toLowerCase().startsWith('jo') >= 0) {
+        if (item.name.toLowerCase().indexOf('jo') === 0) {
           results.push(item);
           return true;
         }
