@@ -823,6 +823,90 @@ describe('IDBWrapper', function () {
 
         });
 
+        it('should apply the custom filter', function (done) {
+
+            store.query(function (data) {
+                expect(data.length).to.equal(3);
+                expect(data[0].id).to.equal(3);
+                expect(data[1].id).to.equal(4);
+                expect(data[2].id).to.equal(6);
+                done();
+            }, {
+                filter: function (item) {
+                    return item.lastname.indexOf('i') >= 0;
+                }
+            });
+
+        });
+
+        it('should apply the custom filter and respect keyRanges', function (done) {
+
+            store.query(function (data) {
+                expect(data.length).to.equal(2);
+                expect(data[0].id).to.equal(3);
+                expect(data[1].id).to.equal(6);
+                done();
+            }, {
+                index: 'basic',
+                keyRange: store.makeKeyRange({
+                    lower: 'J'
+                }),
+                filter: function (item) {
+                    return item.lastname.indexOf('i') >= 0;
+                }
+            });
+
+        });
+
+        it('should apply the custom filter and respect keyRanges and limit/offset', function (done) {
+
+            store.query(function (data) {
+                expect(data.length).to.equal(1);
+                expect(data[0].id).to.equal(6);
+                done();
+            }, {
+                index: 'date',
+                keyRange: store.makeKeyRange({
+                    upper: Date.parse('Jan 1, 2005')
+                }),
+                offset: 1,
+                limit: 1,
+                filter: function (item) {
+                    return item.name.indexOf('J') >= 0;
+                }
+            });
+
+        });
+
+        it('should return the number of processed results', function (done) {
+
+            store.query(function (data, processedItemCount) {
+                expect(data.length).to.equal(3);
+                expect(processedItemCount).to.equal(6);
+                done();
+            }, {
+                filter: function (item) {
+                    return item.name.indexOf('o') >= 0;
+                }
+            });
+
+        });
+
+        it('should return the number of processed results and respect limit', function (done) {
+
+            store.query(function (data, processedItemCount) {
+                expect(data.length).to.equal(2);
+                expect(processedItemCount).to.equal(2);
+                done();
+            }, {
+                limit: 2,
+                filter: function (item) {
+                    return item.name.indexOf('o') >= 0;
+                }
+            });
+
+        });
+
         after(function (done) {
             store.clear(function () {
                 done();
