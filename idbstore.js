@@ -1208,7 +1208,7 @@
             options.offset = 0;
           } else {
             var onItemReturn = onItem(cursor.value, cursor, cursorTransaction);
-            if (!options.allowItemRejection || onItemReturn) {
+            if (!options.allowItemRejection || onItemReturn !== false) {
               recordCount++;
             }
             if (options.autoContinue) {
