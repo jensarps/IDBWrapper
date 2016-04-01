@@ -35,11 +35,6 @@
     "karma-mocha": "^0.2.1",
     "mocha": "^2.3.3"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/jensarps/IDBWrapper/raw/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "scripts": {}
 }
