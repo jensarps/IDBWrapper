@@ -19,7 +19,7 @@ module.exports = function (config) {
     },
 
     files: [
-      'idbstore.min.js',
+      'idbstore.js',
       'test/**/*spec.js'
     ]
   });
