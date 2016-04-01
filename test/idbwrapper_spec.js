@@ -813,19 +813,19 @@ describe('IDBWrapper', function () {
         var dataArray = [
           {
             id: 1,
-            name: 'John'
+            name: 'Chloe'
           },
           {
             id: 2,
-            name: 'Joe'
+            name: 'John'
           },
           {
             id: 3,
-            name: 'Joseph'
+            name: 'Joe'
           },
           {
             id: 4,
-            name: 'Chloe'
+            name: 'Joseph'
           }
         ];
 
@@ -836,9 +836,11 @@ describe('IDBWrapper', function () {
       });
     });
 
-    it('should return only Joe and Chloe', function (done) {
+    it('should count only Joe and Chloe', function (done) {
       var results = [];
+      var callCount = 0;
       var onItem = function (item) {
+        callCount++;
         if (item.name.toLowerCase().indexOf('oe') >= 0) {
           results.push(item);
           return true;
@@ -848,19 +850,24 @@ describe('IDBWrapper', function () {
       var options = {
         allowItemRejection: true,
         writeAccess: false,
+        limit: 2,
         onEnd: function () {
+          expect(callCount).to.equal(3);
+
           expect(results.length).to.equal(2);
-          expect(results[0].id).to.equal(2);
-          expect(results[1].id).to.equal(4);
+          expect(results[0].id).to.equal(1);
+          expect(results[1].id).to.equal(3);
           done();
         }
       };
       store.iterate(onItem, options);
     });
 
-    it('should return only John and Joe', function (done) {
+    it('should count only John and Joe', function (done) {
       var results = [];
+      var callCount = 0;
       var onItem = function (item) {
+        callCount++;
         if (item.name.toLowerCase().indexOf('jo') === 0) {
           results.push(item);
           return true;
@@ -872,9 +879,11 @@ describe('IDBWrapper', function () {
         writeAccess: false,
         limit: 2,
         onEnd: function () {
+          expect(callCount).to.equal(3);
+
           expect(results.length).to.equal(2);
-          expect(results[0].id).to.equal(1);
-          expect(results[1].id).to.equal(2);
+          expect(results[0].id).to.equal(2);
+          expect(results[1].id).to.equal(3);
           done();
         }
       };
