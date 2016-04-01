@@ -169,7 +169,7 @@
         /**
          * A reference to the IndexedDB object
          *
-         * @type {Object}
+         * @type {IDBDatabase}
          */
         db: null,
 
@@ -191,7 +191,7 @@
         /**
          * A reference to the objectStore used by IDBStore
          *
-         * @type {Object}
+         * @type {IDBObjectStore}
          */
         store: null,
 
@@ -923,8 +923,8 @@
          * Implements getAll for IDB implementations that have a non-standard
          * getAll() method.
          *
-         * @param {Object} getAllTransaction An open READ transaction.
-         * @param {Object} store A reference to the store.
+         * @param {IDBTransaction} getAllTransaction An open READ transaction.
+         * @param {IDBObjectStore} store A reference to the store.
          * @param {Function} onSuccess A callback that will be called if the
          *  operation was successful.
          * @param {Function} onError A callback that will be called if an
@@ -954,8 +954,8 @@
          * Implements getAll for IDB implementations that do not have a getAll()
          * method.
          *
-         * @param {Object} getAllTransaction An open READ transaction.
-         * @param {Object} store A reference to the store.
+         * @param {IDBTransaction} getAllTransaction An open READ transaction.
+         * @param {IDBObjectStore} store A reference to the store.
          * @param {Function} onSuccess A callback that will be called if the
          *  operation was successful.
          * @param {Function} onError A callback that will be called if an
@@ -1078,7 +1078,7 @@
         /**
          * Checks if an actual index complies with an expected index.
          *
-         * @param {Object} actual The actual index found in the store
+         * @param {IDBIndex} actual The actual index found in the store
          * @param {Object} expected An Object describing an expected index
          * @return {Boolean} Whether both index definitions are identical
          */
@@ -1132,14 +1132,14 @@
          *
          * @param {Function} onItem A callback to be called for each match
          * @param {Object} [options] An object defining specific options
-         * @param {Object} [options.index=null] An IDBIndex to operate on
+         * @param {String} [options.index=null] A name of an IDBIndex to operate on
          * @param {String} [options.order=ASC] The order in which to provide the
          *  results, can be 'DESC' or 'ASC'
          * @param {Boolean} [options.autoContinue=true] Whether to automatically
          *  iterate the cursor to the next result
          * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
          *  duplicate matches
-         * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+         * @param {IDBKeyRange} [options.keyRange=null] An IDBKeyRange to use
          * @param {Boolean} [options.writeAccess=false] Whether grant write access
          *  to the store in the onItem callback
          * @param {Function} [options.onEnd=null] A callback to be called after
@@ -1232,12 +1232,12 @@
          * @param {Function} onSuccess A callback to be called when the operation
          *  was successful.
          * @param {Object} [options] An object defining specific options
-         * @param {Object} [options.index=null] An IDBIndex to operate on
+         * @param {String} [options.index=null] A name of an IDBIndex to operate on
          * @param {String} [options.order=ASC] The order in which to provide the
          *  results, can be 'DESC' or 'ASC'
          * @param {Boolean} [options.filterDuplicates=false] Whether to exclude
          *  duplicate matches
-         * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+         * @param {IDBKeyRange} [options.keyRange=null] An IDBKeyRange to use
          * @param {Function} [options.onError=throw] A callback to be called
          *  if an error occurred during the operation.
          * @param {Number} [options.limit=Infinity] Limit the number of returned
@@ -1267,8 +1267,8 @@
          * @param {Function} onSuccess A callback to be called if the opration
          *  was successful.
          * @param {Object} [options] An object defining specific options
-         * @param {Object} [options.index=null] An IDBIndex to operate on
-         * @param {Object} [options.keyRange=null] An IDBKeyRange to use
+         * @param {String} [options.index=null] A name of an IDBIndex to operate on
+         * @param {IDBKeyRange} [options.keyRange=null] An IDBKeyRange to use
          * @param {Function} [options.onError=throw] A callback to be called if an error
          *  occurred during the operation.
          * @returns {IDBTransaction} The transaction used for this operation.
@@ -1327,7 +1327,7 @@
          * @param {*} [options.only] A single key value. Use this if you need a key
          *  range that only includes one value for a key. Providing this
          *  property invalidates all other properties.
-         * @return {Object} The IDBKeyRange representing the specified options
+         * @return {IDBKeyRange} The IDBKeyRange representing the specified options
          */
         makeKeyRange: function (options) {
             /*jshint onecase:true */
