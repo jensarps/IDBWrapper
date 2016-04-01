@@ -305,19 +305,19 @@
           return;
         }
 
-        if(this.db){
+        if (this.db) {
           this.onStoreReady();
           return;
         }
 
         this.db = event.target.result;
 
-        if(typeof this.db.version == 'string'){
+        if (typeof this.db.version == 'string') {
           this.onError(new Error('The IndexedDB implementation in this browser is outdated. Please upgrade your browser.'));
           return;
         }
 
-        if(!this.db.objectStoreNames.contains(this.storeName)){
+        if (!this.db.objectStoreNames.contains(this.storeName)) {
           // We should never ever get here.
           // Lets notify the user anyway.
           this.onError(new Error('Object store couldn\'t be created.'));
@@ -329,10 +329,10 @@
 
         // check indexes
         var existingIndexes = Array.prototype.slice.call(this.getIndexList());
-        this.indexes.forEach(function(indexData){
+        this.indexes.forEach(function (indexData) {
           var indexName = indexData.name;
 
-          if(!indexName){
+          if (!indexName) {
             preventSuccessCallback = true;
             this.onError(new Error('Cannot create index: No index name given.'));
             return;
@@ -340,11 +340,11 @@
 
           this.normalizeIndexData(indexData);
 
-          if(this.hasIndex(indexName)){
+          if (this.hasIndex(indexName)) {
             // check if it complies
             var actualIndex = this.store.index(indexName);
             var complies = this.indexComplies(actualIndex, indexData);
-            if(!complies){
+            if (!complies) {
               preventSuccessCallback = true;
               this.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( this.dbVersion + 1 ) + '.'));
             }
@@ -365,14 +365,14 @@
         preventSuccessCallback || this.onStoreReady();
       }.bind(this);
 
-      openRequest.onupgradeneeded = function(/* IDBVersionChangeEvent */ event){
+      openRequest.onupgradeneeded = function (/* IDBVersionChangeEvent */ event) {
 
         this.db = event.target.result;
 
-        if(this.db.objectStoreNames.contains(this.storeName)){
+        if (this.db.objectStoreNames.contains(this.storeName)) {
           this.store = event.target.transaction.objectStore(this.storeName);
         } else {
-          var optionalParameters = { autoIncrement: this.autoIncrement };
+          var optionalParameters = {autoIncrement: this.autoIncrement};
           if (this.keyPath !== null) {
             optionalParameters.keyPath = this.keyPath;
           }
@@ -380,35 +380,41 @@
         }
 
         var existingIndexes = Array.prototype.slice.call(this.getIndexList());
-        this.indexes.forEach(function(indexData){
+        this.indexes.forEach(function (indexData) {
           var indexName = indexData.name;
 
-          if(!indexName){
+          if (!indexName) {
             preventSuccessCallback = true;
             this.onError(new Error('Cannot create index: No index name given.'));
           }
 
           this.normalizeIndexData(indexData);
 
-          if(this.hasIndex(indexName)){
+          if (this.hasIndex(indexName)) {
             // check if it complies
             var actualIndex = this.store.index(indexName);
             var complies = this.indexComplies(actualIndex, indexData);
-            if(!complies){
+            if (!complies) {
               // index differs, need to delete and re-create
               this.store.deleteIndex(indexName);
-              this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+              this.store.createIndex(indexName, indexData.keyPath, {
+                unique: indexData.unique,
+                multiEntry: indexData.multiEntry
+              });
             }
 
             existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
           } else {
-            this.store.createIndex(indexName, indexData.keyPath, { unique: indexData.unique, multiEntry: indexData.multiEntry });
+            this.store.createIndex(indexName, indexData.keyPath, {
+              unique: indexData.unique,
+              multiEntry: indexData.multiEntry
+            });
           }
 
         }, this);
 
         if (existingIndexes.length) {
-          existingIndexes.forEach(function(_indexName){
+          existingIndexes.forEach(function (_indexName) {
             this.store.deleteIndex(_indexName);
           }, this);
         }
@@ -525,7 +531,7 @@
 
       var hasSuccess = false,
           result = null;
-      
+
       var getTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       getTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
@@ -593,7 +599,7 @@
       onError || (onError = defaultErrorHandler);
       onSuccess || (onSuccess = defaultSuccessHandler);
 
-      if(Object.prototype.toString.call(dataArray) != '[object Array]'){
+      if (Object.prototype.toString.call(dataArray) != '[object Array]') {
         onError(new Error('dataArray argument must be of type Array.'));
       } else if (dataArray.length === 0) {
         return onSuccess(true);
@@ -603,7 +609,7 @@
       var called = false;
       var hasSuccess = false;
 
-      var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_WRITE);
+      var batchTransaction = this.db.transaction([this.storeName], this.consts.READ_WRITE);
       batchTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
         callback(hasSuccess);
@@ -664,8 +670,8 @@
      * @returns {IDBTransaction} The transaction used for this operation.
      */
     putBatch: function (dataArray, onSuccess, onError) {
-      var batchData = dataArray.map(function(item){
-        return { type: 'put', value: item };
+      var batchData = dataArray.map(function (item) {
+        return {type: 'put', value: item};
       });
 
       return this.batch(batchData, onSuccess, onError);
@@ -771,8 +777,8 @@
      * @returns {IDBTransaction} The transaction used for this operation.
      */
     removeBatch: function (keyArray, onSuccess, onError) {
-      var batchData = keyArray.map(function(key){
-        return { type: 'remove', key: key };
+      var batchData = keyArray.map(function (key) {
+        return {type: 'remove', key: key};
       });
 
       return this.batch(batchData, onSuccess, onError);
@@ -840,7 +846,7 @@
       onSuccess || (onSuccess = defaultSuccessHandler);
       arrayType || (arrayType = 'sparse');
 
-      if (Object.prototype.toString.call(keyArray) != '[object Array]'){
+      if (Object.prototype.toString.call(keyArray) != '[object Array]') {
         onError(new Error('keyArray argument must be of type Array.'));
       } else if (keyArray.length === 0) {
         return onSuccess([]);
@@ -852,7 +858,7 @@
       var hasSuccess = false;
       var result = null;
 
-      var batchTransaction = this.db.transaction([this.storeName] , this.consts.READ_ONLY);
+      var batchTransaction = this.db.transaction([this.storeName], this.consts.READ_ONLY);
       batchTransaction.oncomplete = function () {
         var callback = hasSuccess ? onSuccess : onError;
         callback(result);
@@ -1098,7 +1104,7 @@
 
           // Chrome/Opera stores keyPath squences as DOMStringList, Firefox
           // as Array
-          if ( ! (typeof act.contains == 'function' || typeof act.indexOf == 'function') ) {
+          if (!(typeof act.contains == 'function' || typeof act.indexOf == 'function')) {
             return false;
           }
 
@@ -1106,8 +1112,8 @@
             return false;
           }
 
-          for (var i = 0, m = exp.length; i<m; i++) {
-            if ( ! ( (act.contains && act.contains(exp[i])) || act.indexOf(exp[i] !== -1) )) {
+          for (var i = 0, m = exp.length; i < m; i++) {
+            if (!( (act.contains && act.contains(exp[i])) || act.indexOf(exp[i] !== -1) )) {
               return false;
             }
           }
@@ -1325,14 +1331,14 @@
      *  property invalidates all other properties.
      * @return {Object} The IDBKeyRange representing the specified options
      */
-    makeKeyRange: function(options){
+    makeKeyRange: function (options) {
       /*jshint onecase:true */
       var keyRange,
           hasLower = typeof options.lower != 'undefined',
           hasUpper = typeof options.upper != 'undefined',
           isOnly = typeof options.only != 'undefined';
 
-      switch(true){
+      switch (true) {
         case isOnly:
           keyRange = this.keyRange.only(options.only);
           break;
@@ -1357,6 +1363,7 @@
 
   /** helpers **/
   var empty = {};
+
   function mixin (target, source) {
     var name, s;
     for (name in source) {

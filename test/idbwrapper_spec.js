@@ -1,4 +1,4 @@
-describe('IDBWrapper', function(){
+describe('IDBWrapper', function () {
 
   if (typeof window.excludeIE == 'undefined') {
     try {
@@ -11,10 +11,10 @@ describe('IDBWrapper', function(){
 
   console.log('Running ' + (excludeIE ? 'reduced' : 'full') + ' suite.');
 
-  describe('delete databases', function(){
+  describe('delete databases', function () {
     var store;
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple'
       }, function () {
@@ -22,8 +22,8 @@ describe('IDBWrapper', function(){
       });
     });
 
-    it('should delete the newly created database', function(done){
-      store.deleteDatabase(function(result){
+    it('should delete the newly created database', function (done) {
+      store.deleteDatabase(function (result) {
         expect(result).to.be.ok;
         done();
       }, done);
@@ -31,92 +31,92 @@ describe('IDBWrapper', function(){
 
   });
 
-  describe('basic CRUD, in-line keys', function(){
+  describe('basic CRUD, in-line keys', function () {
 
     var store, lastInsertId;
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple'
       }, done);
     });
 
 
-    it('should store a well-formed object', function(done){
+    it('should store a well-formed object', function (done) {
       var data = {
         id: 1,
         name: 'John'
       };
-      store.put(data, function(insertId){
+      store.put(data, function (insertId) {
         expect(insertId).to.equal(data.id);
         done();
       }, done);
     });
 
-    it('should fetch a stored object', function(done){
-      store.get(1, function(data){
+    it('should fetch a stored object', function (done) {
+      store.get(1, function (data) {
         expect(data.name).to.equal('John');
         done();
       }, done);
     });
 
-    it('should overwrite a given object', function(done){
+    it('should overwrite a given object', function (done) {
       var data = {
         id: 1,
         name: 'James'
       };
-      store.put(data, function(insertId){
-        store.get(1, function(data){
+      store.put(data, function (insertId) {
+        store.get(1, function (data) {
           expect(data.name).to.equal('James');
           done();
         }, done);
       }, done);
     });
 
-    it('should store an object w/o an id', function(done){
+    it('should store an object w/o an id', function (done) {
       var data = {
         name: 'Joe'
       };
-      store.put(data, function(insertId){
+      store.put(data, function (insertId) {
         expect(insertId).to.exist;
         lastInsertId = insertId;
-        store.get(insertId, function(result){
+        store.get(insertId, function (result) {
           expect(result.name).to.equal(data.name);
           done();
         }, done);
       }, done);
     });
 
-    it('should assign an id which is greater than the last assigned', function(done){
+    it('should assign an id which is greater than the last assigned', function (done) {
       var data = {
         name: 'John'
       };
-      store.put(data, function(insertId){
+      store.put(data, function (insertId) {
         expect(insertId).to.exist;
         expect(store.idb.cmp(insertId, lastInsertId)).to.equal(1);
         done();
       }, done);
     });
 
-    it('should get all stored objects', function(done){
-      store.getAll(function(data){
+    it('should get all stored objects', function (done) {
+      store.getAll(function (data) {
         expect(data.length).to.equal(3);
         done();
       }, done);
     });
 
-    it('should delete a given object', function(done){
-      store.remove(1, function(result){
-        store.get(1, function(data){
+    it('should delete a given object', function (done) {
+      store.remove(1, function (result) {
+        store.get(1, function (data) {
           expect(data).to.not.exist;
           done();
         }, done);
       }, done);
     });
 
-    it('should clear all objects', function(done){
-      store.clear(function(){
-        store.getAll(function(data){
+    it('should clear all objects', function (done) {
+      store.clear(function () {
+        store.getAll(function (data) {
           expect(data.length).to.equal(0);
         }, done);
         done();
@@ -124,19 +124,19 @@ describe('IDBWrapper', function(){
     });
 
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
 
   });
 
-  describe('basic CRUD, out-of-line keys', function(){
+  describe('basic CRUD, out-of-line keys', function () {
 
     var store;
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple-out-of-line',
         keyPath: null
@@ -144,40 +144,40 @@ describe('IDBWrapper', function(){
     });
 
 
-    it('should store a well-formed object', function(done){
+    it('should store a well-formed object', function (done) {
       var data = {
         name: 'John'
       };
       var id = 1;
-      store.put(id, data, function(insertId){
+      store.put(id, data, function (insertId) {
         expect(insertId).to.equal(id);
         done();
       }, done);
     });
 
-    it('should fetch a stored object', function(done){
-      store.get(1, function(data){
+    it('should fetch a stored object', function (done) {
+      store.get(1, function (data) {
         expect(data.name).to.equal('John');
         done();
       }, done);
     });
 
-    it('should overwrite a given object', function(done){
+    it('should overwrite a given object', function (done) {
       var data = {
         name: 'James'
       };
       var id = 1;
-      store.put(id, data, function(insertId){
-        store.get(id, function(data){
+      store.put(id, data, function (insertId) {
+        store.get(id, function (data) {
           expect(data.name).to.equal('James');
           done();
         }, done);
       }, done);
     });
 
-    it('should delete a given object', function(done){
-      store.remove(1, function(result){
-        store.get(1, function(data){
+    it('should delete a given object', function (done) {
+      store.remove(1, function (result) {
+        store.get(1, function (data) {
           expect(data).to.not.exist;
           done();
         }, done);
@@ -185,15 +185,15 @@ describe('IDBWrapper', function(){
     });
 
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
 
   });
 
-  describe('batch ops', function(){
+  describe('batch ops', function () {
 
     var store;
     var dataArray = [
@@ -211,30 +211,30 @@ describe('IDBWrapper', function(){
       }
     ];
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple'
       }, done);
     });
 
 
-    it('should store multiple objects', function(done){
-      store.putBatch(dataArray, function(result){
+    it('should store multiple objects', function (done) {
+      store.putBatch(dataArray, function (result) {
         expect(result).to.be.ok;
         done();
       }, done);
     });
 
-    it('should short circuit putBatch when an empty array of items are passed and should call success', function(done) {
-      store.putBatch([], function(){
+    it('should short circuit putBatch when an empty array of items are passed and should call success', function (done) {
+      store.putBatch([], function () {
         done();
-      }, function(error){
+      }, function (error) {
         done(new Error('Error event encountered when an empty data array is passed to putBatch.', error));
       });
     });
 
-    it('should fetch multiple objects', function(done){
-      store.getBatch([1,2,3], function(data){
+    it('should fetch multiple objects', function (done) {
+      store.getBatch([1, 2, 3], function (data) {
         expect(data[0].name).to.equal('John');
         expect(data[1].name).to.equal('Joe');
         expect(data[2].name).to.equal('James');
@@ -242,19 +242,19 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
-    it('should short circuit getBatch when an empty array of keys is passed with calling success with an empty array of results', function(done) {
-      store.getBatch([], function(data){
+    it('should short circuit getBatch when an empty array of keys is passed with calling success with an empty array of results', function (done) {
+      store.getBatch([], function (data) {
         expect(data).to.deep.equal([]);
         done();
-      }, function(error){
+      }, function (error) {
         done(new Error('Error event encountered when an empty key array is passed to getBatch. The error message is null and not useful.', error));
       });
     });
 
-    it('should delete multiple objects', function(done){
-      store.removeBatch([1,2], function(result){
+    it('should delete multiple objects', function (done) {
+      store.removeBatch([1, 2], function (result) {
         expect(result).to.be.ok;
-        store.getAll(function(data){
+        store.getAll(function (data) {
           expect(data.length).to.equal(1);
           expect(data[0].name).to.equal('James');
         }, done);
@@ -262,17 +262,17 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
-    it('should short circuit removeBatch when an empty array of items is passed and should call success', function(done) {
-      store.removeBatch([], function(){
+    it('should short circuit removeBatch when an empty array of items is passed and should call success', function (done) {
+      store.removeBatch([], function () {
         done();
-      }, function(error){
+      }, function (error) {
         done(new Error('Error event encountered when an empty data array is passed to removeBatch.', error));
       });
     });
 
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
@@ -333,7 +333,7 @@ describe('IDBWrapper', function(){
 
   });
 
-  describe('getBatch() dataArray return type', function(){
+  describe('getBatch() dataArray return type', function () {
 
     var store;
     var dataArray = [
@@ -351,18 +351,18 @@ describe('IDBWrapper', function(){
       }
     ];
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple'
-      }, function(){
-        store.putBatch(dataArray, function(){
+      }, function () {
+        store.putBatch(dataArray, function () {
           done();
         }, done);
       });
     });
 
-    it('should return a sparse array for arrayType="sparse"', function(done){
-      store.getBatch([1,10,3], function(data){
+    it('should return a sparse array for arrayType="sparse"', function (done) {
+      store.getBatch([1, 10, 3], function (data) {
         expect(data.length).to.equal(3);
 
         expect(data[0].name).to.equal('John');
@@ -370,7 +370,7 @@ describe('IDBWrapper', function(){
         expect(data[2].name).to.equal('James');
 
         var forEachCount = 0;
-        data.forEach(function(){
+        data.forEach(function () {
           forEachCount++;
         });
         expect(forEachCount).to.equal(2);
@@ -379,8 +379,8 @@ describe('IDBWrapper', function(){
       }, done, 'sparse');
     });
 
-    it('should return a dense array for arrayType="dense"', function(done){
-      store.getBatch([1,10,3], function(data){
+    it('should return a dense array for arrayType="dense"', function (done) {
+      store.getBatch([1, 10, 3], function (data) {
         expect(data.length).to.equal(3);
 
         expect(data[0].name).to.equal('John');
@@ -388,7 +388,7 @@ describe('IDBWrapper', function(){
         expect(data[2].name).to.equal('James');
 
         var forEachCount = 0;
-        data.forEach(function(){
+        data.forEach(function () {
           forEachCount++;
         });
         expect(forEachCount).to.equal(3);
@@ -397,8 +397,8 @@ describe('IDBWrapper', function(){
       }, done, 'dense');
     });
 
-    it('should return a reduced array for arrayType="skip"', function(done){
-      store.getBatch([1,10,3], function(data){
+    it('should return a reduced array for arrayType="skip"', function (done) {
+      store.getBatch([1, 10, 3], function (data) {
         expect(data.length).to.equal(2);
 
         expect(data[0].name).to.equal('John');
@@ -409,8 +409,8 @@ describe('IDBWrapper', function(){
     });
 
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
@@ -418,22 +418,32 @@ describe('IDBWrapper', function(){
   });
 
 
-  describe('indexes', function(){
+  describe('indexes', function () {
 
     var store;
 
-    before(function(done){
+    before(function (done) {
 
       var indexes = [
-        { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
-        { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
-        { name: 'date', keyPath: 'joined', unique: false, multiEntry: false }
+        {name: 'basic', keyPath: 'name', unique: false, multiEntry: false},
+        {
+          name: 'deep',
+          keyPath: 'address.email',
+          unique: false,
+          multiEntry: false
+        },
+        {name: 'date', keyPath: 'joined', unique: false, multiEntry: false}
       ];
 
       if (!excludeIE) {
         indexes.push.apply(indexes, [
-          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false },
-          { name: 'multi', keyPath: 'pets', unique: false, multiEntry: true }
+          {
+            name: 'compound',
+            keyPath: ['name', 'age'],
+            unique: false,
+            multiEntry: false
+          },
+          {name: 'multi', keyPath: 'pets', unique: false, multiEntry: true}
         ]);
       }
 
@@ -443,13 +453,13 @@ describe('IDBWrapper', function(){
       }, done);
     });
 
-    it('should create all indexes', function(){
+    it('should create all indexes', function () {
       var indexList = store.getIndexList();
       expect(indexList).to.respondTo('contains');
       expect(indexList.length).to.equal(excludeIE ? 3 : 5);
     });
 
-    it('should store a well-formed object', function(done){
+    it('should store a well-formed object', function (done) {
       var data = {
         id: 1,
         name: 'John',
@@ -462,43 +472,53 @@ describe('IDBWrapper', function(){
         },
         pets: ['cat', 'dog']
       };
-      store.put(data, function(insertId){
+      store.put(data, function (insertId) {
         expect(insertId).to.equal(data.id);
         done();
       }, done);
     });
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
 
   });
 
-  describe('queries', function(){
+  describe('queries', function () {
 
     var store;
 
-    before(function(done){
+    before(function (done) {
 
       var indexes = [
-        { name: 'basic', keyPath: 'name', unique: false, multiEntry: false },
-        { name: 'deep', keyPath: 'address.email', unique: false, multiEntry: false },
-        { name: 'date', keyPath: 'joined', unique: false, multiEntry: false }
+        {name: 'basic', keyPath: 'name', unique: false, multiEntry: false},
+        {
+          name: 'deep',
+          keyPath: 'address.email',
+          unique: false,
+          multiEntry: false
+        },
+        {name: 'date', keyPath: 'joined', unique: false, multiEntry: false}
       ];
 
       if (!excludeIE) {
         indexes.push.apply(indexes, [
-          { name: 'compound', keyPath: ['name', 'age'], unique: false, multiEntry: false },
-          { name: 'multi', keyPath: 'pets', unique: false, multiEntry: true }
+          {
+            name: 'compound',
+            keyPath: ['name', 'age'],
+            unique: false,
+            multiEntry: false
+          },
+          {name: 'multi', keyPath: 'pets', unique: false, multiEntry: true}
         ]);
       }
 
       store = new IDBStore({
         storeName: 'spec-store-indexes',
         indexes: indexes
-      }, function(){
+      }, function () {
 
         var dataArray = [
           {
@@ -576,16 +596,16 @@ describe('IDBWrapper', function(){
           }
         ];
 
-        store.putBatch(dataArray, function(){
+        store.putBatch(dataArray, function () {
           done();
         });
 
       });
     });
 
-    it('should fetch objects using basic index (Keyrange.only)', function(done){
+    it('should fetch objects using basic index (Keyrange.only)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(2);
         done();
       }, {
@@ -597,9 +617,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using basic index (Keyrange.lower)', function(done){
+    it('should fetch objects using basic index (Keyrange.lower)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(3);
         done();
       }, {
@@ -611,9 +631,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using deep index (KeyRange.only)', function(done){
+    it('should fetch objects using deep index (KeyRange.only)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(2);
         done();
       }, {
@@ -625,9 +645,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using deep index (KeyRange.upper + exclude)', function(done){
+    it('should fetch objects using deep index (KeyRange.upper + exclude)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(1);
         done();
       }, {
@@ -640,9 +660,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using date index (KeyRange.lower)', function(done){
+    it('should fetch objects using date index (KeyRange.lower)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(5);
         done();
       }, {
@@ -654,9 +674,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using date index (KeyRange.upper)', function(done){
+    it('should fetch objects using date index (KeyRange.upper)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(4);
         done();
       }, {
@@ -668,9 +688,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should fetch objects using date index (KeyRange.upper + lower)', function(done){
+    it('should fetch objects using date index (KeyRange.upper + lower)', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(3);
         done();
       }, {
@@ -719,9 +739,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should limit resultset, no index', function(done){
+    it('should limit resultset, no index', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(2);
         done();
       }, {
@@ -730,9 +750,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should limit resultset, using basic index', function(done){
+    it('should limit resultset, using basic index', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(2);
         expect(data[0].id).to.equal(4);
         expect(data[1].id).to.equal(3);
@@ -744,9 +764,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should start with an offset, using basic index', function(done){
+    it('should start with an offset, using basic index', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(4);
         expect(data[0].id).to.equal(5);
         expect(data[1].id).to.equal(2);
@@ -758,9 +778,9 @@ describe('IDBWrapper', function(){
 
     });
 
-    it('should start with an offset and limit resultset, using basic index', function(done){
+    it('should start with an offset and limit resultset, using basic index', function (done) {
 
-      store.query(function(data){
+      store.query(function (data) {
         expect(data.length).to.equal(2);
         expect(data[0].id).to.equal(1);
         expect(data[1].id).to.equal(6);
@@ -773,22 +793,22 @@ describe('IDBWrapper', function(){
 
     });
 
-    after(function(done){
-      store.clear(function(){
+    after(function (done) {
+      store.clear(function () {
         done();
       });
     });
 
   });
 
-  describe('iterate with allowItemRejection=true', function(){
+  describe('iterate with allowItemRejection=true', function () {
 
     var store;
 
-    before(function(done){
+    before(function (done) {
       store = new IDBStore({
         storeName: 'spec-store-simple'
-      }, function(){
+      }, function () {
 
         var dataArray = [
           {
@@ -807,9 +827,9 @@ describe('IDBWrapper', function(){
             id: 4,
             name: 'Chloe'
           }
-		];
+        ];
 
-        store.putBatch(dataArray, function(){
+        store.putBatch(dataArray, function () {
           done();
         });
 
