@@ -890,6 +890,30 @@ describe('IDBWrapper', function () {
       store.iterate(onItem, options);
     });
 
+    it('should ignore return value if allowItemRejection is not set', function (done) {
+      var results = [];
+      var callCount = 0;
+      var onItem = function (item) {
+        callCount++;
+        if (item.name.toLowerCase().indexOf('jo') === 0) {
+          results.push(item);
+          return true;
+        }
+        return false;
+      };
+      var options = {
+        writeAccess: false,
+        limit: 2,
+        onEnd: function () {
+          expect(callCount).to.equal(2);
+
+          expect(results.length).to.equal(1);
+          done();
+        }
+      };
+      store.iterate(onItem, options);
+    });
+
     after(function (done) {
       store.clear(function () {
         done();
