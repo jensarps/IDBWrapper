@@ -881,6 +881,12 @@ describe('IDBWrapper', function () {
       store.iterate(onItem, options);
     });
 
+    after(function (done) {
+      store.clear(function () {
+        done();
+      });
+    });
+
   });
 
 });
