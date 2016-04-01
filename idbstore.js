@@ -87,26 +87,26 @@
      * @param {Function} [onStoreReady] A callback to be called when the store
      * is ready to be used.
      * @example
-        // create a store for customers with an additional index over the
-        // `lastname` property.
-        var myCustomerStore = new IDBStore({
-            dbVersion: 1,
-            storeName: 'customer-index',
-            keyPath: 'customerid',
-            autoIncrement: true,
-            onStoreReady: populateTable,
-            indexes: [
-                { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
-            ]
-        });
+     // create a store for customers with an additional index over the
+     // `lastname` property.
+     var myCustomerStore = new IDBStore({
+         dbVersion: 1,
+         storeName: 'customer-index',
+         keyPath: 'customerid',
+         autoIncrement: true,
+         onStoreReady: populateTable,
+         indexes: [
+             { name: 'lastname', keyPath: 'lastname', unique: false, multiEntry: false }
+         ]
+     });
      * @example
-        // create a generic store
-        var myCustomerStore = new IDBStore({
-            storeName: 'my-data-store',
-            onStoreReady: function(){
-                // start working with the store.
-            }
-        });
+     // create a generic store
+     var myCustomerStore = new IDBStore({
+         storeName: 'my-data-store',
+         onStoreReady: function(){
+             // start working with the store.
+         }
+     });
      */
     var IDBStore = function (kwArgs, onStoreReady) {
 
@@ -462,22 +462,22 @@
          *  failed.
          * @returns {IDBTransaction} The transaction used for this operation.
          * @example
-            // Storing an object, using inline keys (the default scenario):
-            var myCustomer = {
-                customerid: 2346223,
-                lastname: 'Doe',
-                firstname: 'John'
-            };
-            myCustomerStore.put(myCustomer, mySuccessHandler, myErrorHandler);
-            // Note that passing success- and error-handlers is optional.
-            * @example
-            // Storing an object, using out-of-line keys:
-            var myCustomer = {
-                lastname: 'Doe',
-                firstname: 'John'
-            };
-            myCustomerStore.put(2346223, myCustomer, mySuccessHandler, myErrorHandler);
-            // Note that passing success- and error-handlers is optional.
+         // Storing an object, using inline keys (the default scenario):
+         var myCustomer = {
+             customerid: 2346223,
+             lastname: 'Doe',
+             firstname: 'John'
+         };
+         myCustomerStore.put(myCustomer, mySuccessHandler, myErrorHandler);
+         // Note that passing success- and error-handlers is optional.
+         * @example
+         // Storing an object, using out-of-line keys:
+         var myCustomer = {
+             lastname: 'Doe',
+             firstname: 'John'
+         };
+         myCustomerStore.put(2346223, myCustomer, mySuccessHandler, myErrorHandler);
+         // Note that passing success- and error-handlers is optional.
          */
         put: function (key, value, onSuccess, onError) {
             if (this.keyPath !== null) {
