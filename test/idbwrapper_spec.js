@@ -861,7 +861,6 @@ describe('IDBWrapper', function () {
         it('should apply the custom filter and respect keyRanges and limit/offset', function (done) {
 
             store.query(function (data) {
-                console.log(data.length, data);
                 expect(data.length).to.equal(1);
                 expect(data[0].id).to.equal(6);
                 done();
@@ -874,6 +873,35 @@ describe('IDBWrapper', function () {
                 limit: 1,
                 filter: function (item) {
                     return item.name.indexOf('J') >= 0;
+                }
+            });
+
+        });
+
+        it('should return the number of processed results', function (done) {
+
+            store.query(function (data, processedItemCount) {
+                expect(data.length).to.equal(3);
+                expect(processedItemCount).to.equal(6);
+                done();
+            }, {
+                filter: function (item) {
+                    return item.name.indexOf('o') >= 0;
+                }
+            });
+
+        });
+
+        it('should return the number of processed results and respect limit', function (done) {
+
+            store.query(function (data, processedItemCount) {
+                expect(data.length).to.equal(2);
+                expect(processedItemCount).to.equal(2);
+                done();
+            }, {
+                limit: 2,
+                filter: function (item) {
+                    return item.name.indexOf('o') >= 0;
                 }
             });
 
