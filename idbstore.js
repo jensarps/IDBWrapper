@@ -295,13 +295,13 @@
                     }
                 }
 
-				var self = this;
 				function handleIndexes(indexData) {
+                    var self = this;  // jshint ignore:line
 					var indexName = indexData.name;
 
 					if (!indexName) {
 						preventSuccessCallback = true;
-						self.onError(new Error('Cannot create index: No index name given.'));
+                        self.onError(new Error('Cannot create index: No index name given.'));
 						return;
 					}
 
@@ -313,7 +313,7 @@
 						var complies = currentStore.indexComplies(actualIndex, indexData);
 						if (!complies) {
 							preventSuccessCallback = true;
-							self.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( self.dbVersion + 1 ) + '.'));
+                            self.onError(new Error('Cannot modify index "' + indexName + '" for current version. Please bump version number to ' + ( self.dbVersion + 1 ) + '.'));
 						}
 
 						existingIndexes.splice(existingIndexes.indexOf(indexName), 1);
@@ -339,9 +339,6 @@
                         if (this.stores[i].keyPath !== null) {
                             optionalParameters.keyPath = this.stores[i].keyPath ? this.stores[i].keyPath : storeDefaults.keyPath;
                         }
-						window.console.log('opt kp' + optionalParameters.keyPath);
-						window.console.log('opt ai' + optionalParameters.autoIncrement);
-						window.console.log('name ' + this.stores[i].name);
                         currentStore = new Store(this.db, this.stores[i], this.db.createObjectStore(this.stores[i].name, optionalParameters));
                         this[this.stores[i].name] = currentStore;
                     }
@@ -354,8 +351,8 @@
                     }
                 }
 				
-				var self = this;
 				function handleIndexes(indexData) {
+                    var self = this;  // jshint ignore:line
 					var indexName = indexData.name;
 
 					if (!indexName) {
@@ -368,7 +365,7 @@
 					if (currentStore.hasIndex(indexName)) {
 						// check if it complies
 						var actualIndex = currentStore.store.index(indexName);
-						var complies = self.stores[i].indexComplies(actualIndex, indexData);
+						var complies = currentStore.indexComplies(actualIndex, indexData);
 						if (!complies) {
 							// index differs, need to delete and re-create
 							currentStore.store.deleteIndex(indexName);
