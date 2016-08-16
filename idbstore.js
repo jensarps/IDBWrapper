@@ -1388,9 +1388,9 @@
 
     function hasVersionError(errorEvent) {
         if ('error' in errorEvent.target) {
-            return event.target.error.name == 'VersionError';
+            return errorEvent.target.error.name == 'VersionError';
         } else if ('errorCode' in errorEvent.target) {
-            return event.target.errorCode == 12;
+            return errorEvent.target.errorCode == 12;
         }
         return false;
     }
