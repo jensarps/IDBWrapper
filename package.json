@@ -24,6 +24,7 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-jsdoc": "^2.1.0",
     "grunt-karma": "^2.0.0",
+    "grunt-md2html": "^0.3.1",
     "jsdoc-oblivion": "0.0.4",
     "karma": "^1.2.0",
     "karma-chai": "^0.1.0",
