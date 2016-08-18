@@ -295,7 +295,9 @@
                         error = errorEvent.target.error;
                     } else {
                         var errorMessage = 'IndexedDB unknown error occurred when opening DB ' + this.dbName + ' version ' + this.dbVersion;
-                        if ('errorCode' in errorEvent.target) errorMessage += ' with error code ' + errorEvent.target.errorCode;
+                        if ('errorCode' in errorEvent.target) {
+                            errorMessage += ' with error code ' + errorEvent.target.errorCode;
+                        }
                         error = new Error(errorMessage);
                     }
 
