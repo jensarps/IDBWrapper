@@ -2,7 +2,7 @@
 
 /**
  * @license IDBWrapper - A cross-browser wrapper for IndexedDB
- * Version 1.7.0
+ * Version 1.7.1
  * Copyright (c) 2011 - 2016 Jens Arps
  * http://jensarps.de/
  *
@@ -54,7 +54,7 @@
      *
      * @constructor
      * @name IDBStore
-     * @version 1.7.0
+     * @version 1.7.1
      *
      * @param {Object} [kwArgs] An options object used to configure the store and
      *  set callbacks
@@ -164,7 +164,7 @@
          *
          * @type {String}
          */
-        version: '1.7.0',
+        version: '1.7.1',
 
         /**
          * A reference to the IndexedDB object
@@ -284,18 +284,23 @@
             var openRequest = this.idb.open(this.dbName, this.dbVersion);
             var preventSuccessCallback = false;
 
-            openRequest.onerror = function (error) {
+            openRequest.onerror = function (errorEvent) {
 
-                var gotVersionErr = false;
-                if ('error' in error.target) {
-                    gotVersionErr = error.target.error.name == 'VersionError';
-                } else if ('errorCode' in error.target) {
-                    gotVersionErr = error.target.errorCode == 12;
-                }
-
-                if (gotVersionErr) {
+                if (hasVersionError(errorEvent)) {
                     this.onError(new Error('The version number provided is lower than the existing one.'));
                 } else {
+                    var error;
+
+                    if (errorEvent.target.error) {
+                        error = errorEvent.target.error;
+                    } else {
+                        var errorMessage = 'IndexedDB unknown error occurred when opening DB ' + this.dbName + ' version ' + this.dbVersion;
+                        if ('errorCode' in errorEvent.target) {
+                            errorMessage += ' with error code ' + errorEvent.target.errorCode;
+                        }
+                        error = new Error(errorMessage);
+                    }
+
                     this.onError(error);
                 }
             }.bind(this);
@@ -1381,6 +1386,15 @@
             }
         }
         return target;
+    }
+
+    function hasVersionError(errorEvent) {
+        if ('error' in errorEvent.target) {
+            return errorEvent.target.error.name == 'VersionError';
+        } else if ('errorCode' in errorEvent.target) {
+            return errorEvent.target.errorCode == 12;
+        }
+        return false;
     }
 
     IDBStore.prototype = proto;
