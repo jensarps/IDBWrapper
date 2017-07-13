@@ -132,6 +132,11 @@
         });
         this.implementation = availableImplementations[0];
         this.idb = env[this.implementation];
+
+        if (!this.idb) {
+            return this.onError(new Error('Could not find any indexedDB implementation. Please update your browser or change your Privacy settings.'));
+        }
+
         this.keyRange = env.IDBKeyRange || env.webkitIDBKeyRange || env.mozIDBKeyRange;
 
         this.consts = {
