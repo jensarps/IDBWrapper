@@ -1,5 +1,6 @@
 [![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper)
 [![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper?ref=badge_shield)
 
 
 **IDBWrapper** is a cross-browser wrapper for the HTML5 IndexedDB API. While this
@@ -112,3 +113,7 @@ License
 ===
 
 [MIT style (X11)](https://github.com/jensarps/IDBWrapper/blob/master/LICENSE)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper?ref=badge_large)
