@@ -3,7 +3,7 @@
 /**
  * @license IDBWrapper - A cross-browser wrapper for IndexedDB
  * Version 1.7.1
- * Copyright (c) 2011 - 2016 Jens Arps
+ * Copyright (c) 2011 - 2017 Jens Arps
  * http://jensarps.de/
  *
  * Licensed under the MIT (X11) license
