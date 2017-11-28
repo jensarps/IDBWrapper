@@ -1,3 +1,10 @@
+1.7.1 / 2017-11-28
+------------------
+
+* Update dev dependencies
+* Remove X11 license
+* For the full changelog, please see: https://github.com/jensarps/IDBWrapper/compare/v1.7.1...v1.7.2
+
 1.7.1 / 2016-08-31
 ------------------
 
