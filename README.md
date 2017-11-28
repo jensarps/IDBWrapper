@@ -109,11 +109,5 @@ git
 
 You can git clone the repository, or download a zip file here: https://github.com/jensarps/IDBWrapper/releases
 
-License
-===
-
-[MIT style (X11)](https://github.com/jensarps/IDBWrapper/blob/master/LICENSE)
-
-
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper?ref=badge_large)
