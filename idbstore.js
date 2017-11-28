@@ -6,7 +6,7 @@
  * Copyright (c) 2011 - 2017 Jens Arps
  * http://jensarps.de/
  *
- * Licensed under the MIT (X11) license
+ * Licensed under the MIT license
  */
 
 (function (name, definition, global) {
