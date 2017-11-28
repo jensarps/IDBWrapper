@@ -1,5 +1,7 @@
-[![NPM version](https://badge.fury.io/js/idb-wrapper.svg)](http://badge.fury.io/js/idb-wrapper)
-[![Dependency Status](https://gemnasium.com/jensarps/IDBWrapper.png)](https://gemnasium.com/jensarps/IDBWrapper)
+[![GitHub](https://img.shields.io/github/tag/jensarps/IDBWrapper.svg)](https://github.com/jensarps/IDBWrapper)
+[![NPM](https://img.shields.io/npm/v/idb-wrapper.svg)](https://www.npmjs.com/package/idb-wrapper)
+[![CDNJS](https://img.shields.io/cdnjs/v/idbwrapper.svg)](https://cdnjs.com/libraries/idbwrapper)
+[![Dependency Status](https://img.shields.io/gemnasium/jensarps/IDBWrapper.svg)](https://gemnasium.com/jensarps/IDBWrapper)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjensarps%2FIDBWrapper?ref=badge_shield)
 
 
